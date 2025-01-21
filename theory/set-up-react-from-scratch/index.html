@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Under the Hood</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- ESLint script: Used for identifying and reporting on patterns in JavaScript code to help maintain code quality -->
+    <script src=" https://cdn.jsdelivr.net/npm/eslint@8.57.0/lib/api.min.js "></script>
+
+    <!-- Babel script: Transpiles modern JavaScript (ES6+ and JSX) to ES5 so it can run in older browsers -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- React library: Provides the core React functionality, enabling component-based UI development -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+
+    <!-- ReactDOM library: Used for rendering React components into the DOM -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+
+    <!-- Main script: Contains the React application code, written in JSX and ES6+ syntax, which is transpiled by Babel -->
+    <script type="text/babel" src="script.js"></script>
+  </body>
+</html>

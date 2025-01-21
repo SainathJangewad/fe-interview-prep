@@ -1,0 +1,161 @@
+# State as Snapshot - Short Notes
+
+## Key Concepts:
+1. **State at a Specific Time**:
+   - React treats state as a snapshot at a particular moment during rendering.
+   - The component uses the state as it is at the time of the render.
+
+2. **Immutability of Rendered State**:
+   - Once a component starts rendering, it uses the state captured for that cycle.
+   - State changes do not affect the current render but trigger a new render cycle.
+
+3. **Asynchronous State Updates**:
+   - State updates are queued and processed after the current render completes.
+   - React batches state updates to optimize performance.
+
+4. **React Renders Based on Current State**:
+   - Each render uses the state available at the start of the render cycle.
+   - Updates to state during a render will be reflected in the next render.
+
+5. **Setting State Multiple Times**:
+   - Setting the same state value multiple times in a row in the same render cycle does not cause the state to update incrementally as expected:
+     ```jsx
+     const handleClick = () => {
+       setCount(count + 1); // Uses the initial count value
+       setCount(count + 1); // Still uses the initial count value
+       setCount(count + 1); // Again, uses the initial count value
+     };
+     ```
+   - In this case, `count` is incremented only once, because all updates use the same snapshot of `count`.
+
+6. **Functional Updates**:
+   - To ensure each update uses the most recent state, use functional updates:
+     ```jsx
+     const incBy3 = () => {
+       setCount(prevCount => prevCount + 1);
+       setCount(prevCount => prevCount + 1);
+       setCount(prevCount => prevCount + 1); // Correctly increments count by 3
+     };
+     ```
+
+## Example:
+
+### Incorrect Increment (Does not increment by 3):
+```jsx
+function Counter() {
+  const [count, setCount] = React.useState(0);
+
+  const handleClick = () => {
+    setCount(count + 1); // All use the same initial count value
+    setCount(count + 1);
+    setCount(count + 1);
+  };
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={handleClick}>Increment</button>
+    </div>
+  );
+}
+----------------------------------------**BATCHING STATES**---------------------------------
+# Batching in React - Short Notes
+
+## What is Batching?
+- **Batching**: Grouping multiple state updates to trigger a single re-render instead of multiple.
+
+## How it Works:
+- Multiple `setState` calls in the same event loop are batched.
+- React applies all state changes together and re-renders once.
+
+## Benefits:
+- **Improved Performance**: Fewer render cycles.
+- **Consistent State**: State updates are processed together, ensuring accuracy.
+
+## Example:
+```jsx
+const handleClick = () => {
+  setCount(count + 1);
+  setCount(count + 1);
+  setCount(count + 1);
+};
+// React batches these updates and re-renders once, not causing 3 render cycles.
+
+----------------------------------------**STATE UPDATES AND QUEUING**---------------------------------
+
+# Updater Function in React - Short Notes
+
+- **Updater Function**: In React, when using the functional form of `setState` (e.g., `setState(prevState => newState)`), the function always takes the **most recent state** value, not the snapshot from the time the update was triggered.
+  
+- **Why It's Important**: React batches state updates for performance, and the updater function ensures that updates are applied correctly based on the current state, even if other updates are still pending.
+
+- **Key Point**: The updater function avoids using outdated snapshots and guarantees state updates are based on the latest value.
+
+### Example:
+```jsx
+setCount(prevCount => prevCount + 1);  // Uses the most recent state value
+-----------------------------------------------------------------------------------------------
+Q: What will be the output after clicking the button in the following code?
+import { useState } from 'react';
+
+export default function Counter() {
+  const [number, setNumber] = useState(0);
+
+  return (
+    <>
+      <h1>{number}</h1>
+      <button onClick={() => {
+        setNumber(number + 5);
+        setNumber(n => n + 1);
+      }}>Increase the number</button>
+    </>
+  )
+}
+
+A: Output will be 6.
+Explanation:
+First setNumber(number + 5): Updates number to 0 + 5 = 5 based on the snapshot (0).
+Second setNumber(n => n + 1): Correctly increments based on the most recent state (5), resulting in 6.
+The key point is that the second setNumber uses the most recent value of number, not the initial snapshot (0).
+-----------------------------------------------------------------------------------------------
+Q: What will be the output after clicking the button in the following code?
+
+```jsx
+import { useState } from 'react';
+
+export default function Counter() {
+  const [number, setNumber] = useState(0);
+
+  return (
+    <>
+      <h1>{number}</h1>
+      <button onClick={() => {
+        setNumber(number + 5);
+        setTimeout(() => {
+          alert(number);
+        }, 3000);
+      }}>+5</button>
+    </>
+  )
+}
+
+### Output:
+
+When you click the `+5` button, the following will happen:
+
+1. **`setNumber(number + 5)`**: This updates `number` to `0 + 5 = 5`.
+2. **`setTimeout` Execution**: The `setTimeout` is set to execute after 3 seconds. Inside the `setTimeout` callback, `alert(number)` will display the value of `number`.
+
+### Actual Alert Output:
+
+- The alert will show **`0`**, not **`5`**.
+
+### Explanation:
+
+- The **`setTimeout`** captures the value of `number` at the time the button is clicked, which is **`0`**.
+- Although `setNumber(number + 5)` updates the state to **`5`**, React's state updates are asynchronous, and the **`alert`** function inside `setTimeout` refers to the **initial snapshot** of `number` (**`0`**) captured when the callback was defined.
+
+To correctly alert the updated state, you could use the state after it has been updated or move the alert logic into a side effect (like `useEffect`).
+
+
+

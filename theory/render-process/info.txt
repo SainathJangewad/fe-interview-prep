@@ -1,0 +1,36 @@
+# React Rendering Process
+
+The React rendering process involves a series of steps to update the user interface (UI) when a component's state or properties change. Here's a breakdown of the key stages:
+
+## 1. Component Function Execution
+- **Initial Render**: React calls the component function (for functional components) or the `render` method (for class components) to generate a UI description using React elements.
+- **Subsequent Renders**: When a component's state or props change, the function is called again to produce a new set of React elements.
+
+## 2. Virtual DOM Creation
+- React elements describe the desired UI.
+- The Virtual DOM, a lightweight copy of the real DOM, is created as a JavaScript object representing the DOM structure.
+
+## 3. Diffing (Reconciliation)
+- React compares the new Virtual DOM with the previous one to identify changes (reconciliation).
+- React determines the minimal set of changes needed to update the real DOM.
+
+## 4. Updating the Real DOM
+- React batches the identified changes and applies them to the real DOM efficiently.
+- Only the changed elements are updated to minimize performance costs.
+
+## 5. Commit Phase
+- React updates the real DOM and runs lifecycle methods (`componentDidMount`, `componentDidUpdate`, etc.) or effects (`useEffect` in functional components) after the DOM update.
+
+## 6. Rendering Optimization
+- **Memoization**: Use `React.memo` to prevent unnecessary re-renders by memoizing component output based on props.
+- **Hooks**: `useMemo` and `useCallback` optimize performance by memoizing values or functions.
+- **shouldComponentUpdate**: For class components, this lifecycle method prevents unnecessary re-renders by comparing new and old props/state.
+
+## 7. Re-render Triggers
+- A component re-renders when:
+  - Its state changes (using `setState` or `useState`).
+  - Its props change.
+  - The parent component re-renders, potentially causing child components to re-render unless optimized.
+
+## Summary
+React's rendering process focuses on efficiency by using the Virtual DOM to minimize direct DOM manipulation. Through reconciliation and diffing, React updates only necessary parts of the UI, leading to better performance and a smoother user experience.
