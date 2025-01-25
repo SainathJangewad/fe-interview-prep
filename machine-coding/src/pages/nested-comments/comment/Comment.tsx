@@ -2,13 +2,15 @@
 
 import React, { useState, ChangeEvent, KeyboardEvent } from 'react';
 
-interface CommentProps {
-  comment: {
+interface IComment{
     id: number;
     text: string;
-    replies: Array<Comment>;
+    replies: Array<IComment>;
     level: number;
-  };
+}
+
+interface CommentProps {
+  comment:IComment;
   onAdd: (parentId: number | null, text: string) => void;
   onEdit: (id: number, newText: string) => void;
   onDelete: (id: number) => void;

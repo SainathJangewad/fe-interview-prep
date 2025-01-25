@@ -1,0 +1,72 @@
+### `useEffect` in React
+
+`useEffect` is a React Hook used for handling side effects in functional components, such as:
+
+- Fetching data.
+- Subscribing to services or WebSockets.
+- Setting up timers or event listeners.
+
+#### Syntax:
+```javascript
+useEffect(() => {
+  // Side effect logic
+  return () => {
+    // Cleanup logic
+  };
+}, [dependencies]);
+```
+
+#### Behavior:
+- **Runs After Render**: By default, runs after every render.
+- **Dependency Array**:
+  - `[]`: Runs only once (like `componentDidMount`).
+  - `[dependencies]`: Runs when dependencies change.
+  - No array: Runs after every render.
+
+#### Examples:
+1. **Run Once**:
+   ```javascript
+   useEffect(() => {
+     console.log('Component mounted');
+   }, []);
+   ```
+
+2. **Run on Dependency Change**:
+   ```javascript
+   useEffect(() => {
+     console.log(`Count: ${count}`);
+   }, [count]);
+   ```
+
+3. **Cleanup Example**:
+   ```javascript
+   useEffect(() => {
+     const interval = setInterval(() => console.log('Tick'), 1000);
+     return () => clearInterval(interval); // Cleanup
+   }, []);
+   ```
+
+#### Key Points:
+- Avoid side effects in render; use `useEffect`.
+- Always handle cleanup to avoid memory leaks.
+- Include all dependencies the effect depends on in the array.
+-----------------------------------------------------------------------------------------------
+
+// React useEffect Behavior
+
+1. On Mount: Setup code runs after the component is added to the DOM.
+2. On Dependency Change:
+   - Cleanup code runs with old dependencies.
+   - Setup code runs with new dependencies.
+3. On Unmount: Cleanup code runs before the component is removed.
+
+useEffect(() => {
+  // Setup
+  return () => {
+    // Cleanup
+  };
+}, [dependencies]);
+
+// React ensures side effects are properly managed to avoid leaks.
+
+
