@@ -9,7 +9,8 @@ export const useEffectPoly = (fn: any, deps?: any[]) => {
 
     // If no dependencies are provided, run the function on every render
     if (!deps) {
-        fn();
+        if (cleanUpFnRef.current) cleanUpFnRef.current();
+        cleanUpFnRef.current = fn();
         return;
     }
 

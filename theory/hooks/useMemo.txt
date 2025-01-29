@@ -1,0 +1,61 @@
+useMemo() Hook - Interview Notes
+
+What is useMemo?
+A React hook used to memoize (cache) expensive computations.
+Returns a memoized value that only recalculates when dependencies change.
+Helps optimize performance by avoiding unnecessary re-renders.
+
+Syntax:
+const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+
+First argument: Function that returns the computed value.
+Second argument: Array of dependencies. Recalculates only if dependencies change.
+
+When to use:
+Expensive calculations: Avoid recalculating heavy operations on every render.
+Referential equality: Prevent unnecessary re-renders when passing objects or arrays as props.
+
+Key Points:
+Not for side effects: Use useEffect for side effects, not useMemo.
+Dependency array: Always include all dependencies to avoid bugs.
+Overuse: Avoid premature optimization; only use when performance issues arise.
+------
+
+Code Example: Performance Issue Without useMemo
+Problem:
+Expensive computation runs on every render, even when inputs haven’t changed.
+
+import React, { useState } from 'react';
+
+function App() {
+  const [count, setCount] = useState(0);
+  const [items] = useState([1, 2, 3, 4, 5]);
+
+  // Expensive calculation (runs on every render)
+  const total = items.reduce((acc, item) => {
+    console.log('Recalculating...'); // Logs every render
+    return acc + item;
+  }, 0);
+
+  return (
+    <div>
+      <p>Total: {total}</p>
+      <button onClick={() => setCount(count + 1)}>Re-render ({count})</button>
+    </div>
+  );
+}
+
+export default App;
+
+Issue:
+Clicking the button triggers a re-render, causing the reduce function to recalculate unnecessarily.
+Performance impact: Slows down the app if the computation is heavy.
+
+Fix with useMemo:
+const total = useMemo(() => {
+  console.log('Recalculating...'); // Only logs when `items` changes
+  return items.reduce((acc, item) => acc + item, 0);
+}, [items]);
+
+Key Takeaway:
+Without useMemo, expensive calculations run on every render, causing performance bottlenecks.

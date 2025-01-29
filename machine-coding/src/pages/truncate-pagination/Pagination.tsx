@@ -1,162 +1,89 @@
-// import React, { useState, useEffect } from 'react';
-// import './Pagination.scss'
-
-// interface PaginationProps {
-//   totalItems: number;
-//   itemsPerPage: number;
-//   currentPage: number;
-//   onPageChange: (page: number) => void;
-//   maxVisiblePages: number; // Number of pages to show around the current page
-// }
-
-// const Pagination: React.FC<PaginationProps> = ({
-//   totalItems,
-//   itemsPerPage,
-//   currentPage,
-//   onPageChange,
-//   maxVisiblePages,
-// }) => {
-//   const [totalPages, setTotalPages] = useState(0);
-
-//   useEffect(() => {
-//     setTotalPages(Math.ceil(totalItems / itemsPerPage));
-//   }, [totalItems, itemsPerPage]);
-
-//   const handlePageChange = (page: number) => {
-//     if (page >= 1 && page <= totalPages) {
-//       onPageChange(page);
-//     }
-//   };
-
-//   const renderPageNumbers = () => {
-//     const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-//     const endPage = Math.min(totalPages, currentPage + Math.floor(maxVisiblePages / 2));
-
-//     const pages = [];
-//     for (let i = startPage; i <= endPage; i++) {
-//       pages.push(
-//         <button
-//           key={i}
-//           onClick={() => handlePageChange(i)}
-//           className={currentPage === i ? 'active' : ''}
-//         >
-//           {i}
-//         </button>
-//       );
-//     }
-
-//     return pages;
-//   };
-
-//   return (
-//     <div className="pagination">
-//       <button
-//         disabled={currentPage === 1}
-//         onClick={() => handlePageChange(currentPage - 1)}
-//       >
-//         Previous
-//       </button>
-//       {renderPageNumbers()}
-//       <button
-//         disabled={currentPage === totalPages}
-//         onClick={() => handlePageChange(currentPage + 1)}
-//       >
-//         Next
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default Pagination;
-
-import React from "react";
+import React, { useState } from 'react';
+import './Pagination.scss'
 
 interface PaginationProps {
-  totalPages: number;
   currentPage: number;
+  totalPages: number;
   onPageChange: (page: number) => void;
-  maxVisible?: number; // Optional: Max visible pages (default to 5)
+  truncationThreshold?: number;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
-  totalPages,
   currentPage,
+  totalPages,
   onPageChange,
-  maxVisible = 5,
+  truncationThreshold = 3,
 }) => {
-  // Generate the pagination numbers with truncation logic
-  const generatePagination = () => {
-    const pages: (number | string)[] = [];
-    const half = Math.floor(maxVisible / 2);
+  const [page, setPage] = useState(currentPage);
 
-    // Add the first page
-    if (currentPage > half + 1) {
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    setPage(newPage);
+    onPageChange(newPage);
+  };
+
+  const renderPageNumbers = () => {
+    const pages = [];
+    let startPage = Math.max(1, page - truncationThreshold);
+    let endPage = Math.min(totalPages, page + truncationThreshold);
+
+    if (startPage > 1) {
       pages.push(1);
-      if (currentPage > half + 2) {
-        pages.push("...");
+      if (startPage > 2) {
+        pages.push('...');
       }
     }
 
-    // Add pages around the current page
-    const start = Math.max(2, currentPage - half);
-    const end = Math.min(totalPages - 1, currentPage + half);
-    for (let i = start; i <= end; i++) {
+    for (let i = startPage; i <= endPage; i++) {
       pages.push(i);
     }
 
-    // Add the last page
-    if (currentPage + half < totalPages - 1) {
-      if (currentPage + half < totalPages - 2) {
-        pages.push("...");
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pages.push('...');
       }
       pages.push(totalPages);
     }
 
-    return pages;
-  };
-
-  const handleClick = (page: number | string) => {
-    if (typeof page === "number" && page !== currentPage) {
-      onPageChange(page);
-    }
+    return pages.map((p, index) =>
+      p === '...' ? (
+        <span key={index} className="pagination-ellipsis">
+          ...
+        </span>
+      ) : (
+        <button
+          key={index}
+          className={`pagination-item ${p === page ? 'active' : ''}`}
+          onClick={() => handlePageChange(p as number)}
+          aria-label={`Go to page ${p}`}
+          aria-current={p === page ? 'page' : undefined}
+        >
+          {p}
+        </button>
+      )
+    );
   };
 
   return (
-    <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center" }}>
-      {/* Previous Button */}
+    <nav role="navigation" aria-label="Pagination">
       <button
-        onClick={() => handleClick(currentPage - 1)}
-        disabled={currentPage === 1}
+        className="pagination-item"
+        onClick={() => handlePageChange(page - 1)}
+        disabled={page === 1}
+        aria-label="Previous page"
       >
-        Previous
+        &laquo;
       </button>
-
-      {/* Render Pagination */}
-      {generatePagination().map((page, index) =>
-        typeof page === "number" ? (
-          <button
-            key={index}
-            onClick={() => handleClick(page)}
-            style={{
-              fontWeight: page === currentPage ? "bold" : "normal",
-              background: page === currentPage ? "#ddd" : "transparent",
-            }}
-          >
-            {page}
-          </button>
-        ) : (
-          <span key={index}>...</span>
-        )
-      )}
-
-      {/* Next Button */}
+      {renderPageNumbers()}
       <button
-        onClick={() => handleClick(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        className="pagination-item"
+        onClick={() => handlePageChange(page + 1)}
+        disabled={page === totalPages}
+        aria-label="Next page"
       >
-        Next
+        &raquo;
       </button>
-    </div>
+    </nav>
   );
 };
 

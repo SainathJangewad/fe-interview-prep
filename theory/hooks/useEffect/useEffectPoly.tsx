@@ -1,32 +1,31 @@
 import { useRef } from "react"
 
 export const useEffectPoly = (fn: any, deps?: any[]) => {
-    // Using useRef to persist state across renders without causing re-renders
-    const depsRef: any = useRef([])  // Ref to store previous dependency values
-    let cleanUpFnRef: any = useRef(null);  // Ref to store the cleanup function from previous effect
-    let callOnceRef: any = useRef(false);  // Ref to ensure the function runs only once if deps is empty
+    const depsRef: any = useRef([])
+    let cleanUpFnRef: any = useRef(null);
+    let callOnceRef: any = useRef(false);
 
-    const prevDeps = depsRef?.current;  // Get the previous dependency array from the ref
+    const prevDeps = depsRef?.current;
 
     // If no dependencies are provided, run the function on every render
     if (!deps) {
-        fn();  // Call the effect function immediately
+        fn();
         return;
     }
 
     // If the dependency array is empty and we haven't called the function before, call it once
     if (deps.length == 0 && !callOnceRef.current) {
-        fn();  // Call the effect function once
-        callOnceRef.current = true;  // Set the flag so it doesn't call the function again
+        fn();
+        callOnceRef.current = true;
         return;
     }
 
-    let depsChanged = false;  // Flag to track if dependencies have changed
+    let depsChanged = false;
 
     // Compare the current dependencies with the previous ones
     for (let i = 0; i < prevDeps.length; i++) {
         if (prevDeps[i] != deps[i]) {
-            depsChanged = true;  // If any dependency has changed, set the flag to true
+            depsChanged = true;
             break;
         }
     }

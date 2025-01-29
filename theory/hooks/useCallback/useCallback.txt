@@ -1,0 +1,113 @@
+1. What is useCallback?
+Definition: useCallback is a React hook that memoizes a function, meaning it returns a memoized version of the callback function that only changes if one of its dependencies has changed.
+
+Purpose: It is used to optimize performance by preventing unnecessary re-renders or re-creations of functions, especially in scenarios where functions are passed as props to child components.
+
+2.Syntax
+const memoizedCallback = useCallback(
+  () => {
+    // Function logic
+  },
+  [dependencies] // Array of dependencies
+);
+
+Parameters:
+Function: The function you want to memoize.
+Dependencies: An array of values that the function depends on. If any of these values change, the function will be re-created.
+Returns: A memoized version of the function.
+
+3. When to use useCallback?
+Preventing Re-renders: When passing a function as a prop to a child component that relies on React.memo to prevent unnecessary re-renders.
+Optimizing Expensive Computations: When the function is computationally expensive and you want to avoid re-creating it on every render.
+Dependency Arrays in Other Hooks: When the function is used as a dependency in other hooks like useEffect.
+
+4. Key Points to Remember
+Memoization: useCallback memoizes the function, not the result of the function (unlike useMemo).
+Dependencies: Always include all variables or props that the function depends on in the dependency array. Omitting dependencies can lead to bugs.
+Performance: Overusing useCallback can actually harm performance because it adds overhead. Use it only when necessary.
+
+5. Common Pitfalls
+Unnecessary Use: Avoid using useCallback for simple functions or when performance gains are negligible.
+Incorrect Dependencies: Forgetting to include dependencies can lead to stale closures or bugs.
+Overhead: Using useCallback everywhere can add unnecessary complexity and overhead.
+
+
+1. Without useCallback (Child Component Re-renders Unnecessarily)
+import React, { useState } from 'react';
+
+function ParentComponent() {
+  const [count, setCount] = useState(0);
+
+  // Function to update count
+  const incrementCount = () => {
+    setCount((prevCount) => prevCount + 1);
+  };
+
+  // Unrelated function (passed to child component)
+  const unrelatedFunction = () => {
+    console.log('Unrelated function called');
+  };
+
+  return (
+    <div>
+      <button onClick={incrementCount}>Increment Count</button>
+      <ChildComponent onAction={unrelatedFunction} />
+      <p>Count: {count}</p>
+    </div>
+  );
+}
+
+// ChildComponent wrapped in React.memo
+const ChildComponent = React.memo(({ onAction }) => {
+  console.log('ChildComponent rendered'); // Logs every time the component re-renders
+  return <button onClick={onAction}>Click Me</button>;
+});
+
+export default ParentComponent;
+Explanation:
+When you click "Increment Count", count updates, causing ParentComponent to re-render.
+The unrelatedFunction is re-created on every render, so its reference changes.
+Even though ChildComponent uses React.memo, it re-renders because the onAction prop (the unrelatedFunction) is a new function every time.
+Result: The console.log in ChildComponent fires every time you increment the count, showing unnecessary re-renders.
+
+----
+With useCallback (Child Does NOT Re-render Unnecessarily)
+
+import React, { useState, useCallback } from 'react';
+
+function ParentComponent() {
+  const [count, setCount] = useState(0);
+
+  // Function to update count (triggers re-render)
+  const incrementCount = () => {
+    setCount((prevCount) => prevCount + 1);
+  };
+
+  // Unrelated function (memoized with useCallback)
+  const unrelatedFunction = useCallback(() => {
+    console.log('Unrelated function called');
+  }, []); // Empty dependency array = same function reference
+
+  return (
+    <div>
+      <button onClick={incrementCount}>Increment Count</button>
+      <ChildComponent onAction={unrelatedFunction} />
+      <p>Count: {count}</p>
+    </div>
+  );
+}
+
+// ChildComponent wrapped in React.memo
+const ChildComponent = React.memo(({ onAction }) => {
+  console.log('ChildComponent rendered'); // Only logs once initially
+  return <button onClick={onAction}>Click Me</button>;
+});
+
+export default ParentComponent;
+
+Explanation:
+The unrelatedFunction is memoized with useCallback and retains the same reference across re-renders (due to the empty dependency array []).
+
+When ParentComponent re-renders (due to count changes), the onAction prop passed to ChildComponent remains the same function reference.
+
+Result: The console.log in ChildComponent fires only once initially. Subsequent increments of count do NOT trigger a re-render of ChildComponent.

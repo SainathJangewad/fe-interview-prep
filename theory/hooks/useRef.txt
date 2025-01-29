@@ -1,0 +1,46 @@
+useRef Notes
+What is useRef?
+
+A React hook that returns a mutable object with a .current property.
+
+Used to persist values across renders without causing re-renders.
+
+Syntax:
+
+javascript
+Copy
+const ref = useRef(initialValue);
+initialValue: The initial value for the .current property.
+
+ref.current: Holds the mutable value.
+
+Common Use Cases:
+Accessing DOM elements directly.
+Storing mutable values that don’t trigger re-renders.
+Keeping track of previous values.
+
+Accessing DOM Elements:
+import React, { useRef } from 'react';
+
+function TextInput() {
+  const inputRef = useRef(null);
+
+  const focusInput = () => {
+    inputRef.current.focus();
+  };
+
+  return (
+    <div>
+      <input ref={inputRef} type="text" />
+      <button onClick={focusInput}>Focus Input</button>
+    </div>
+  );
+}
+
+export default TextInput;
+
+
+Key Points:
+Changes to ref.current do not trigger re-renders.
+Useful for interacting with DOM elements or storing values that persist across renders.
+Avoid overusing for state management; prefer useState or useReducer for state that affects rendering.

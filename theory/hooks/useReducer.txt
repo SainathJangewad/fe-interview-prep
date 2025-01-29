@@ -1,0 +1,61 @@
+useReducer Notes
+
+What is useReducer?
+
+A React hook for state management, ideal for complex state logic.
+Alternative to useState when state transitions depend on previous state or involve multiple sub-values.
+
+Syntax:
+const [state, dispatch] = useReducer(reducer, initialState);
+
+reducer: A function that takes (state, action) and returns the new state.
+initialState: The initial state value.
+dispatch: A function to trigger state updates by sending actions.
+
+Reducer Function:
+Handles state transitions based on action types.
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'ACTION_TYPE':
+      return { ...state, updatedProperty: action.payload };
+    default:
+      return state;
+  }
+}
+
+
+When to use useReducer?
+State logic is complex.
+State depends on previous state.
+Multiple sub-values in state.
+
+Example: Counter App
+import React, { useReducer } from 'react';
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      throw new Error();
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      Count: {state.count}
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+    </div>
+  );
+}
+
+export default Counter;
