@@ -6,6 +6,7 @@ import { useEffectPoly } from './hooks/useEffectPoly'
 import { FileOrFolder, FolderType } from './pages/file-manager/types'
 import FileManager from './pages/file-manager/FileManager'
 import InfiniteScrollList from './pages/Infinite-scroll/InfiniteScrollList'
+import Stopwatch from './pages/stopwatch/Stopwatch'
 
 // Initial state
 const initialState: FolderType = {
@@ -112,9 +113,13 @@ function App() {
   //   console.log('initial count render',count);
   // },[])
 
+
+
   return (
     <div>
       <div className="App">
+        <Stopwatch />
+   
         <NestedComments />
         <Parent />
         <button onClick={() => setCount(count + 1)}>inc</button>
