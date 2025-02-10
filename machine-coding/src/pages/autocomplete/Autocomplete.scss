@@ -1,0 +1,17 @@
+.autocomplete{
+    width:300px;
+    position: relative;
+
+.input-box {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box; 
+}
+    .loader,.error{
+        font-size: 16px;
+        padding:10px;
+    }
+    .error{
+        color:red;
+    }
+}

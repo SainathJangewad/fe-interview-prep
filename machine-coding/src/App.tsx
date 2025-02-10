@@ -7,60 +7,11 @@ import { FileOrFolder, FolderType } from './pages/file-manager/types'
 import FileManager from './pages/file-manager/FileManager'
 import InfiniteScrollList from './pages/Infinite-scroll/InfiniteScrollList'
 import Stopwatch from './pages/stopwatch/Stopwatch'
+import AutocompleteParent from './pages/autocomplete/AutocompleteParent'
 
-// Initial state
-const initialState: FolderType = {
-  id: "root",
-  name: "Root",
-  type: "folder",
-  children: [],
-};
-
-// Reducer function
-function fileManagerReducer(
-  state: FolderType,
-  action: { type: string; payload: any }
-): FolderType {
-  switch (action.type) {
-    case "ADD_ITEM":
-      return {
-        ...state,
-        children: [...state.children, action.payload],
-      };
-    case "RENAME_ITEM":
-      return renameItem(state, action.payload.id, action.payload.newName);
-    default:
-      return state;
-  }
-}
-
-// Helper function to rename an item
-function renameItem(
-  node: FileOrFolder,
-  id: string,
-  newName: string
-): FileOrFolder {
-  if (node.id === id) {
-    return { ...node, name: newName };
-  }
-  if (node.type === "folder") {
-    return {
-      ...node,
-      children: node.children.map((child) => renameItem(child, id, newName)),
-    };
-  }
-  return node;
-}
 
 function App() {
   const [count, setCount] = useState(0)
-  const [state, dispatch] = useReducer(fileManagerReducer, initialState);
-
-  const calc = () => {
-    console.log('calc');
-  }
-
-
 
 
   // useEffectPoly(() => {
@@ -115,21 +66,15 @@ function App() {
 
 
 
-  return (
-    <div>
-      <div className="App">
-        <Stopwatch />
-   
-        <NestedComments />
-        <Parent />
-        <button onClick={() => setCount(count + 1)}>inc</button>
-        <FileManager data={state} dispatch={dispatch} />
-        <InfiniteScrollList />
+  return <div className="App">
+    <Stopwatch />
+    <NestedComments />
+    <Parent />
+    {/* <button onClick={() => setCount(count + 1)}>inc</button> */}
+    <AutocompleteParent />
+    <InfiniteScrollList />
+  </div>
 
-      </div>
-    </div>
-
-  )
 }
 
 export default App
