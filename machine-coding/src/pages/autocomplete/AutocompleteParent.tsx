@@ -28,6 +28,7 @@ const AutocompleteParent = () => {
             onFocus={(e: any) => { }}
             customStyles={{}}
             customLoader={<>Loading...</>}
+            caching={true}
         />
     );
 };

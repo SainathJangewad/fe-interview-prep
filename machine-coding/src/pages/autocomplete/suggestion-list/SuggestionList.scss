@@ -18,5 +18,10 @@
             background-color: lightgray;
             cursor: pointer;
         }
+        
+        &.active{
+            background-color: #dacece;
+            padding: 10px;
+        }
     }
 }

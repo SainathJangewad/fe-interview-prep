@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import './SuggestionList.scss'
 
 interface SuggestionsListProps {
@@ -5,6 +6,7 @@ interface SuggestionsListProps {
     textToHighlight: string,
     onSuggestionSelect: (suggestion: any) => void,
     suggestions: any[],
+    selectedIndex: number,
 }
 
 const SuggestionsList: React.FC<SuggestionsListProps> = ({
@@ -12,8 +14,10 @@ const SuggestionsList: React.FC<SuggestionsListProps> = ({
     textToHighlight,
     onSuggestionSelect,
     suggestions,
+    selectedIndex,
 }) => {
 
+    const listRef = useRef<HTMLUListElement>(null);
 
     function highlightSearchTerm(text: string, searchTerm: string): JSX.Element {
         // Why use regex to split the text?
@@ -62,15 +66,36 @@ const SuggestionsList: React.FC<SuggestionsListProps> = ({
         );
     }
 
+    useEffect(() => {
+        if (selectedIndex != -1 && listRef.current) {
+            const selectedListItem = listRef?.current.children[selectedIndex] as HTMLElement;
+            if (selectedListItem) {
+                selectedListItem.scrollIntoView({
+                    behavior: "smooth",
+                    block: 'nearest',
+                })
+                //Why Use block: "nearest" ?
+                //It ensures that the selected item scrolls into view only when necessary, avoiding unnecessary jumps.
+                // How It Works
+                // If the selected item is already visible, it won’t scroll.
+                // If the item is partially visible, it will scroll just enough to fully show it.
+                // If the item is completely outside the viewport, it will bring it into view smoothly.
+            }
+        }
+    }, [selectedIndex])
+
 
     return <>
-        <ul className='suggestions-list'>
+        <ul className='suggestions-list' ref={listRef}>
             {
                 suggestions?.map((suggestion: any, index: number) => {
                     const currentSuggestion = dataKey ? suggestion[dataKey] : suggestion;
                     return <li
-                        className='suggestions-list-item'
+                        className={`${selectedIndex == index ? 'active' : ''} suggestions-list-item`}
                         onClick={(e: any) => onSuggestionSelect(suggestion)}
+                        role="option"
+                        aria-selected={index == selectedIndex}
+
                     >
                         {highlightSearchTerm(currentSuggestion, textToHighlight)}
                     </li>
