@@ -36,15 +36,18 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
 }) => {
     const [value, setValue] = useState("");
     const [suggestionData, setSuggestionData] = useState<string[]>([]);
-    const [loading, setLoading] = useState<boolean>();
+    const [loading, setLoading] = useState<boolean>(false);
+    const [skipNextFetch, setSkipNextFetch] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
     const { setCache, getCache } = useCache('autocomplete', 86400);
 
     const handleChange = (e: any) => {
-        console.log(e);
         setValue(e.target.value);
+        if (skipNextFetch) {
+            setSkipNextFetch(false);  // Reset after skipping once
+        }
     }
 
     const fetchSuggestions = async (query: string) => {
@@ -79,6 +82,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     const handleSuggestionSelect = (suggestion: any) => {
         setValue(dataKey ? suggestion[dataKey] : suggestion);
         setSuggestionData([]);
+        setSkipNextFetch(true);
         if (onSelect) {
             onSelect(suggestion)
         }
@@ -100,6 +104,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
         } else if (key == 'Enter') {
             if (selectedIndex >= 0) {
                 handleSuggestionSelect(suggestionData[selectedIndex])
+                setSkipNextFetch(true);
             }
         }
     }
@@ -113,10 +118,10 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
     }, [value])
 
     useEffect(() => {
-        if (debouncedValue) {
+        if (debouncedValue && !skipNextFetch) {
             fetchSuggestions(debouncedValue)
         }
-    }, [debouncedValue])
+    }, [debouncedValue, skipNextFetch])
 
     return <div className="autocomplete">
         <input
