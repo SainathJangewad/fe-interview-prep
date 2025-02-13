@@ -12,28 +12,19 @@ const Parent: React.FC = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 20;
-  
+
     const handlePageChange = (page: number) => {
-      setCurrentPage(page);
-      console.log("Current Page:", page);
+        setCurrentPage(page);
+        console.log("Current Page:", page);
     };
 
     return (
         <div>
-            {/* Your content here */}
-            {/* <Pagination
-        totalItems={totalItems}
-        itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-        maxVisiblePages={5} // Show at most 5 pages at a time
-      /> */}
-
             <Pagination
                 totalPages={totalPages}
                 currentPage={currentPage}
                 onPageChange={handlePageChange}
-                maxVisible={5} // Optional, defaults to 5
+                truncationThreshold={3}
             />
         </div>
     );
