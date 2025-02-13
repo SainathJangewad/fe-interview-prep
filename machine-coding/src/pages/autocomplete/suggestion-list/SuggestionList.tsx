@@ -86,7 +86,11 @@ const SuggestionsList: React.FC<SuggestionsListProps> = ({
 
 
     return <>
-        <ul className='suggestions-list' ref={listRef}>
+        <ul className='suggestions-list'
+            id="suggestions-list"
+            role="listbox"
+            ref={listRef}
+        >
             {
                 suggestions?.map((suggestion: any, index: number) => {
                     const currentSuggestion = dataKey ? suggestion[dataKey] : suggestion;
@@ -95,6 +99,7 @@ const SuggestionsList: React.FC<SuggestionsListProps> = ({
                         onClick={(e: any) => onSuggestionSelect(suggestion)}
                         role="option"
                         aria-selected={index == selectedIndex}
+                        id={`suggestion-${index}`}
 
                     >
                         {highlightSearchTerm(currentSuggestion, textToHighlight)}

@@ -7,41 +7,42 @@ loading: Indicates whether suggestions are being fetched.
 error: Stores any errors encountered during fetching.
 selectedIndex: Tracks the highlighted suggestion index for keyboard navigation.
 skipNextFetch: Prevents an immediate API call after selection.
-Handle Input Change
 
+Handle Input Change
 Update value with the input.
 Reset skipNextFetch if previously set.
-Debounce API Calls
 
+Debounce API Calls
 Use useDebounce to delay API requests while the user is typing.
+
 Fetch Suggestions
 
 Check cache (if enabled) for stored results before making a request.
 If static data is provided, filter it based on the input.
 If using an API (getSuggestions function), fetch results and store them in the cache.
-Handle Suggestion Selection
 
+Handle Suggestion Selection:
 Set value to the selected suggestion.
 Clear suggestions list.
 Set skipNextFetch to avoid unnecessary fetch on input update.
 Trigger onSelect callback if provided.
-Keyboard Navigation
 
+Keyboard Navigation
 ArrowUp: Move selection up in the suggestion list.
 ArrowDown: Move selection down in the list.
 Enter: Select the currently highlighted suggestion.
-Manage Effects
 
+Manage Effects
 On value change: Reset selectedIndex and clear suggestions if empty.
 On debouncedValue update: Fetch suggestions unless skipNextFetch is active.
-Render Components
 
+Render Components
 Input field with event handlers (onChange, onBlur, onFocus, onKeyDown).
 Display loading indicator while fetching.
 Show error messages if fetching fails.
 Render SuggestionsList if there are results.
-Suggestions List
 
+Suggestions List
 Highlight the search term in each suggestion.
 Ensure the selected suggestion scrolls into view.
 Handle onClick to select a suggestion.
