@@ -8,10 +8,13 @@ import FileManager from './pages/file-manager/FileManager'
 import InfiniteScrollList from './pages/Infinite-scroll/InfiniteScrollList'
 import Stopwatch from './pages/stopwatch/Stopwatch'
 import AutocompleteParent from './pages/autocomplete/AutocompleteParent'
+import ProgressBar from './pages/progress-bar/Progressbar'
+import CarouselParent from './pages/carousel/CarouselParent'
 
 
 function App() {
   const [count, setCount] = useState(0)
+  const [progress, setProgress] = useState(0)
 
 
   // useEffectPoly(() => {
@@ -65,11 +68,23 @@ function App() {
   // },[])
 
 
+  // useEffect(() => { 
+  //   console.log(progress)
+  //   const id = setInterval(() => {
+  //     setProgress((prev) => prev + 1)
+  //   }, 100);
+
+  //   return () => clearInterval(id);
+  // }, [])
+
+
 
   return <div className="App">
+    <CarouselParent />
     <Stopwatch />
     <NestedComments />
     <Parent />
+    <ProgressBar value={progress} max={100} color="success" size="large" striped animated showLabel />
     {/* <button onClick={() => setCount(count + 1)}>inc</button> */}
     <AutocompleteParent />
     <InfiniteScrollList />

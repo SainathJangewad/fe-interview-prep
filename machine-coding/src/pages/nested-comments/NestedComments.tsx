@@ -30,7 +30,7 @@ const NestedComments: React.FC = () => {
                     };
                 }
                 // After adding a comment at correct location no need to traverse further so return "comment" as-is 
-                if(commentAdded) return comment;
+                if (commentAdded) return comment;
                 return {
                     ...comment,
                     replies: addReplyRecursively(comment.replies, parentId, text, level + 1),
@@ -68,11 +68,18 @@ const NestedComments: React.FC = () => {
     const deleteComment = (id: number) => {
         const deleteCommentRecursively = (commentsList: CommentType[], id: number): CommentType[] => {
             return commentsList
-                .filter((comment) => comment.id !== id)
-                .map((comment) => ({
-                    ...comment,
-                    replies: deleteCommentRecursively(comment.replies, id),
-                }));
+                .filter((comment) => {
+                    if (comment.id !== id) {
+                        comment.replies = deleteCommentRecursively(comment.replies, id);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                })
+            // .map((comment) => ({
+            //     ...comment,
+            //     replies: deleteCommentRecursively(comment.replies, id),
+            // }));
         };
 
         setComments(deleteCommentRecursively(comments, id));
