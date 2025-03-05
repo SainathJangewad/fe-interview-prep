@@ -1,6 +1,12 @@
-import {  useState } from "react";
+import { useState } from "react";
+
+function isBrowser() {
+  return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
+}
 
 function useLocalStorage<T>(key: string, initialValue: T) {
+  if (!isBrowser()) return [initialValue, () => { }, () => { }] as const; // Fallback for non-browser environments
+
   const getStoredValue = (): T => {
     try {
       const storedValue = localStorage.getItem(key);
@@ -26,16 +32,22 @@ function useLocalStorage<T>(key: string, initialValue: T) {
   const removeValue = () => {
     try {
       localStorage.removeItem(key);
-      setStoredValue(initialValue);
+      setStoredValue(undefined);
     } catch (error) {
       console.error("Error removing localStorage key:", key, error);
     }
   };
 
- 
-  
-
   return [storedValue, setValue, removeValue] as const;
 }
 
+
+
 export default useLocalStorage;
+
+// WHY TO USE try-catch while accessing or setting value in localstorage ?
+
+// The try-catch blocks are crucial for ensuring the app doesn't break due to localStorage errors. These errors can happen due to:
+// Browser restrictions (private mode, disabled storage).
+// Quota limits (storage full).
+// Corrupt or invalid JSON (prevents JSON.parse

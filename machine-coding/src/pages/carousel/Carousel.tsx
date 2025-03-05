@@ -73,6 +73,10 @@ const Carousel: React.FC<CarouselProps> = ({
             <div
                 className="carousel-track"
                 // 100 / itemsToShow - use this formula to slide one item at a time .to slide the all visible items in one go use, 100% as translation value
+                // Why to translate with a negative value ?
+                // ans: after setting display flex on 'carousel-trac' all the flex items are put in the right hand side .
+                // so to show the next flex item we need to move 'carousel-track' to the left hence the negative value . 
+                // if we use positive value it will move to rightside which is wrong .
                 style={{ transform: `translateX(-${(100) * currentIndex}%)` }}
             >
                 {items.map((item, index) => (

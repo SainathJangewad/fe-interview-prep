@@ -63,6 +63,8 @@ const NestedComments: React.FC = () => {
         };
 
         setComments(editCommentRecursively(comments, id, newText));
+
+
     };
 
     const deleteComment = (id: number) => {
@@ -102,6 +104,7 @@ const NestedComments: React.FC = () => {
             <div style={{ marginTop: "20px" }}>
                 <input
                     type="text"
+
                     placeholder="Add a new comment..."
                     onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
                         if (e.key === "Enter" && e.currentTarget.value.trim()) {
