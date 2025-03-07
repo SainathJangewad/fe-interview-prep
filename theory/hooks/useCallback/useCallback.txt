@@ -24,7 +24,7 @@ Dependency Arrays in Other Hooks: When the function is used as a dependency in o
 4. Key Points to Remember
 Memoization: useCallback memoizes the function, not the result of the function (unlike useMemo).
 Dependencies: Always include all variables or props that the function depends on in the dependency array. Omitting dependencies can lead to bugs.
-Performance: Overusing useCallback can actually harm performance because it adds overhead. Use it only when necessary.
+Performance: Overusing useCallback can actually harm performance because it adds overhead ("Overhead" in this context means extra work ). Use it only when necessary.
 
 5. Common Pitfalls
 Unnecessary Use: Avoid using useCallback for simple functions or when performance gains are negligible.
