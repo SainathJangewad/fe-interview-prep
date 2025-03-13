@@ -1,0 +1,165 @@
+React Class Component Lifecycle Methods & Phases (Interview Perspective)
+React class components follow a lifecycle that consists of three main phases:
+
+Mounting (Component is created and inserted into the DOM)
+Updating (Component is re-rendered due to state/props changes)
+Unmounting (Component is removed from the DOM)
+Each phase has specific lifecycle methods that can be used to control the component's behavior. Let's go through them in detail.
+
+1. Mounting Phase
+When a component is created and inserted into the DOM, the following methods are called in order:
+
+(a) constructor(props)
+Purpose: Initializes state and binds event handlers.
+Common Use Cases:
+Setting up the initial state.
+Binding event handler functions.
+Avoiding side effects (API calls should not be made here).
+
+Example:
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+    this.handleClick = this.handleClick.bind(this);
+  }
+}
+
+(b) static getDerivedStateFromProps(props, state) (Rarely Used)
+Purpose: Allows the state to be updated based on prop changes.
+Common Use Cases:
+Syncing state with props before rendering.
+Avoid using it unnecessarily, as it can lead to unnecessary re-renders.
+
+Example:
+static getDerivedStateFromProps(props, state) {
+  if (props.defaultCount !== state.count) {
+    return { count: props.defaultCount };
+  }
+  return null; // No changes
+}
+
+(c) render() (Required)
+Purpose: Returns the JSX to be displayed in the UI.
+Common Use Cases:
+Displaying component UI based on state and props.
+Should be a pure function (no side effects like API calls).
+
+Example:
+render() {
+  return <h1>Count: {this.state.count}</h1>;
+}
+
+(d) componentDidMount()
+Purpose: Runs after the component is inserted into the DOM.
+Common Use Cases:
+Fetching data from APIs.
+Setting up event listeners or subscriptions.
+Manipulating the DOM if needed.
+
+Example:
+componentDidMount() {
+  console.log("Component Mounted!");
+  fetch("https://api.example.com/data")
+    .then((res) => res.json())
+    .then((data) => this.setState({ data }));
+}
+Interview Tip:
+This method runs only once when the component is first mounted.
+It is the best place for API calls or setting timers.
+
+--------------------------------------
+
+2. Updating Phase
+This phase occurs when a component's state or props change, causing a re-render. The following lifecycle methods are called:
+
+(a) static getDerivedStateFromProps(props, state)
+Called again before render, with new props.
+Same behavior as in the Mounting phase.
+
+(b) shouldComponentUpdate(nextProps, nextState)
+Purpose: Determines whether the component should re-render.
+Common Use Cases:
+Optimizing performance by preventing unnecessary re-renders.
+
+Example:
+shouldComponentUpdate(nextProps, nextState) {
+  return nextState.count !== this.state.count; // Only re-render if count changes
+}
+Interview Tip:
+Return false to prevent unnecessary re-renders.
+Use it when performance optimizations are needed.
+
+(c) render()
+Called again to update the UI with the latest state/props.
+Same behavior as in the Mounting phase.
+
+(d) getSnapshotBeforeUpdate(prevProps, prevState) (Rarely Used)
+Purpose: Captures some information before the DOM updates.
+Common Use Cases:
+Used to store the scroll position before updates.
+
+Example: 
+getSnapshotBeforeUpdate(prevProps, prevState) {
+  return document.body.scrollHeight; // Capture scroll height
+}
+Interview Tip:
+Rarely used but useful for UI-related updates.
+
+(e) componentDidUpdate(prevProps, prevState, snapshot)
+Purpose: Runs after the component updates.
+Common Use Cases:
+Fetching new data when props change.
+Working with the previous state.
+
+Example:    
+componentDidUpdate(prevProps, prevState) {
+  if (prevState.count !== this.state.count) {
+    console.log("Count updated!");
+  }
+}
+Interview Tip:
+Do not call setState() inside componentDidUpdate() without a condition, as it will cause an infinite loop.
+Best place to handle API calls when props change.
+-------------------------------
+3. Unmounting Phase
+This phase occurs when a component is removed from the DOM.
+
+(a) componentWillUnmount()
+Purpose: Cleanup before the component is destroyed.
+Common Use Cases:
+Clearing timers or intervals.
+Removing event listeners.
+Canceling network requests.
+
+Example:
+componentWillUnmount() {
+  console.log("Component Unmounted!");
+  clearInterval(this.timer);
+}
+Interview Tip:
+Best place for cleanup operations.
+Prevents memory leaks.
+
+----------------------------------------------------------
+Final Summary (Order of Execution)
++-------------+----------------------------+-------+
+| Phase       | Method                     | Order |
++-------------+----------------------------+-------+
+| Mounting    | constructor()               | 1     |
+|             | getDerivedStateFromProps()  | 2     |
+|             | render()                    | 3     |
+|             | componentDidMount()         | 4     |
++-------------+----------------------------+-------+
+| Updating    | getDerivedStateFromProps()  | 5     |
+|             | shouldComponentUpdate()     | 6     |
+|             | render()                    | 7     |
+|             | getSnapshotBeforeUpdate()   | 8     |
+|             | componentDidUpdate()        | 9     |
++-------------+----------------------------+-------+
+| Unmounting  | componentWillUnmount()      | 10    |
++-------------+----------------------------+-------+
+
+The Updating Phase is triggered when either state or props change, causing the component to re-render.
+
+The Unmounting Phase is triggered when the component is removed from the DOM

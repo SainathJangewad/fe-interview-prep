@@ -38,6 +38,7 @@ const Form = () => {
         <div>
             <InputField ref={inputRef} placeholder="Type here..." />
             <button onClick={focusInput}>Focus Input</button>
+
         </div>
     );
 };

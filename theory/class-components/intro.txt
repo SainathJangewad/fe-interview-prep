@@ -1,0 +1,282 @@
+Basic Questions
+1. What are class-based components in React?
+Class-based components are ES6 classes that extend React.Component and contain state, lifecycle methods, and logic. Unlike functional components, they require a render() method to return JSX.
+
+Example:
+import React, { Component } from "react";
+
+class Welcome extends Component {
+  render() {
+    return <h1>Hello, {this.props.name}!</h1>;
+  }
+}
+
+export default Welcome;
+-------------------------------
+How do class-based components differ from functional components?
+
+Feature	            Class Component	                    Functional Component
+Syntax	            Extends React.Component   |	           Simple function
+State Management	Uses this.state and setState()	       Uses useState hook
+Lifecycle Methods	Uses methods like componentDidMount()	Uses useEffect
+Performance     	Slower due to lifecycle complexity   	Faster and optimized
+-------------------
+3. How do you create a class component in React?
+A class component must extend React.Component and implement a render() method.
+
+Example:
+import React, { Component } from "react";
+
+class Greeting extends Component {
+  render() {
+    return <h1>Welcome to React!</h1>;
+  }
+}
+
+export default Greeting;
+-------------------------
+Lifecycle Methods
+4. What are the different phases of the component lifecycle?
+The React component lifecycle has three main phases:
+
+1.Mounting (component is created)
+constructor()
+static getDerivedStateFromProps()
+render()
+componentDidMount()
+
+2. Updating (state/props change)
+static getDerivedStateFromProps()
+shouldComponentUpdate()
+render()
+getSnapshotBeforeUpdate()
+componentDidUpdate()
+
+3.Unmounting (component is removed)
+componentWillUnmount()
+
+-----------------------------
+5. What is componentDidMount() used for?
+It is called once after the component is mounted. It is used for:
+
+Fetching data from an API
+Subscribing to events
+Setting up timers
+
+Example:
+componentDidMount() {
+  console.log("Component mounted!");
+}
+----------
+6. What is componentDidUpdate() and when does it run?
+It is called after state or props change.
+
+Example:
+componentDidUpdate(prevProps, prevState) {
+  if (prevState.count !== this.state.count) {
+    console.log("State updated!");
+  }
+}
+--------------
+7. What is componentWillUnmount() and why is it important?
+It is called just before the component is removed from the DOM. It is used to:
+
+Cleanup timers
+Unsubscribe from API calls
+Remove event listeners
+
+Example:
+componentWillUnmount() {
+  console.log("Component is being removed");
+}
+-----------------
+8. What is shouldComponentUpdate() and how does it optimize performance?
+It controls whether the component re-renders based on a condition.
+
+Example:
+shouldComponentUpdate(nextProps, nextState) {
+  return nextState.count !== this.state.count; // Renders only if count changes
+}
+-----------
+State and Props
+9. How do you update state in a class component?
+Use setState().
+
+Example:
+this.setState({ count: this.state.count + 1 });
+---------------------
+10. What happens if you modify state directly instead of using setState()?
+Direct modification does not trigger a re-render.
+
+Wrong Example:
+this.state.count = this.state.count + 1; // Won't work!
+
+Correct Example:
+this.setState({ count: this.state.count + 1 });
+------------------------------------------**-----------------------------------
+Event Handling
+12. How do you handle events in class components?
+Use arrow functions or bind this.
+
+Example:
+class App extends Component {
+  handleClick = () => {
+    console.log("Button clicked!");
+  };
+
+  render() {
+    return <button onClick={this.handleClick}>Click Me</button>;
+  }
+}
+------------------
+13.Why do we need to bind event handlers in class components?
+
+// In React class components, event handlers need to be explicitly bound to `this`
+// because class methods do not automatically bind `this` to the component instance.
+
+// Why?
+// In JavaScript, `this` depends on how a function is called, not where it is defined.
+// When passing a class method as an event handler in JSX, it loses its context
+// (i.e., `this` becomes `undefined` or refers to the global object in strict mode).
+
+// Example of the Issue:
+import React from "react";
+
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+  }
+
+  handleClick() {
+    console.log(this.state.count); // ❌ 'this' is undefined
+    why this is undefined? - 'this' in a normal function is undefined.
+  }
+
+  render() {
+    return <button onClick={this.handleClick}>Click Me</button>;
+  }
+}
+
+// Here, `handleClick` loses the `this` binding when passed as an event handler, leading to an error.
+
+// Solutions:
+
+// 1. Binding in the Constructor (Recommended)
+class MyComponent1 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+    this.handleClick = this.handleClick.bind(this); // ✅ Binding in constructor
+  }
+
+  handleClick() {
+    console.log(this.state.count); // ✅ 'this' correctly refers to the class instance
+  }
+
+  render() {
+    return <button onClick={this.handleClick}>Click Me</button>;
+  }
+}
+
+// 2. Using Arrow Functions in Class Properties (Modern Approach)
+class MyComponent2 extends React.Component {
+  state = { count: 0 };
+
+  handleClick = () => {
+   console.log(this.state.count); // ✅ 'this' correctly refers to the instance
+   Arrow Functions (handleClick = () => {})
+   They do not have their own this.
+   Instead, they inherit this from where they are defined.
+   Since they are defined inside the class body, this automatically refers to the instance of the class
+  };
+
+  render() {
+    return <button onClick={this.handleClick}>Click Me</button>;
+  }
+}
+
+// 3. Using Arrow Function in JSX (Avoid for Performance Reasons)
+class MyComponent3 extends React.Component {
+  state = { count: 0 };
+
+  handleClick() {
+    console.log(this.state.count); // ✅ Works, but not efficient
+  }
+
+  render() {
+    return <button onClick={() => this.handleClick()}>Click Me</button>;
+  }
+}
+
+// This works but creates a new function on every render, which can impact performance.
+------------------------------------------------------------------**------------------------------------------
+Refs and Context
+14. What are refs and how do you use them?
+Refs are used to directly access DOM elements.
+
+Example:
+class InputFocus extends Component {
+  constructor(props) {
+    super(props);
+    this.inputRef = React.createRef();
+  }
+
+  focusInput = () => {
+    this.inputRef.current.focus();
+  };
+
+  render() {
+    return (
+      <div>
+        <input ref={this.inputRef} />
+        <button onClick={this.focusInput}>Focus</button>
+      </div>
+    );
+  }
+}
+------------------------------
+ Performance Optimization
+15. What is PureComponent?
+A class component that only re-renders if props or state change.
+and extends 'PureComponent' class
+
+Example:
+import React, { PureComponent } from "react";
+
+class MyComponent extends PureComponent {
+  render() {
+    return <h1>{this.props.text}</h1>;
+  }
+}
+
+-------------------------
+How does shouldComponentUpdate() impact performance?
+shouldComponentUpdate() helps improve performance by preventing unnecessary re-renders. By default, React re-renders a component whenever its state or props change. However, if the new props or state are the same as the previous ones, re-rendering is unnecessary and wastes resources.
+
+By implementing shouldComponentUpdate(), we can compare the new and old props/state and return false to skip re-rendering if no significant changes have occurred.
+
+Example: Preventing Unnecessary Re-renders
+
+class OptimizedComponent extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    // here returning true means 'update' the comp and false means dont update
+    return nextProps.count !== this.props.count; // Only re-render if count changes
+  }
+
+  render() {
+    console.log("Rendered");
+    return <h1>Count: {this.props.count}</h1>;
+  }
+}
+
+
+
+
+
+
+
+
+ 
+
+

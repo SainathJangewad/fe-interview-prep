@@ -9,31 +9,29 @@ export const useEffectPoly = (fn: any, deps?: any[]) => {
 
     // If no dependencies are provided, run the function on every render
     if (!deps) {
-        fn();
+        if (cleanUpFnRef.current && typeof cleanUpFnRef.current == 'function') cleanUpFnRef.current();
+        cleanUpFnRef.current = fn();
         return;
     }
 
     // If the dependency array is empty and we haven't called the function before, call it once
     if (deps.length == 0 && !callOnceRef.current) {
-        fn();
         callOnceRef.current = true;
-        return;
-    }
-
-    let depsChanged = false;
-
-    // Compare the current dependencies with the previous ones
-    for (let i = 0; i < prevDeps.length; i++) {
-        if (prevDeps[i] != deps[i]) {
-            depsChanged = true;
-            break;
+        const cleanUp = fn();
+        // returning afn which cleans uuup stuff because here we cant just call cleanup right after calling fn()
+        // cleanup fn of useEeffect with empty deps gets called on comp unmont .hence we returning a fn here 
+        return () => {
+            if (cleanUp && typeof cleanUp == 'function') cleanUp();
         }
     }
 
+    // Compare the current dependencies with the previous ones
+    let depsChanged = JSON.stringify(depsRef.current) !== JSON.stringify(deps) ? true : false;
+
     // If the dependencies have changed, or if the lengths of the dependencies are different
-    if (depsChanged || prevDeps.length != deps.length) {
+    if (depsChanged) {
         // If there was a cleanup function from the previous render, call it
-        if (cleanUpFnRef.current) cleanUpFnRef.current();
+        if (cleanUpFnRef.current && typeof cleanUpFnRef.current == 'function') cleanUpFnRef.current();
 
         // Store the new cleanup function by calling the effect function
         cleanUpFnRef.current = fn();

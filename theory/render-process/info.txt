@@ -28,6 +28,7 @@ The React rendering process involves a series of steps to update the user interf
 
 ## 7. Re-render Triggers
 - A component re-renders when:
+
   - Its state changes (using `setState` or `useState`).
   - Its props change.
   - The parent component re-renders, potentially causing child components to re-render unless optimized.

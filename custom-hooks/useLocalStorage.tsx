@@ -17,6 +17,9 @@ function useLocalStorage<T>(key: string, initialValue: T) {
     }
   };
 
+
+
+
   const [storedValue, setStoredValue] = useState<T>(getStoredValue);
 
   const setValue = (value: T | ((val: T) => T)) => {

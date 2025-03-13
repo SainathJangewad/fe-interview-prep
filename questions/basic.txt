@@ -1,0 +1,102 @@
+### React Interview Questions
+
+#### ✅ Basic React Questions
+
+1. **What is React?**
+   **Answer:** React is an open-source JavaScript library developed by Facebook for building user interfaces, especially for single-page applications (SPAs). It allows developers to build reusable UI components and manage the application state efficiently.
+
+2. **What is JSX in React? Why is it used?**
+   **Answer:** JSX (JavaScript XML) is a syntax extension in React that allows writing HTML-like code within JavaScript. It makes it easier to describe the UI structure and is then compiled to React.createElement calls under the hood.
+
+3. **What is the difference between functional and class components?**
+   **Answer:** Functional components are simple JavaScript functions that return JSX, whereas class components use ES6 classes, have lifecycle methods, and maintain state using this.state. Functional components use hooks like useState and useEffect for state management and side effects.
+
+4. **What is the Virtual DOM in React?**
+   **Answer:** The Virtual DOM is a lightweight JavaScript object representing the actual DOM. React uses it to optimize the rendering process by comparing the current Virtual DOM with the previous one (diffing) and then updating only the changed parts of the real DOM (reconciliation).
+
+5. **Why do we use keys in React lists?**
+   **Answer:** Keys in React lists help identify which elements have changed, been added, or removed. Using unique keys prevents unnecessary re-renders and improves performance by ensuring React can efficiently update the DOM.
+
+6. **What is React Fragment? Why is it used?**
+   **Answer:** React Fragment is a built-in component that allows grouping multiple elements without adding extra nodes to the DOM. It prevents unnecessary wrapper elements like div and keeps the DOM clean.
+
+7. **What is the difference between state and props?**
+   **Answer:** State is a local, mutable data source managed within a component, whereas props are read-only data passed from parent to child components. State controls component behavior, while props are used for communication between components.
+
+8. **What happens when the state is updated in React?**
+   **Answer:** When the state is updated using setState (class component) or useState (functional component), React triggers a re-render. It first updates the Virtual DOM, performs a diffing algorithm, and then efficiently updates only the changed parts in the real DOM.
+
+9. **Can you directly modify the state in React? Why or why not?**
+   **Answer:** No, you should never modify the state directly. Always use setState or useState to trigger a re-render and keep the component in sync. Directly modifying the state will not trigger a re-render.
+
+10. **What is the use of React.memo?**
+   **Answer:** React.memo is a higher-order component (HOC) that memoizes the component's output and prevents unnecessary re-renders if the props have not changed. It improves performance by reducing unwanted re-renders.
+
+#### ✅ React Hooks Questions
+
+11. **What are React Hooks? Why were they introduced?**
+   **Answer:** React Hooks are functions that allow functional components to use state and lifecycle features without converting them into class components. They were introduced to simplify component logic and reduce boilerplate code.
+
+12. **Explain the useState hook with an example.**
+   **Answer:** The useState hook is used to declare state variables in functional components. Example: 
+   ```js
+   const [count, setCount] = useState(0);
+   ```
+   It returns a state variable (count) and a function (setCount) to update the value.
+
+13. **Explain the useEffect hook with an example.**
+   **Answer:** The useEffect hook handles side effects in functional components like fetching API data, DOM manipulation, or subscriptions. Example:
+   ```js
+   useEffect(() => {
+     document.title = `Count: ${count}`;
+   }, [count]);
+   ```
+
+14. **What are the dependencies in useEffect? How do they work?**
+   **Answer:** Dependencies are the second argument in useEffect. They control when the effect should re-run. If the dependency array is empty, the effect runs only once on mount. If it has values, it runs whenever those values change.
+
+15. **Explain the useRef hook. When would you use it?**
+   **Answer:** useRef is a hook that returns a mutable reference object that persists across renders without causing re-renders. It is commonly used to access DOM elements or store previous state values.
+
+16. **What is the use of useMemo and useCallback? How are they different?**
+   **Answer:**
+   - **useMemo:** Memoizes the result of an expensive function to prevent re-calculation.
+   - **useCallback:** Memoizes the function itself to prevent it from being re-created unnecessarily.
+
+17. **What is the useImperativeHandle hook? Where is it used?**
+   **Answer:** useImperativeHandle is used with forwardRef to customize the instance value exposed to the parent component. It is commonly used when a parent component needs to trigger a function inside a child component.
+
+18. **What happens if you don't provide a dependency array in useEffect?**
+   **Answer:** The effect will run after every render, potentially causing infinite loops. Adding a dependency array ensures it only runs when the dependencies change.
+
+19. **How would you clear the subscription or API call in useEffect?**
+   **Answer:** By returning a cleanup function inside useEffect. Example:
+   ```js
+   useEffect(() => {
+     const subscription = data.subscribe();
+     return () => subscription.unsubscribe();
+   }, []);
+   ```
+
+20. **How does React handle re-renders in functional components?**
+   **Answer:** React triggers a re-render whenever the state or props change. It uses the Virtual DOM to identify differences and update only the necessary parts of the real DOM efficiently.
+
+#### ✅ React Performance Optimization Questions
+
+21. **What are some ways to optimize performance in a React application?**
+   **Answer:**
+   - Use React.memo to prevent unnecessary re-renders.
+   - Use useCallback and useMemo to memoize functions and expensive calculations.
+   - Lazy load components using React.lazy and Suspense.
+   - Split code using dynamic imports.
+   - Optimize image loading using lazy loading.
+   - Use efficient list rendering techniques like virtualization.
+
+22. **What is Code Splitting in React?**
+   **Answer:** Code splitting is a technique to split the application’s JavaScript bundle into smaller chunks to reduce the initial load time. React supports code splitting using dynamic imports and React.lazy.
+
+23. **What is hydration in React?**
+   **Answer:** Hydration is the process of attaching event handlers to pre-rendered (server-side rendered) HTML content when it reaches the client-side. It ensures React components can become interactive.
+
+(Now I have restored **both Hooks and Performance sections**.)
+

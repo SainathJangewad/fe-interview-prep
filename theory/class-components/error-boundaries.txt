@@ -1,0 +1,64 @@
+Error Boundaries in React:
+
+Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of crashing the whole app. They help improve user experience by preventing an entire application from breaking due to a single component failure.
+
+Creating an Error Boundary Using a Class Component
+You can create an error boundary by defining a class component that implements either of these lifecycle methods:
+
+static getDerivedStateFromError(error): Updates the state when an error occurs.
+componentDidCatch(error, info): Logs error details.
+
+Example:
+
+import React, { Component, ErrorInfo } from "react";
+
+class ErrorBoundary extends Component<{ children: React.ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    // Update state to display fallback UI
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("Error caught by boundary:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h2>Something went wrong.</h2>; // Fallback UI
+    }
+    return this.props.children;
+  }
+}
+
+export default ErrorBoundary;
+---------------------------
+
+Using the Error Boundary
+Wrap any component that might throw an error with the ErrorBoundary component:
+
+import ErrorBoundary from "./ErrorBoundary";
+import MyComponent from "./MyComponent";
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <MyComponent />
+    </ErrorBoundary>
+  );
+}
+
+export default App;
+----
+Key Points
+Only class components can be error boundaries (functional components cannot use componentDidCatch).
+Error boundaries do not catch:
+Errors inside event handlers.
+Errors in asynchronous code (like setTimeout or fetch).
+Server-side rendering (SSR) errors.
+Errors thrown from inside the error boundary itself.
+  
