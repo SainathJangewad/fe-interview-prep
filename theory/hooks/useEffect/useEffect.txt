@@ -42,6 +42,7 @@ useEffect(() => {
    ```javascript
    useEffect(() => {
      const interval = setInterval(() => console.log('Tick'), 1000);
+     // here for cleanup ,always return a function that does cleanup operation. this this should not return anything.
      return () => clearInterval(interval); // Cleanup
    }, []);
    ```

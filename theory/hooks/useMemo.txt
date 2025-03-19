@@ -8,7 +8,7 @@ Helps optimize performance by avoiding unnecessary re-renders.
 Syntax:
 const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
 
-First argument: Function that returns the computed value.
+First argument: Function that returns the computed value.(this cb must NOT take any arguments)
 Second argument: Array of dependencies. Recalculates only if dependencies change.
 
 When to use:
@@ -59,3 +59,32 @@ const total = useMemo(() => {
 
 Key Takeaway:
 Without useMemo, expensive calculations run on every render, causing performance bottlenecks.
+------------------------------------------------------------------------------------------------------
+Q.so if count value is 4 now and i increment it to 5 calculation will be done.then if i reduce the coun t back to 4 will the catchebe return or recompute?
+
+ANS - If count was 4, then changed to 5, and then back to 4, the calculation will be recomputed and not returned from cache.
+
+Why?
+useMemo() does not persist cache indefinitely.
+When dependencies change, React discards the old cached value and computes a new one.
+Since the value 4 was already removed from the cache when count changed to 5, React will recompute it when you go back to 4.
+ 
+function App() {
+  const [count, setCount] = useState(0)
+  const [count2, setCount2] = useState(0)
+
+
+    const sqrt = useMemo(() => { 
+    console.log('calculating...')
+    return count * count;
+  }, [count])
+
+
+  return <div className="App"> 
+    <button onClick={() => setCount2(count2 + 1)}>inc2</button>
+    <button onClick={() => setCount(count + 1)}>inc</button>
+    <button onClick={() => setCount(count - 1)}>dec</button>
+    <div>sqrt : {sqrt}</div> 
+  </div>
+
+}

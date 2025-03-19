@@ -11,6 +11,9 @@ import AutocompleteParent from './pages/autocomplete/AutocompleteParent'
 import ProgressBar from './pages/progress-bar/Progressbar'
 import CarouselParent from './pages/carousel/CarouselParent'
 import { useMemoPoly } from './hooks/useMemoPoly'
+import useWindowSize from './hooks/useWindowSize'
+import useFetch from './hooks/useFetch'
+import { useIntersectionObserver } from './hooks/useIntersectionObserver'
 
 
 
@@ -18,6 +21,11 @@ function App() {
   const [count, setCount] = useState(0)
   const [count2, setCount2] = useState(0)
   const [progress, setProgress] = useState(0)
+  // const { data, loading, error } = useFetch('https://jsonplaceholder.typicode.com/posts');
+  const elRef = useRef(null);
+  const options = useMemo(() => ({ root: null, rootMargin: '10px', threshold: 0.5 }), []);
+  const intersectingEntry = useIntersectionObserver(elRef, options);
+
 
 
   // useEffectPoly(() => {
@@ -91,20 +99,32 @@ function App() {
   //   return count * count;
   // }, [count])
 
+  // if (loading) return <div>loading..</div>
+  // if (error) return <div>{error?.message}</div>
+
+  // console.log('dataa', data);
 
   return <div className="App">
+
+
+
     <CarouselParent />
     <Stopwatch />
     <NestedComments />
     <Parent />
-    <ProgressBar value={progress} max={100} color="success" size="large" striped animated showLabel />
-    {/* <button onClick={() => setCount2(count2 + 1)}>inc2</button>
+    {/* <ProgressBar value={progress} max={100} color="success" size="large" striped animated showLabel /> */}
+    <button onClick={() => setCount2(count2 + 1)}>inc2</button>
     <button onClick={() => setCount(count + 1)}>inc</button>
     <button onClick={() => setCount(count - 1)}>dec</button>
-    <div>sqrt : {sqrt}</div>
+    {/* <div>sqrt : {sqrt}</div>
     <div>sqrt : {sqrt2}</div> */}
     <AutocompleteParent />
-    <InfiniteScrollList />
+    {/* <InfiniteScrollList /> */}
+
+    <div ref={elRef} style={{ height: '200px', background: `${intersectingEntry?.isIntersecting ? 'green' : 'red'}` }}>
+      element to observe
+    </div>
+
   </div>
 
 }
