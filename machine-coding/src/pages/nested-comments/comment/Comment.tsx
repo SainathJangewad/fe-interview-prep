@@ -2,15 +2,14 @@
 
 import React, { useState, ChangeEvent, KeyboardEvent } from 'react';
 
-interface IComment{
-    id: number;
-    text: string;
-    replies: Array<IComment>;
-    level: number;
+interface IComment {
+  id: number;
+  text: string;
+  replies: Array<IComment>;
 }
 
 interface CommentProps {
-  comment:IComment;
+  comment: IComment;
   onAdd: (parentId: number | null, text: string) => void;
   onEdit: (id: number, newText: string) => void;
   onDelete: (id: number) => void;
@@ -36,7 +35,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onAdd, onEdit, onDelete }) =
   };
 
   return (
-    <div style={{ marginLeft: `${comment.level * 20}px`, borderLeft: "1px solid #ccc", paddingLeft: "10px", marginTop: "10px" }}>
+    <div style={{ marginLeft: `20px`, borderLeft: "1px solid #ccc", paddingLeft: "10px", marginTop: "10px" }}>
       {isEditing ? (
         <input
           type="text"

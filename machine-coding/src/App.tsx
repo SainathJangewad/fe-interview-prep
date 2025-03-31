@@ -14,6 +14,7 @@ import { useMemoPoly } from './hooks/useMemoPoly'
 import useWindowSize from './hooks/useWindowSize'
 import useFetch from './hooks/useFetch'
 import { useIntersectionObserver } from './hooks/useIntersectionObserver'
+import PollWidgetParent from './pages/poll-widget/pollWidgetParent'
 
 
 
@@ -124,6 +125,7 @@ function App() {
     <div ref={elRef} style={{ height: '200px', background: `${intersectingEntry?.isIntersecting ? 'green' : 'red'}` }}>
       element to observe
     </div>
+    <PollWidgetParent />
 
   </div>
 

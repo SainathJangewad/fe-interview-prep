@@ -7,17 +7,16 @@ interface CommentType {
     id: number;
     text: string;
     replies: Array<CommentType>;
-    level: number;
 }
 
 const NestedComments: React.FC = () => {
     const [comments, setComments] = useState<CommentType[]>([
-        { id: 1, text: "This is a comment.", replies: [], level: 0 },
+        { id: 1, text: "This is a comment.", replies: [] },
     ]);
 
     const addComment = (parentId: number | null, text: string) => {
         let commentAdded = false;
-        const addReplyRecursively = (commentsList: CommentType[], parentId: number, text: string, level: number = 0): CommentType[] => {
+        const addReplyRecursively = (commentsList: CommentType[], parentId: number, text: string,): CommentType[] => {
             return commentsList.map((comment) => {
                 if (comment.id === parentId) {
                     commentAdded = true;
@@ -25,7 +24,7 @@ const NestedComments: React.FC = () => {
                         ...comment,
                         replies: [
                             ...comment.replies,
-                            { id: Date.now(), text, replies: [], level: level + 1 },
+                            { id: Date.now(), text, replies: [] },
                         ],
                     };
                 }
@@ -33,7 +32,7 @@ const NestedComments: React.FC = () => {
                 if (commentAdded) return comment;
                 return {
                     ...comment,
-                    replies: addReplyRecursively(comment.replies, parentId, text, level + 1),
+                    replies: addReplyRecursively(comment.replies, parentId, text),
                 };
             });
         };
@@ -42,7 +41,7 @@ const NestedComments: React.FC = () => {
             // Add a top-level comment
             setComments([
                 ...comments,
-                { id: Date.now(), text, replies: [], level: 0 },
+                { id: Date.now(), text, replies: [] },
             ]);
         } else {
             setComments(addReplyRecursively(comments, parentId, text));
