@@ -15,6 +15,7 @@ import useWindowSize from './hooks/useWindowSize'
 import useFetch from './hooks/useFetch'
 import { useIntersectionObserver } from './hooks/useIntersectionObserver'
 import PollWidgetParent from './pages/poll-widget/pollWidgetParent'
+import { NotificationParent } from './pages/notification/NotificationParent'
 
 
 
@@ -109,6 +110,7 @@ function App() {
 
 
 
+    <NotificationParent />
     <CarouselParent />
     <Stopwatch />
     <NestedComments />
@@ -126,6 +128,7 @@ function App() {
       element to observe
     </div>
     <PollWidgetParent />
+
 
   </div>
 
