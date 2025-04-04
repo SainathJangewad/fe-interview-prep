@@ -16,6 +16,10 @@ import useFetch from './hooks/useFetch'
 import { useIntersectionObserver } from './hooks/useIntersectionObserver'
 import PollWidgetParent from './pages/poll-widget/pollWidgetParent'
 import { NotificationParent } from './pages/notification/NotificationParent'
+import Counter from './redux/components/Counter'
+import { useSelector } from 'react-redux'
+import { RootState } from './redux/types'
+import User from './redux/components/User'
 
 
 
@@ -28,6 +32,7 @@ function App() {
   const options = useMemo(() => ({ root: null, rootMargin: '10px', threshold: 0.5 }), []);
   const intersectingEntry = useIntersectionObserver(elRef, options);
 
+  const counter = useSelector((state: RootState) => state.counter.count);
 
 
   // useEffectPoly(() => {
@@ -108,20 +113,23 @@ function App() {
 
   return <div className="App">
 
-
-
+    <Counter />
+    <User />
+    {
+      counter
+    }
     <NotificationParent />
-    <CarouselParent />
+    {/* <CarouselParent />
     <Stopwatch />
     <NestedComments />
-    <Parent />
+    <Parent /> */}
     {/* <ProgressBar value={progress} max={100} color="success" size="large" striped animated showLabel /> */}
-    <button onClick={() => setCount2(count2 + 1)}>inc2</button>
+    {/* <button onClick={() => setCount2(count2 + 1)}>inc2</button>
     <button onClick={() => setCount(count + 1)}>inc</button>
-    <button onClick={() => setCount(count - 1)}>dec</button>
+    <button onClick={() => setCount(count - 1)}>dec</button> */}
     {/* <div>sqrt : {sqrt}</div>
     <div>sqrt : {sqrt2}</div> */}
-    <AutocompleteParent />
+    {/* <AutocompleteParent /> */}
     {/* <InfiniteScrollList /> */}
 
     <div ref={elRef} style={{ height: '200px', background: `${intersectingEntry?.isIntersecting ? 'green' : 'red'}` }}>
