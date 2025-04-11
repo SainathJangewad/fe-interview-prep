@@ -51,6 +51,9 @@ const SuggestionsList: React.FC<SuggestionsListProps> = ({
         const regex = new RegExp(`(${searchTerm})`, "gi");
         const parts = text.split(regex);
 
+        // console.log("regex obj", regex); // op : /(searchTerm)/gi here searchTerm is the value user types in the input field
+        // split() accepts a string value or regExp as arguments 
+
         return (
             <>
                 {parts.map((part, index) =>

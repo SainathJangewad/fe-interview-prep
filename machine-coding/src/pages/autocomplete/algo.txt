@@ -39,7 +39,8 @@ On debouncedValue update: Fetch suggestions unless skipNextFetch is active.
 Render Components
 Input field with event handlers (onChange, onBlur, onFocus, onKeyDown).
 Display loading indicator while fetching.
-Show error messages if fetching fails.
+Show error messages if fetching 
+fails.
 Render SuggestionsList if there are results.
 
 Suggestions List

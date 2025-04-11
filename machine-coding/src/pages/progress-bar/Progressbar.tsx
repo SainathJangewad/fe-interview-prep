@@ -33,9 +33,11 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
             aria-valuemax={max}
             aria-label="Progress"
         >
+
             <div
                 className={`progress-bar ${color} ${striped ? "striped" : ""} ${animated ? "animated" : ""}`}
-                style={{ width: `${percentage}%` }}
+                style={{ transform: `translateX(-${100 - percentage}%)` }}
+
             >
                 {showLabel && <span>{Math.round(percentage)}%</span>}
             </div>

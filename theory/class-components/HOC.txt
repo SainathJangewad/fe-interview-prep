@@ -141,5 +141,59 @@ Conclusion
 🔹 Without {...this.props}, Dashboard would lose the props.
 
 NOTe - In the withAuth HOC, this.props belongs to the anonymous class that extends Component.
+---------------------------------------
+example two (another way of using HOC):
+
+import React from 'react'
+
+const EnhancedComponent = (OriginalComponent) => {
+    class NewComponent extends React.Component {
+
+        constructor(props) {
+            super(props);
+            // Set initial count to be 0
+            this.state = { count: 0 }; 
+        }
+
+        handleClick = () => {
+            // Incrementing the count
+            this.setState({ count: this.state.count + 1 }); 
+        }
+
+        render() {
+
+            // passed a handleclick and count in the originalComponent
+            // as a props for calling and adding the functionality
+            return <OriginalComponent
+                handleclick={this.handleClick} 
+                show={this.state.count} /> 
+        }
+    }
+    // Returns the new component
+    return NewComponent 
+}
+// Export main Component
+export default EnhancedComponent 
+
+--
+import React from 'react'
+import "./App.css"
+// importing HighOrder file
+import EnhancedComponent from './HighOrder' 
+
+class App extends React.Component {
+  render() {
+    // Destructuring the props
+    const { show, handleclick } = this.props
+
+    // Calling out the props
+    return <button onClick={handleclick}>{show}
+    </button> 
+  }
+}
+
+
+export default EnhancedComponent(App);
+
 
 

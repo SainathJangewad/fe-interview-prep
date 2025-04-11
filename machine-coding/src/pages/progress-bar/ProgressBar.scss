@@ -30,14 +30,12 @@ $colors: (
 // Progress bar styles
 .progress-bar {
   height: 100%;
-  width: 0;
-  transition: width 0.3s ease-in-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%; 
+  transition: transform 0.3s ease-in-out; 
   color: white;
   font-size: 12px;
   font-weight: bold;
+  text-align: right;
   
   @each $name, $color in $colors {
     &.#{$name} {

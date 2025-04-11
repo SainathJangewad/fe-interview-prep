@@ -77,6 +77,13 @@ componentDidUpdate(prevProps, prevState) {
     console.log("State updated!");
   }
 }
+Bonus Tip (Functional Component Equivalent):
+In functional components, you'd use useEffect with a dependency array:
+useEffect(() => {
+  // runs when count changes
+  console.log('count updated');
+}, [count]);
+
 --------------
 7. What is componentWillUnmount() and why is it important?
 It is called just before the component is removed from the DOM. It is used to:
@@ -259,7 +266,7 @@ By implementing shouldComponentUpdate(), we can compare the new and old props/st
 Example: Preventing Unnecessary Re-renders
 
 class OptimizedComponent extends React.Component {
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps,nextState) {
     // here returning true means 'update' the comp and false means dont update
     return nextProps.count !== this.props.count; // Only re-render if count changes
   }

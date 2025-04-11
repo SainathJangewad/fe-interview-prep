@@ -16,7 +16,7 @@ interface AutocompleteProps {
     onFocus: (e: any) => void,
     onSelect: (res: any) => void,
     customLoader?: React.ReactNode,
-    customStyles?: object,
+    customStyles?: React.CSSProperties,
     caching?: boolean,
 }
 

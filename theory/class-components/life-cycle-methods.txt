@@ -32,12 +32,53 @@ Syncing state with props before rendering.
 Avoid using it unnecessarily, as it can lead to unnecessary re-renders.
 
 Example:
-static getDerivedStateFromProps(props, state) {
-  if (props.defaultCount !== state.count) {
-    return { count: props.defaultCount };
+Suppose you have a UserCard component.
+
+It shows the username, and you store it in the component’s state so you can allow editing.
+class UserCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: props.username  // Save prop to state
+    };
   }
-  return null; // No changes
+
+  // This runs whenever props change
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.username !== prevState.username) {
+      // Update state if props changed
+      return {
+        username: nextProps.username
+      };
+    }
+
+    // No need to change state
+    return null;
+  }
+
+  render() {
+    return <h1>{this.state.username}</h1>;
+  }
 }
+
+its Equivalent in function component is as below:
+import React, { useState, useEffect } from "react";
+
+function UserCard({ username }) {
+  const [localUsername, setLocalUsername] = useState(username); // store prop in state
+
+  useEffect(() => {
+    // This runs whenever props.username changes
+    setLocalUsername(username);
+  }, [username]);
+
+  return <h1>{localUsername}</h1>;
+}
+
+export default UserCard;
+
+
+ --------- 
 
 (c) render() (Required)
 Purpose: Returns the JSX to be displayed in the UI.

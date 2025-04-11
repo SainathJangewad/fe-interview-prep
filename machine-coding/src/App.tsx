@@ -86,7 +86,7 @@ function App() {
   // },[])
 
 
-  // useEffect(() => { 
+  // useEffect(() => {
   //   console.log(progress)
   //   const id = setInterval(() => {
   //     setProgress((prev) => prev + 1)
@@ -118,12 +118,12 @@ function App() {
     {
       counter
     }
-    <NotificationParent />
+    {/* <NotificationParent /> */}
     {/* <CarouselParent />
     <Stopwatch />
     <NestedComments />
     <Parent /> */}
-    {/* <ProgressBar value={progress} max={100} color="success" size="large" striped animated showLabel /> */}
+    <ProgressBar value={progress} max={100} color="success" size="large" striped animated showLabel />
     {/* <button onClick={() => setCount2(count2 + 1)}>inc2</button>
     <button onClick={() => setCount(count + 1)}>inc</button>
     <button onClick={() => setCount(count - 1)}>dec</button> */}
@@ -135,7 +135,7 @@ function App() {
     <div ref={elRef} style={{ height: '200px', background: `${intersectingEntry?.isIntersecting ? 'green' : 'red'}` }}>
       element to observe
     </div>
-    <PollWidgetParent />
+    {/* <PollWidgetParent /> */}
 
 
   </div>
