@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useReducer, useRef, useState, InputHTMLAttributes, useImperativeHandle, useMemo } from 'react'
-import './App.css'
+import './App.scss'
 import NestedComments from './pages/nested-comments/NestedComments'
 import Parent from './pages/truncate-pagination/Parent'
 import { useEffectPoly } from './hooks/useEffectPoly'
@@ -20,6 +20,8 @@ import Counter from './redux/components/Counter'
 import { useSelector } from 'react-redux'
 import { RootState } from './redux/types'
 import User from './redux/components/User'
+import { useTheme } from './pages/dark-mode/ThemeContext'
+import ThemeToggle from './pages/dark-mode/ThemeToggle'
 
 
 
@@ -33,6 +35,8 @@ function App() {
   const intersectingEntry = useIntersectionObserver(elRef, options);
 
   const counter = useSelector((state: RootState) => state.counter.count);
+
+  const { theme } = useTheme();
 
 
   // useEffectPoly(() => {
@@ -113,8 +117,12 @@ function App() {
 
   return <div className="App">
 
-    <Counter />
-    <User />
+    {/* dark mode  */}
+    <h1 className="home__title">Current Theme: {theme}</h1>
+    <ThemeToggle />
+
+    {/* <Counter /> */}
+    {/* <User /> */}
     {
       counter
     }

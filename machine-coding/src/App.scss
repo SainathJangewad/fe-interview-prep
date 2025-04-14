@@ -1,0 +1,21 @@
+@import "../src/styles/variables.scss"; 
+
+html {
+  font-family: sans-serif;
+  background-color: $light-bg;
+  color: $light-text;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &.dark {
+    background-color: $dark-bg;
+    color: $dark-text;
+  }
+}
+
+
+.App{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin: 2rem;
+} 

@@ -1,0 +1,27 @@
+ @import "../../styles/variables.scss";  
+
+.theme-toggle {
+  width: 60px;
+  height: 30px;
+  border-radius: 30px;
+  background-color: lightgray;
+  border: none;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  .slider {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #fff;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: left 0.3s ease;
+  }
+
+  &.dark .slider {
+    left: 33px;
+  }
+}
