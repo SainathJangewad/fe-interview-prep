@@ -22,6 +22,7 @@ import { RootState } from './redux/types'
 import User from './redux/components/User'
 import { useTheme } from './pages/dark-mode/ThemeContext'
 import ThemeToggle from './pages/dark-mode/ThemeToggle'
+import FullForm from './pages/config-driven-form/simpleForm'
 
 
 
@@ -116,6 +117,7 @@ function App() {
   // console.log('dataa', data);
 
   return <div className="App">
+    <FullForm />
 
     {/* dark mode  */}
     <h1 className="home__title">Current Theme: {theme}</h1>

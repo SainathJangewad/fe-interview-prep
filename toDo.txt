@@ -1,0 +1,11 @@
+Date : 14th april 25
+
+react : 
+ - dark light them (done)
+ - create dynamic form 
+ - create shoppig cart 
+
+Js : '  
+ - revision
+ - study about security
+

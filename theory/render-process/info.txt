@@ -35,3 +35,94 @@ The React rendering process involves a series of steps to update the user interf
 
 ## Summary
 React's rendering process focuses on efficiency by using the Virtual DOM to minimize direct DOM manipulation. Through reconciliation and diffing, React updates only necessary parts of the UI, leading to better performance and a smoother user experience.
+----------------------------------------------------------------------------------------------------------------------------------
+http://medium.com/code-your-own-path/the-react-rendering-process-what-drives-component-behavior-e779e97ad38b
+
+
+When React initiates the rendering of this component, it executes the function to retrieve the JSX representation. This JSX is transformed into a virtual DOM object via React.createElement(), allowing React to create an object-based representation of the component without immediately affecting the real DOM.
+
+Understanding the Rendering Cycle
+The rendering cycle in React can be broken down into several key processes:
+
+Render: React calculates the new representation of the component based on its current state and props.
+Reconciliation: This phase involves comparing the newly created virtual DOM with the previous version, identifying what has changed.
+Commit: The changes are then applied to the real DOM, completing the render.
+
+The Lifecycle of a Component
+A React component goes through various stages from its creation to its removal from the DOM. The lifecycle consists of three main phases:
+
+Mounting: When the component is first added to the DOM.
+Updating: Occurs in response to changes in state or props.
+Unmounting: When the component is removed from the DOM.
+
+1.Mounting: The First Step
+During the mounting phase, React performs several tasks:
+
+It calls the component function to analyze its JSX and compute local values.
+Side effects defined in useEffect() are queued for execution.
+Hooks like useState() and useRef() are initialized, maintaining their initial states for subsequent updates.
+
+During the mounting process, React:
+
+Analyzes the JSX and computes local values.
+Queues side effects for execution.
+Initializes hooks in the order they are declared.
+
+After rendering, React enters the commit phase, where the new DOM nodes are inserted into the real DOM, and any refs are updated accordingly.
+
+Updating: Responding to Change
+The updating phase occurs when a component needs to re-render due to changes in state or props. Here’s how it unfolds:
+
+Re-Render: React initiates the render cycle again, recalculating the new representation based on the updated state and props.
+Commit Changes: The DOM is updated with any changes from the latest render cycle.
+Effect Cleanup: Cleanup functions from previous renders are executed to  maintain stability and performance.
+
+
+Unmounting: Cleaning Up
+When a component is removed from the DOM, React executes the following steps:
+
+Runs cleanup functions for layout effects.
+Clears refs associated with DOM elements.
+Removes DOM nodes and executes any final cleanup for side effects.
+
+-------------------------------------------------------------------------------
+
+1. What is the Render Phase?
+The render phase is where React decides what changes need to be made to the user interface (UI). It’s a “pure calculation” phase that doesn’t directly interact with the DOM.
+
+Key characteristics of the render phase:
+
+Pure functions: It determines the next state of the UI without side effects. React evaluates components, processes the state, and prepares a “virtual DOM” representation.
+Interruptibility: In modern React (with concurrent rendering), the render phase can be paused, interrupted, or even restarted to prioritize more urgent updates like user interactions.
+Output: It produces a description of what the UI should look like but does not apply those changes yet.
+Example:
+If a component’s state changes, React re-renders the component tree in memory to determine what has changed.
+
+2. What is the Commit Phase?
+The commit phase is where React takes the results of the render phase and applies the changes to the actual DOM. It’s the “mutation” phase of React’s rendering process.
+
+Key characteristics of the commit phase:
+
+DOM Updates: React writes the calculated changes (like creating, updating, or removing DOM elements).
+Side Effects: React executes lifecycle methods such as componentDidMount, componentDidUpdate, or effects defined using useEffect.
+Non-Interruptible: Unlike the render phase, the commit phase cannot be paused or interrupted — it must run to completion to ensure the DOM is consistent.
+Example:
+Once React knows what needs to change in the DOM, it updates the DOM, executes any side effects, and makes the UI visually reflect the new state.
+
+3. How Render and Commit Work Together
+React’s rendering process can be visualized as follows:
+
+Render Phase
+
+React calculates changes by rendering the component tree virtually.
+This phase can be paused and resumed when using features like React’s concurrent mode.
+Commit Phase
+
+React updates the DOM and applies effects.
+This phase ensures that the user sees the updated UI.
+By separating these phases, React provides flexibility to optimize performance and avoid blocking the browser during long-running computations.
+
+------------------------------------------------------
+
+
+
