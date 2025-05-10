@@ -139,7 +139,7 @@ function App() {
     <button onClick={() => setCount(count - 1)}>dec</button> */}
     {/* <div>sqrt : {sqrt}</div>
     <div>sqrt : {sqrt2}</div> */}
-    {/* <AutocompleteParent /> */}
+    <AutocompleteParent />
     {/* <InfiniteScrollList /> */}
 
     <div ref={elRef} style={{ height: '200px', background: `${intersectingEntry?.isIntersecting ? 'green' : 'red'}` }}>

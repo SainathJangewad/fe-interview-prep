@@ -64,6 +64,7 @@ const SuggestionsList: React.FC<SuggestionsListProps> = ({
                     ) : (
                         part
                     )
+
                 )}
             </>
         );

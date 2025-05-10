@@ -11,7 +11,7 @@ export const useCache = (key: string, expires: number) => {
     const setCache = (subKey: string, data: any) => {
         const time = getCurrTimeInSeconds() + expires;
         cache.current[subKey] = { time, data };
-        localStorage.setItem(subKey, JSON.stringify(cache.current));
+        localStorage.setItem(key, JSON.stringify(cache.current));
     }
 
     const getCache = (subKey: string) => {
@@ -29,7 +29,7 @@ export const useCache = (key: string, expires: number) => {
             return cachedData.data;
         } else {
             delete cache.current[subKey];
-            localStorage.setItem(subKey, cache.current);
+            localStorage.setItem(key, cache.current);
             return null;
         }
 

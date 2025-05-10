@@ -1,7 +1,6 @@
 Date : 14th april 25
 
-react : 
- - dark light them (done)
+react :  
  - create dynamic form 
  - create shoppig cart 
 
