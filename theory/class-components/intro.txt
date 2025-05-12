@@ -186,7 +186,7 @@ class MyComponent1 extends React.Component {
   }
 }
 
-// 2. Using Arrow Functions in Class Properties (Modern Approach)
+ // 2. Using Arrow Functions in Class Properties (Modern Approach)
 class MyComponent2 extends React.Component {
   state = { count: 0 };
 

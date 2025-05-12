@@ -1,0 +1,181 @@
+
+🚀 Redux Toolkit with TypeScript + Thunk (CRUD API Example)
+
+📦 1. Installation
+npm install @reduxjs/toolkit react-redux axios
+npm install --save-dev typescript @types/react @types/react-dom @types/react-redux
+
+---
+
+🧱 2. Store Setup (store.ts)
+
+import { configureStore } from '@reduxjs/toolkit';
+import userReducer from '../features/user/userSlice';
+
+export const store = configureStore({
+  reducer: {
+    user: userReducer,
+  },
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+---
+
+⚙️ 3. Hooks Setup (hooks.ts)
+
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import type { RootState, AppDispatch } from './store';
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+---
+
+📁 4. Folder Structure
+
+src/
+├── app/
+│   ├── store.ts
+│   └── hooks.ts
+├── features/
+│   └── user/
+│       ├── userSlice.ts
+│       └── userAPI.ts
+├── App.tsx
+
+---
+
+🧠 5. userSlice.ts (with TypeScript + Thunks)
+
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+interface User {
+  id: number;
+  name: string;
+}
+
+interface UserState {
+  users: User[];
+  loading: boolean;
+  error: string | null;
+}
+
+const initialState: UserState = {
+  users: [],
+  loading: false,
+  error: null,
+};
+
+const BASE_URL = 'https://jsonplaceholder.typicode.com/users';
+
+// Thunks
+export const fetchUsers = createAsyncThunk<User[]>('user/fetchUsers', async () => {
+  const res = await axios.get(BASE_URL);
+  return res.data;
+});
+
+export const addUser = createAsyncThunk<User, Partial<User>>('user/addUser', async (newUser) => {
+  const res = await axios.post(BASE_URL, newUser);
+  return res.data;
+});
+
+export const updateUser = createAsyncThunk<User, User>('user/updateUser', async (user) => {
+  const res = await axios.put(`${BASE_URL}/${user.id}`, user);
+  return res.data;
+});
+
+export const deleteUser = createAsyncThunk<number, number>('user/deleteUser', async (id) => {
+  await axios.delete(`${BASE_URL}/${id}`);
+  return id;
+});
+
+// Slice
+const userSlice = createSlice({
+  name: 'user',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchUsers.fulfilled, (state, action: PayloadAction<User[]>) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to fetch users';
+      })
+      .addCase(addUser.fulfilled, (state, action: PayloadAction<User>) => {
+        state.users.push(action.payload);
+      })
+      .addCase(updateUser.fulfilled, (state, action: PayloadAction<User>) => {
+        const index = state.users.findIndex(u => u.id === action.payload.id);
+        if (index !== -1) state.users[index] = action.payload;
+      })
+      .addCase(deleteUser.fulfilled, (state, action: PayloadAction<number>) => {
+        state.users = state.users.filter(u => u.id !== action.payload);
+      });
+  },
+});
+
+export default userSlice.reducer;
+
+---
+
+📦 6. Usage in Component (Users.tsx)
+
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { fetchUsers, addUser, updateUser, deleteUser } from '../features/user/userSlice';
+
+const Users: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { users, loading, error } = useAppSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
+
+  const handleAdd = () => {
+    dispatch(addUser({ name: 'New User' }));
+  };
+
+  const handleUpdate = (user: typeof users[number]) => {
+    dispatch(updateUser({ ...user, name: 'Updated Name' }));
+  };
+
+  const handleDelete = (id: number) => {
+    dispatch(deleteUser(id));
+  };
+
+  return (
+    <div>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
+      <button onClick={handleAdd}>Add User</button>
+      {users.map(user => (
+        <div key={user.id}>
+          {user.name}
+          <button onClick={() => handleUpdate(user)}>Update</button>
+          <button onClick={() => handleDelete(user.id)}>Delete</button>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Users;
+
+---
+
+✅ Summary
+
+- Strong typing with `createAsyncThunk` and `PayloadAction`
+- Scalable and maintainable architecture
+- Handles all 4 CRUD operations via thunks
+

@@ -1,0 +1,130 @@
+
+🚀 React Router v6 – Essentials Guide
+
+📦 1. Installation
+npm install react-router-dom
+
+🧱 2. Basic Setup
+// App.jsx
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+📁 3. File Structure (Recommended)
+src/
+├── App.jsx
+├── pages/
+│   ├── Home.jsx
+│   └── About.jsx
+
+🔄 4. Navigation (Link vs NavLink)
+// In Navbar.jsx
+import { Link, NavLink } from "react-router-dom";
+
+<Link to="/">Home</Link>
+<NavLink to="/about" className={({ isActive }) => (isActive ? "active" : "")}>
+  About
+</NavLink>
+
+🧭 5. Nested Routes
+// App.jsx
+<Route path="dashboard" element={<Dashboard />}>
+  <Route path="profile" element={<Profile />} />
+  <Route path="settings" element={<Settings />} />
+</Route>
+
+// Dashboard.jsx
+import { Outlet } from "react-router-dom";
+function Dashboard() {
+  return (
+    <>
+      <h1>Dashboard</h1>
+      <Outlet />
+    </>
+  );
+}
+
+📌 6. Route Parameters
+<Route path="user/:id" element={<User />} />
+
+// User.jsx
+import { useParams } from "react-router-dom";
+const { id } = useParams();
+
+📬 7. Search Params (Query Params)
+// /search?q=react
+import { useSearchParams } from "react-router-dom";
+
+const [searchParams, setSearchParams] = useSearchParams();
+const query = searchParams.get("q");
+
+🔁 8. Navigate Programmatically
+import { useNavigate } from "react-router-dom";
+
+const navigate = useNavigate();
+navigate("/about");
+
+🛑 9. 404 Page (Wildcard Route)
+<Route path="*" element={<NotFound />} />
+
+🧰 10. Protected Routes (Auth Guard)
+function ProtectedRoute({ children }) {
+  const isAuth = // logic
+  return isAuth ? children : <Navigate to="/login" />;
+}
+
+<Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+
+🌳 11. Route Layouts (Shared Layouts)
+<Route path="/" element={<MainLayout />}>
+  <Route index element={<Home />} />
+  <Route path="about" element={<About />} />
+</Route>
+
+// MainLayout.jsx
+<>
+  <Navbar />
+  <Outlet />
+  <Footer />
+</>
+
+🚚 12. Redirects
+<Navigate to="/new-location" replace />
+
+🌀 13. Lazy Loading (Code Splitting)
+import { lazy, Suspense } from "react";
+const Home = lazy(() => import("./pages/Home"));
+
+<Route path="/" element={
+  <Suspense fallback={<div>Loading...</div>}>
+    <Home />
+  </Suspense>
+} />
+
+✅ 14. Using useLocation
+import { useLocation } from "react-router-dom";
+const location = useLocation();
+console.log(location.pathname);
+
+💡 Summary Cheatsheet
+
+| Feature             | Hook/Component     |
+|---------------------|--------------------|
+| Navigation          | Link, NavLink, useNavigate |
+| URL Params          | useParams()        |
+| Query Params        | useSearchParams()  |
+| Accessing Location  | useLocation()      |
+| Route Matching      | Route              |
+| Outlet for children | Outlet             |
+| Redirect            | Navigate           |

@@ -62,6 +62,7 @@ It calls the component function to analyze its JSX and compute local values.
 Side effects defined in useEffect() are queued for execution.
 Hooks like useState() and useRef() are initialized, maintaining their initial states for subsequent updates.
 
+
 During the mounting process, React:
 
 Analyzes the JSX and computes local values.
