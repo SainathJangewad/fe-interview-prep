@@ -1,0 +1,10 @@
+encyption / decription which library to use and why ?  
+
+api rate limiting (debounce/throttle) 
+
+testing in react ?
+
+u know yup?
+
+explain projects properly? 
+

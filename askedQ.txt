@@ -1,0 +1,690 @@
+**What is CORS?**
+
+CORS stands for **Cross-Origin Resource Sharing**. It's a **security feature implemented by browsers** that controls how web pages can request resources from a different origin (domain, protocol, or port) than the one the page was loaded from.
+
+In a **React application**, this typically becomes relevant when your frontend (e.g., running on `localhost:3000`) tries to make an API call to a backend running on a different port (e.g., `localhost:5000`) or domain. By default, browsers block such cross-origin requests unless the server explicitly allows them using specific **CORS headers**.
+
+For example, the backend needs to include a header like:
+
+```
+Access-Control-Allow-Origin: http://localhost:3000
+```
+
+to allow the frontend to access its resources.
+
+---
+
+**Why is it important?**
+
+* Prevents **unauthorized requests** from malicious websites.
+* Ensures only **trusted origins** can access protected resources.
+* React devs often face CORS issues in **development**, especially when the frontend and backend are hosted separately.
+
+---
+
+**How do you handle CORS in development?**
+
+* **Using a proxy**: In React (Create React App), you can set a `"proxy"` field in `package.json` to redirect API calls during development.
+* **Server-side configuration**: On the backend (Node/Express, etc.), you can use middleware like `cors` to set the appropriate headers.
+----------------------------------------------------------------------------------------
+
+### ✅ What is JWT?
+
+**JWT (JSON Web Token)** is a **compact, URL-safe** way to securely transmit information between two parties — typically between a client (like a React app) and a server (like a Node.js backend).
+
+It’s widely used for **authentication and authorization** in web applications.
+
+---
+
+### ✅ When do we use JWT?
+
+* **Authentication**: After a user logs in successfully, the server sends back a JWT.
+* **Subsequent Requests**: The client includes the JWT in the `Authorization` header for every API call, so the server knows who the user is without requiring a session.
+
+---
+
+### ✅ Structure of JWT
+
+A JWT has **three parts**, separated by dots (`.`):
+
+```
+xxxxx.yyyyy.zzzzz
+```
+
+These parts are:
+
+1. **Header**
+
+   * Contains metadata about the token and the algorithm used to sign it.
+     Example:
+
+   ```json
+   {
+     "alg": "HS256",
+     "typ": "JWT"
+   }
+   ```
+
+2. **Payload**
+
+   * Contains the actual data (called "claims") — like user ID, role, or expiry time.
+     Example:
+
+   ```json
+   {
+     "userId": "12345",
+     "role": "admin",
+     "exp": 1715792400
+   }
+   ```
+
+3. **Signature**
+
+   * Ensures the token hasn't been tampered with. It's created using a **secret key** and the header + payload.
+
+---
+
+### ✅ How is JWT used?
+
+1. **Login**
+
+   * User logs in via a form.
+   * Backend validates credentials and generates a JWT.
+   * JWT is sent back to the frontend and typically stored in **localStorage** or **cookies**.
+
+2. **API Requests**
+
+   * React app sends the JWT in the `Authorization` header:
+
+     ```
+     Authorization: Bearer <token>
+     ```
+
+3. **Validation on Server**
+
+   * Server verifies the token's signature and expiration.
+   * If valid, it processes the request and knows who the user is.
+
+---
+
+### ✅ Why JWT?
+
+* **Stateless**: No need to store session on the server.
+* **Scalable**: Perfect for microservices or distributed systems.
+* **Secure** (if used correctly): Can’t be tampered with if signed properly and transmitted over HTTPS.
+
+-------------------------------------------------------
+
+Here’s a simple example to illustrate how to use JWT with HttpOnly cookies to improve security compared to storing tokens in localStorage.
+
+Example: Using JWT with HttpOnly Cookies
+1. Backend (Node.js + Express) – Set JWT in HttpOnly cookie
+
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const app = express();
+
+app.use(express.json());
+
+const SECRET = 'your_secret_key';
+
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  
+  // (In real app, verify user credentials here)
+  if (username === 'user' && password === 'pass') {
+    // Create JWT token
+    const token = jwt.sign({ username }, SECRET, { expiresIn: '15m' });
+    
+    // Set token in HttpOnly cookie
+    res.cookie('token', token, {
+      httpOnly: true,  // JavaScript cannot access this cookie
+      secure: true,    // Only sent over HTTPS in production
+      sameSite: 'Strict', // Prevent CSRF
+      maxAge: 15 * 60 * 1000 // 15 minutes
+    });
+    
+    return res.json({ message: 'Logged in' });
+  }
+  
+  res.status(401).json({ message: 'Invalid credentials' });
+});
+
+app.get('/protected', (req, res) => {
+  const token = req.cookies.token;
+  
+  if (!token) return res.status(401).json({ message: 'Unauthorized' });
+  
+  try {
+    const payload = jwt.verify(token, SECRET);
+    res.json({ message: `Welcome ${payload.username}!` });
+  } catch (e) {
+    res.status(401).json({ message: 'Invalid token' });
+  }
+});
+
+app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+
+2. Frontend (React example) – No direct access to token
+
+// Login request: send credentials, server sets HttpOnly cookie automatically
+async function login(username, password) {
+  const response = await fetch('/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password }),
+    credentials: 'include'  // Important: include cookies in requests
+  });
+  
+  if (response.ok) {
+    console.log('Logged in successfully');
+  } else {
+    console.log('Login failed');
+  }
+}
+
+// Access protected route: JWT cookie sent automatically
+async function fetchProtectedData() {
+  const response = await fetch('/protected', {
+    method: 'GET',
+    credentials: 'include'  // Include cookies again
+  });
+  
+  if (response.ok) {
+    const data = await response.json();
+    console.log(data.message);
+  } else {
+    console.log('Unauthorized');
+  }
+}
+
+Why is this better?
+
+    The JWT token is never accessible to JavaScript because it’s in an HttpOnly cookie.
+    Cookies are automatically sent with requests, so you don’t manually add tokens to headers.
+    Helps prevent XSS attacks stealing your JWT.
+    Using sameSite helps reduce CSRF risks.
+    -------------
+
+    Absolutely! Here's the same frontend example using Axios first, and then a Redux Toolkit version that integrates Axios calls with async thunks.
+    
+     Frontend with Axios
+     import axios from 'axios';
+
+// Configure axios to send cookies with every request
+const axiosInstance = axios.create({
+  baseURL: 'http://localhost:3000',
+  withCredentials: true, // important to send HttpOnly cookies
+});
+
+// Login function
+async function login(username, password) {
+  try {
+    const response = await axiosInstance.post('/login', { username, password });
+    console.log('Logged in successfully');
+  } catch (error) {
+    console.error('Login failed', error.response?.data || error.message);
+  }
+}
+
+// Fetch protected data function
+async function fetchProtectedData() {
+  try {
+    const response = await axiosInstance.get('/protected');
+    console.log('Protected data:', response.data.message);
+  } catch (error) {
+    console.error('Unauthorized or error', error.response?.data || error.message);
+  }
+}
+Usage is the same — you just call login() and fetchProtectedData(). Axios handles cookies automatically thanks to withCredentials: true.
+
+2. Frontend using Redux Toolkit + Axios
+
+import { createSlice, createAsyncThunk, configureStore } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+// Axios instance with cookies enabled
+const axiosInstance = axios.create({
+  baseURL: 'http://localhost:3000',
+  withCredentials: true,
+});
+
+// Async thunk for login
+export const loginUser = createAsyncThunk(
+  'auth/loginUser',
+  async ({ username, password }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post('/login', { username, password });
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+// Async thunk for fetching protected data
+export const fetchProtectedData = createAsyncThunk(
+  'auth/fetchProtectedData',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get('/protected');
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState: {
+    user: null,
+    protectedMessage: '',
+    loading: false,
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // loginUser
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        // Optionally store some user info here, if returned
+        state.user = { loggedIn: true };
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Login failed';
+      })
+      // fetchProtectedData
+      .addCase(fetchProtectedData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchProtectedData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.protectedMessage = action.payload.message;
+      })
+      .addCase(fetchProtectedData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to fetch protected data';
+      });
+  },
+});
+
+export const store = configureStore({
+  reducer: {
+    auth: authSlice.reducer,
+  },
+});
+
+Summary
+
+    Axios: Use withCredentials: true to send cookies.
+    Redux Toolkit: Wrap async calls in createAsyncThunk, manage loading and error states easily.
+    Cookies handle the JWT token securely (HttpOnly), no manual token management needed on client.
+    -----------------------------------------------------------------------------------------------------------
+
+3)why and when to use fetch over axiso?
+
+ Why fetch (Advantages):
+
+    Built-in:
+    fetch is a native browser API—no need to install extra packages.
+
+    Lightweight:
+    No additional bundle size, unlike axios, which adds ~14KB to your app.
+
+When to Prefer fetch Over axios:
+
+    When you want minimal dependencies:
+    Ideal for small projects or libraries where reducing dependencies is important.
+
+    If you don’t need advanced features:
+    Use fetch when you just need basic GET/POST requests without interceptors, request cancellation, or automatic JSON transformation.
+
+ But Be Aware:
+    fetch doesn’t reject on HTTP errors (e.g., 404/500) — you must manually check response.ok.
+    It doesn’t support request cancellation natively (no built-in AbortController until recently).
+    Needs more boilerplate for things like setting headers or parsing JSON.    
+-----------------------------------------------------------------------------------------------------------------
+
+why use axios over fetch ?
+
+I would prefer using axios when I need more advanced features out of the box that fetch doesn't provide easily.
+
+For example, axios automatically transforms JSON data both in requests and responses, which reduces boilerplate. It also handles HTTP errors better—unlike fetch, axios throws an error for non-2xx status codes, making error handling more straightforward.
+
+I also use axios when I need:
+
+    Interceptors to add tokens or handle responses globally.
+
+    Timeouts, which fetch doesn’t support natively.
+
+    Request cancellation, which is simpler with Axios’s CancelToken (or the newer AbortController if needed).
+
+    Progress tracking for uploads and downloads.
+
+So in larger projects or those that involve authenticated APIs, file uploads, or require robust error handling, axios helps speed up development and keeps the code cleaner.    
+---------------------------------------------------------------------------------
+
+ what are intercepts?" 
+
+---
+
+### ✅ What are Interceptors?
+
+**Interceptors** are functions that allow you to **intercept and modify**:
+
+* Requests **before they are sent** to the server
+* Responses **before they are handled** by your application
+
+---
+
+### 🚀 Example with Axios in React
+
+If you're using Axios to make API calls in a React app, interceptors can be used like this:
+
+#### 👉 Request Interceptor
+
+```ts
+axios.interceptors.request.use(
+  (config) => {
+    // Modify request (e.g., add auth token)
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+```
+
+#### 👉 Response Interceptor
+
+```ts
+axios.interceptors.response.use(
+  (response) => {
+    // Handle successful response
+    return response;
+  },
+  (error) => {
+    // Handle errors globally
+    if (error.response.status === 401) {
+      // For example: redirect to login page
+    }
+    return Promise.reject(error);
+  }
+);
+```
+
+---
+
+### 🧠 Why are interceptors useful?
+
+* Automatically attach **authorization headers** (tokens)
+* Handle **errors** like 401 Unauthorized globally
+* Log or modify **request/response data**
+* **Centralized** API behavior (don't repeat code in every call)
+
+---
+
+### 📌 In summary
+
+> Interceptors are a way to **intercept and modify HTTP requests/responses**, commonly used with Axios in React apps for things like adding auth tokens, handling errors, or logging.
+
+Let me know if you want a quick analogy or a follow-up answer to impress in an interview.
+--------------------------------------------------------------------------------------------------
+
+how would u implement re try mechanism in api? and when to retry it?
+
+When to Retry an API Call
+
+You should retry only for certain types of failures, like:
+    Network errors (e.g., no internet)
+    Server errors (e.g., status codes 500, 502, 503, 504)
+    Rate-limiting errors (e.g., 429 Too Many Requests)
+
+Avoid retrying:
+    For client errors like 400 or 401 — these are usually permanent until the request is fixed.
+
+Great question — implementing a **retry mechanism in API calls** is a practical and impressive topic in React interviews, especially if you're using libraries like **Axios** or **fetch**. Here's a complete answer you could give, followed by how to implement it:
+
+---
+
+### ✅ When to Retry an API Call
+
+You should retry **only for certain types of failures**, like:
+
+* **Network errors** (e.g., no internet)
+* **Server errors** (e.g., status codes 500, 502, 503, 504)
+* **Rate-limiting errors** (e.g., 429 Too Many Requests)
+
+**Avoid retrying:**
+
+* For **client errors** like 400 or 401 — these are usually permanent until the request is fixed.
+* If retries can cause unintended side effects (e.g., duplicate form submissions).
+
+---
+
+### 🔁 How to Implement Retry (Axios + React)
+
+You can implement it **manually** or use a helper library like `axios-retry`. Here's a **manual** example:
+
+#### ✅ Manual Retry with Axios
+
+```ts
+import axios from 'axios';
+
+const axiosInstance = axios.create({
+  baseURL: 'https://api.example.com',
+});
+
+// Retry logic
+axiosInstance.interceptors.response.use(
+  response => response,
+  async error => {
+    const config = error.config;
+
+    if (!config || config._retry) {
+      return Promise.reject(error);
+    }
+
+    // Retry only for certain status codes
+    const retryStatusCodes = [500, 502, 503, 504];
+    if (retryStatusCodes.includes(error.response?.status) || !error.response) {
+      config._retry = true;
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
+      return axiosInstance(config); // Retry once
+    }
+
+    return Promise.reject(error);
+  }
+);
+```
+
+You can extend this to support **multiple retries with backoff** (exponential or linear delays).
+
+---
+
+### ⏳ Optional: Retry with Exponential Backoff
+
+```ts
+async function retryRequest(requestFn, retries = 3, delay = 1000) {
+  try {
+    return await requestFn();
+  } catch (error) {
+    if (retries === 0) throw error;
+    await new Promise(res => setTimeout(res, delay));
+    return retryRequest(requestFn, retries - 1, delay * 2); // exponential backoff
+  }
+}
+```
+
+Usage:
+
+```ts
+retryRequest(() => axios.get('/some-api'))
+  .then(res => console.log(res.data))
+  .catch(err => console.error('Final error after retries:', err));
+```
+
+---
+
+### 🧠 In an Interview, You Can Say:
+
+> I implement a retry mechanism when the API fails due to network or server-side errors (like 500 or 503). I use Axios interceptors to detect such errors and retry once or twice, optionally using exponential backoff to avoid hammering the server. For 400 or 401 errors, I don't retry, since they usually indicate a problem in the request.
+
+--- --------------------------------------------------------------------------------------
+what are sockets ?
+
+In a **React interview**, when you're asked **"What are sockets?"**, they're typically referring to **WebSockets**, a protocol used for **real-time communication** between a client (like a React app) and a server.
+
+---
+
+### 🔌 What are Sockets (WebSockets)?
+
+**Sockets**, in the web context, usually mean **WebSockets** — a way to **open a persistent, two-way connection** between the browser and the server.
+
+* **HTTP** is **request-response**: client sends a request, server responds once.
+* **WebSocket** is **bi-directional and persistent**: once connected, **both client and server can send messages to each other anytime**.
+
+---
+
+### 🧠 Why are WebSockets Used?
+
+To enable **real-time updates** without reloading or continuously polling the server.
+
+#### Common Use Cases:
+
+* Live chat applications 💬
+* Stock price tickers 📈
+* Multiplayer games 🎮
+* Collaborative editing tools (like Google Docs) 📝
+
+---
+
+### 💻 Example in React:
+
+Here’s a basic way to use WebSockets in a React component:
+
+```js
+import { useEffect, useState } from 'react';
+
+function ChatComponent() {
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    const socket = new WebSocket('wss://example.com/socket');
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      setMessages(prev => [...prev, data]);
+    };
+
+    // Cleanup on unmount
+    return () => socket.close();
+  }, []);
+
+  return (
+    <div>
+      {messages.map((msg, i) => <p key={i}>{msg.text}</p>)}
+    </div>
+  );
+}
+```
+
+---
+
+### 🧩 Keywords You Can Mention in Interview:
+
+* Persistent connection
+* Bi-directional communication
+* Real-time data
+* WebSocket API
+* `wss://` protocol (secure WebSocket)
+* Use cases like live chat, live notifications, etc.
+
+----------------------------------------------------------------------------
+
+what was ur role ?
+I worked as a Frontend Developer at Arrayponter for 2 years, focusing mainly on Angular. My role involved building and maintaining complex UI components, integrating REST APIs, and working closely with designers and backend developers to deliver end-to-end features. I also handled tasks like RBAC implementation, data table handling with filtering and pagination, and worked on form-heavy modules with validations and conditional logic.
+=========================================================================
+
+tell us smthng not on ur resume?
+One thing that's not on my resume is that I really enjoy solving performance-related issues in the frontend. For example, in one of my projects, we were facing UI unresponsiveness when uploading a large number of files. I took the initiative to chunk the uploads and process them in batches, which made the UI responsive and user-friendly. I didn’t need assistance for that — I just tried different approaches until it worked. It was satisfying to fix something that directly improved the user experience.
+--------------------------------------------------
+
+explain how u handled RBAC?
+
+Thanks for the correction! Since you used **React** in **myathira.com**, here’s how you can explain **how you handled RBAC in React**:
+
+---
+
+### ✅ Sample Answer (React + RBAC):
+
+> In the *myathira.com* project, I implemented **Role-Based Access Control (RBAC)** using React. After a user logs in, we received their role and permissions from the backend and stored it in a global state using **Redux** (or **Context API**, depending on your actual setup). Based on this role, I controlled access to both **routes** and **UI elements**.
+
+---
+
+### 🔐 How I Handled RBAC in React:
+
+1. **Store Role Info**:
+
+   * After login, the API returned the user role (`admin`, `manager`, `viewer`, etc.).
+   * I saved this role in Redux or Context.
+
+2. **Protect Routes**:
+
+   * I created a **`PrivateRoute`** wrapper component that checked user roles before rendering the page.
+
+   ```tsx
+   const PrivateRoute = ({ children, allowedRoles }) => {
+     const userRole = useSelector(state => state.auth.role);
+     return allowedRoles.includes(userRole) ? children : <Navigate to="/unauthorized" />;
+   };
+   ```
+
+3. **Control UI Elements**:
+
+   * Inside components, I used conditional rendering:
+
+   ```tsx
+   {role === 'admin' && <button onClick={handleDelete}>Delete User</button>}
+   ```
+
+4. **Reusable `hasPermission` Helper**:
+
+   * I wrote a utility function like:
+
+   ```tsx
+   const hasPermission = (role, permission) => {
+     const permissions = {
+       admin: ['view', 'edit', 'delete'],
+       viewer: ['view'],
+     };
+     return permissions[role]?.includes(permission);
+   };
+   ```
+
+5. **Backend Validation**:
+
+   * Even though the frontend hides UI for unauthorized roles, the actual validation is always done at the API level too.
+
+---
+
+### 👨‍💻 Real Example:
+
+> For example, in the Audit Logs page, only users with the `admin` role could see the "Delete" button and access the delete logs API. If a viewer somehow tried to hit the endpoint manually, the backend would return a 403.
+
+----------------------------------------------------------------------------------
+
+
+
