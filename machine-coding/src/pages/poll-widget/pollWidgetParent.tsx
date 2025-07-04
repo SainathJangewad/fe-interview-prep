@@ -76,5 +76,4 @@ const PollWidgetParent: React.FC = () => {
     );
 };
 
-export default PollWidgetPare
-nt;
+export default PollWidgetParent;

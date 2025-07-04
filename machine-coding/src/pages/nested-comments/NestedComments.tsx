@@ -15,6 +15,7 @@ const NestedComments: React.FC = () => {
     ]);
 
     const addComment = (parentId: number | null, text: string) => {
+
         let commentAdded = false;
         const addReplyRecursively = (commentsList: CommentType[], parentId: number, text: string,): CommentType[] => {
             return commentsList.map((comment) => {

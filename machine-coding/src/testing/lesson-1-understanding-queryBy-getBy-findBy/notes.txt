@@ -1,0 +1,299 @@
+Great! Let’s start with **Lesson 1: RTL (React Testing Library) + Vitest Basics**.
+
+---
+
+## 🔹 What is Vitest?
+
+**Vitest** is a **fast unit test framework** built on top of **Vite**. It is commonly used with modern front-end frameworks like React.
+
+### ✅ Why use Vitest?
+
+* **Blazing fast**: Uses Vite under the hood for instant test startup.
+* **Jest-compatible API**: Easy migration from Jest.
+* **Built-in mocking & snapshot support**.
+* Works great with **React Testing Library (RTL)** for UI testing.
+
+---
+
+## 🔹 What is React Testing Library (RTL)?
+
+RTL is used to test UI components from the **user’s perspective**.
+
+### ✅ Why RTL?
+
+* Encourages testing what users actually see.
+* Avoids testing implementation details.
+* Uses actual DOM queries like a user would: by text, role, label, etc.
+
+---
+
+## 🔹 Common Query APIs in RTL
+
+Here are the main RTL queries with examples:
+
+| Type            | Example          | Throws error if not found | Async? | Use When                         |
+| --------------- | ---------------- | ------------------------- | ------ | -------------------------------- |
+| `getBy...`      | `getByText`      | ✅ Yes                     | ❌ No   | Element must be in DOM           |
+| `getAllBy...`   | `getAllByText`   | ✅ Yes                     | ❌ No   | Multiple elements in DOM         |
+| `queryBy...`    | `queryByText`    | ❌ No                      | ❌ No   | Might not be present             |
+| `queryAllBy...` | `queryAllByText` | ❌ No                      | ❌ No   | Multiple optional elements       |
+| `findBy...`     | `findByText`     | ✅ Yes                     | ✅ Yes  | Wait for async element           |
+| `findAllBy...`  | `findAllByText`  | ✅ Yes                     | ✅ Yes  | Wait for multiple async elements |
+
+---
+
+## 🔹 Short Code Example for Each
+
+### ✅ 1. `getByText`
+
+```tsx
+render(<div>Hello World</div>);
+screen.getByText('Hello World'); // ✅ Passes
+screen.getByText('Not There');   // ❌ Throws error
+```
+
+### ✅ 2. `getAllByText`
+
+```tsx
+render(<>
+  <p>Hello</p>
+  <p>Hello</p>
+</>);
+screen.getAllByText('Hello'); // ✅ Returns array of both
+```
+
+### ✅ 3. `queryByText`
+
+```tsx
+render(<div>Hi</div>);
+screen.queryByText('Bye'); // ✅ Returns null (doesn’t throw)
+```
+
+### ✅ 4. `queryAllByText`
+
+```tsx
+render(<>
+  <p>Test</p>
+</>);
+screen.queryAllByText('Nope'); // ✅ Returns []
+```
+
+### ✅ 5. `findByText` (Async)
+
+```tsx
+render(<div>{isLoading ? 'Loading...' : 'Done'}</div>);
+
+// Suppose 'Done' appears later
+await screen.findByText('Done'); // ✅ Waits for it
+```
+
+### ✅ 6. `findAllByText` (Async multiple)
+
+```tsx
+render(<>
+  <p>Load</p>
+  <p>Load</p>
+</>);
+
+await screen.findAllByText('Load'); // ✅ Returns both
+```
+
+---
+
+## 💡 When to use what?
+
+| Goal                                    | Use                            |
+| --------------------------------------- | ------------------------------ |
+| Element **must be there**               | `getBy...` / `getAllBy...`     |
+| Element **might not be there**          | `queryBy...` / `queryAllBy...` |
+| Element **comes after delay or effect** | `findBy...` / `findAllBy...`   |
+
+---
+
+## 🧪 Sample Vitest Test with RTL
+
+```tsx
+// MyComponent.tsx
+export function MyComponent() {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setShow(true), 500);
+  }, []);
+
+  return (
+    <div>
+      <h1>Hello</h1>
+      {show && <p>Loaded!</p>}
+    </div>
+  );
+}
+```
+
+```tsx
+// MyComponent.test.tsx
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { MyComponent } from './MyComponent';
+
+describe('MyComponent', () => {
+  it('renders Hello immediately', () => {
+    render(<MyComponent />);
+    expect(screen.getByText('Hello')).toBeInTheDocument();
+  });
+
+  it('shows Loaded! after delay', async () => {
+    render(<MyComponent />);
+    expect(await screen.findByText('Loaded!')).toBeInTheDocument();
+  });
+
+it('matches Loaded! using RegExp (case-insensitive)', async () => {
+    render(<MyComponent />);
+    // Matches any text that contains "loaded" case-insensitively
+    const paragraph = await screen.findByText(/loaded/i); 
+    expect(paragraph).toBeInTheDocument();
+  });
+
+});
+
+
+---
+--------------------------------------------------------------------------------------------
+                 findByRole, getByRole,
+
+Absolutely! Let’s dive deeper into `findByRole` with a **realistic example** that includes:
+
+* Multiple buttons
+* Different roles (heading, textbox, checkbox, etc.)
+* A clear explanation of why we use `{ name: "Submit" }`
+
+---
+
+## 🔹 Enhanced Example: `findByRole` in Practice
+
+```tsx
+// FormComponent.tsx
+import { useEffect, useState } from 'react';
+
+export function FormComponent() {
+  const [showForm, setShowForm] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setShowForm(true), 500);
+  }, []);
+
+  return (
+    <div>
+      <h1>Registration</h1>
+      {showForm && (
+        <form>
+          <label htmlFor="username">Username</label>
+          <input id="username" placeholder="Enter your name" />
+
+          <label>
+            <input type="checkbox" /> I agree to terms
+          </label>
+
+          <button type="button">Cancel</button>
+          <button type="submit">Submit</button>
+        </form>
+      )}
+    </div>
+  );
+}
+```
+
+---
+
+## 🧪 Test Case with `findByRole`
+
+```tsx
+// FormComponent.test.tsx
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
+import { FormComponent } from './FormComponent';
+
+describe('FormComponent', () => {
+  it('waits for the form to load and checks elements by role', async () => {
+    render(<FormComponent />);
+
+    // Heading
+    const heading = screen.getByRole('heading', { name: 'Registration' });
+    expect(heading).toBeInTheDocument();
+
+    // Text input (role: textbox)
+    const textbox = await screen.findByRole('textbox', { name: 'Username' });
+    expect(textbox).toBeInTheDocument();
+
+    // Checkbox
+    const checkbox = await screen.findByRole('checkbox');
+    expect(checkbox).toBeInTheDocument();
+
+    // Button (Submit) - there are TWO buttons, so we must specify which one
+    const submitBtn = await screen.findByRole('button', { name: 'Submit' });
+    expect(submitBtn).toBeInTheDocument();
+
+    // Another button (Cancel)
+    const cancelBtn = await screen.findByRole('button', { name: 'Cancel' });
+    expect(cancelBtn).toBeInTheDocument();
+  });
+});
+```
+
+---
+
+## 🤔 Why use `{ name: "Submit" }` in `findByRole`?
+
+When you do:
+
+```ts
+screen.findByRole('button');
+```
+
+It will **throw an error if there are multiple buttons** because it doesn't know which one you meant.
+
+To avoid this, use the **accessible name** of the button:
+
+```ts
+screen.findByRole('button', { name: 'Submit' });
+```
+
+> 🔹 The `{ name: "..." }` option refers to the **visible text** associated with the element (what screen readers read).
+
+This helps RTL find the **exact element** you're testing.
+
+---
+
+## 📌 Bonus: How RTL maps HTML elements to roles
+
+| HTML Element              | Role          |
+| ------------------------- | ------------- |
+| `<h1>` to `<h6>`          | `heading`     |
+| `<button>`                | `button`      |
+| `<input type="text">`     | `textbox`     |
+| `<input type="checkbox">` | `checkbox`    |
+| `<form>`                  | `form` (rare) |
+| `<a href="">`             | `link`        |
+| `<img alt="...">`         | `img`         |
+
+You can inspect roles in browser devtools using `axe` or Chrome's accessibility tab.
+
+---
+
+## ✅ Query Priority Recap (Best to Worst)
+
+> Based on RTL's official [guidelines](https://testing-library.com/docs/queries/about/):
+
+| Priority | Query Type                 | Why                                              |
+| -------- | -------------------------- | ------------------------------------------------ |
+| 1️⃣      | `getByRole` / `findByRole` | Most accessible; reflects real user interactions |
+| 2️⃣      | `getByLabelText`           | Great for inputs with labels                     |
+| 3️⃣      | `getByPlaceholderText`     | When labels are missing                          |
+| 4️⃣      | `getByText`                | Useful for simple content                        |
+| 5️⃣      | `getByDisplayValue`        | For input values                                 |
+| 6️⃣      | `getByAltText`             | For images                                       |
+| 7️⃣      | `getByTitle`               | Least recommended                                |
+| ❌ Avoid  | `getByTestId`              | Not user-focused; only when others don’t work    |
+
+---
+ 

@@ -201,7 +201,7 @@ const FullForm = () => {
         console.log(data);
     }
 
-    return <form onSubmit={handleSubmit(submit)} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+    return <form noValidate onSubmit={handleSubmit(submit)} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
         <label>
             <input type="text" {...register('name')} placeholder='name' />

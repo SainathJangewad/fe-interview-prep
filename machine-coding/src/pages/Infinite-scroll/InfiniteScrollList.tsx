@@ -59,7 +59,7 @@ const InfiniteScrollList: React.FC = () => {
     useEffect(() => {
         const handleScroll = () => {
             // Calculate scroll position
-            const { scrollTop, clientHeight, scrollHeight } = document.documentElement; 
+            const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
             // Key Points About Scroll Properties:
             // scrollTop:
             // Tracks how far the user has scrolled down the page.
@@ -73,7 +73,7 @@ const InfiniteScrollList: React.FC = () => {
             // Threshold:
             // A small value (e.g., 10) to trigger the fetch slightly before the user reaches the absolute bottom.
             // Example: scrollHeight - 10 ensures the fetch is triggered when the user is 10px away from the bottom.
-            
+
             // 6. Trigger fetchData when the user is near the bottom of the page
             if (scrollTop + clientHeight >= scrollHeight - 10 && !loading) {
                 fetchData();

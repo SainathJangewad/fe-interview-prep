@@ -37,7 +37,6 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
             <div
                 className={`progress-bar ${color} ${striped ? "striped" : ""} ${animated ? "animated" : ""}`}
                 style={{ transform: `translateX(-${100 - percentage}%)` }}
-
             >
                 {showLabel && <span>{Math.round(percentage)}%</span>}
             </div>

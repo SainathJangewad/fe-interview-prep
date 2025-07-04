@@ -7,8 +7,7 @@ interface NotificationConfig {
     type: "error" | "info" | "success" | "warning"
     message: string,
     duration: number,
-    animation: "slide" | "pop" | "fade",
-
+    animation?: "slide" | "pop" | "fade",
 }
 
 

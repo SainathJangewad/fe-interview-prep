@@ -20,9 +20,12 @@ import Counter from './redux/components/Counter'
 import { useSelector } from 'react-redux'
 import { RootState } from './redux/types'
 import User from './redux/components/User'
-import { useTheme } from './pages/dark-mode/ThemeContext'
+import { ThemeProvider, useTheme } from './pages/dark-mode/ThemeContext'
 import ThemeToggle from './pages/dark-mode/ThemeToggle'
 import FullForm from './pages/config-driven-form/simpleForm'
+import { FiltersComponent } from './pages/filters/FiltersComponent'
+import { BrowserRouter } from 'react-router-dom'
+import { FiltersProvider } from './pages/filters/FiltersProvider'
 
 
 
@@ -117,37 +120,42 @@ function App() {
   // console.log('dataa', data);
 
   return <div className="App">
-    <FullForm />
+    <BrowserRouter>
+      <FiltersProvider>
+        <ThemeProvider>
+          <FiltersComponent />
+          <FullForm />
 
-    {/* dark mode  */}
-    <h1 className="home__title">Current Theme: {theme}</h1>
-    <ThemeToggle />
+          {/* dark mode  */}
+          <h1 className="home__title">Current Theme: {theme}</h1>
+          <ThemeToggle />
 
-    {/* <Counter /> */}
-    {/* <User /> */}
-    {
-      counter
-    }
-    {/* <NotificationParent /> */}
-    {/* <CarouselParent />
-    <Stopwatch />
-    <NestedComments />
-    <Parent /> */}
-    <ProgressBar value={progress} max={100} color="success" size="large" striped animated showLabel />
-    {/* <button onClick={() => setCount2(count2 + 1)}>inc2</button>
+          <Counter />
+          <User />
+          {
+            counter
+          }
+          <NotificationParent />
+          <CarouselParent />
+          <Stopwatch />
+          <NestedComments />
+          <Parent />
+          <ProgressBar value={progress} max={100} color="success" size="large" striped animated showLabel />
+          {/* <button onClick={() => setCount2(count2 + 1)}>inc2</button>
     <button onClick={() => setCount(count + 1)}>inc</button>
     <button onClick={() => setCount(count - 1)}>dec</button> */}
-    {/* <div>sqrt : {sqrt}</div>
+          {/* <div>sqrt : {sqrt}</div>
     <div>sqrt : {sqrt2}</div> */}
-    <AutocompleteParent />
-    {/* <InfiniteScrollList /> */}
+          <AutocompleteParent />
+          <InfiniteScrollList />
 
-    <div ref={elRef} style={{ height: '200px', background: `${intersectingEntry?.isIntersecting ? 'green' : 'red'}` }}>
-      element to observe
-    </div>
-    {/* <PollWidgetParent /> */}
-
-
+          <div ref={elRef} style={{ height: '200px', background: `${intersectingEntry?.isIntersecting ? 'green' : 'red'}` }}>
+            element to observe
+          </div>
+          <PollWidgetParent />
+        </ThemeProvider>
+      </FiltersProvider>
+    </BrowserRouter>
   </div>
 
 }

@@ -1,0 +1,230 @@
+Great! Let's begin **Lesson 2: Interacting with Elements using `userEvent` in RTL with Vitest**.
+
+---
+
+## 🎯 Lesson 2: Simulating User Interactions with `userEvent`
+
+---
+
+## 🔹 What is `userEvent`?
+
+`userEvent` is a utility from **React Testing Library** used to simulate **real user interactions** like:
+
+* Clicking buttons
+* Typing into inputs
+* Selecting checkboxes
+* Pressing keys
+* Hovering/focusing elements
+* Tab navigation
+
+It **mimics real browser behavior** better than the older `fireEvent` API (which simulates only DOM events).
+
+---
+
+## 🧱 Install `@testing-library/user-event`
+
+If not already installed:
+
+```bash
+npm install --save-dev @testing-library/user-event
+```
+
+---
+
+## 📦 Basic Setup
+
+```ts
+import userEvent from '@testing-library/user-event';
+```
+
+You typically combine this with `render()` and `screen` from `@testing-library/react`.
+
+---
+
+## 🧪 Let's Explore with Examples
+
+We'll use the following component for all examples:
+
+```tsx
+// LoginForm.tsx
+import { useState } from 'react';
+
+export function LoginForm() {
+  const [submitted, setSubmitted] = useState(false);
+  const [name, setName] = useState('');
+  const [agreed, setAgreed] = useState(false);
+
+  return (
+    <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}>
+      <label htmlFor="name">Name</label>
+      <input id="name" value={name} onChange={(e) => setName(e.target.value)} />
+
+      <label>
+        <input
+          type="checkbox"
+          checked={agreed}
+          onChange={(e) => setAgreed(e.target.checked)}
+        />
+        I agree
+      </label>
+
+      <button type="submit" disabled={!name || !agreed}>
+        Submit
+      </button>
+
+      {submitted && <p>Form Submitted!</p>}
+    </form>
+  );
+}
+```
+
+---
+
+## ✅ 1. Typing into an Input Field
+
+```tsx
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect } from 'vitest';
+import { LoginForm } from './LoginForm';
+
+describe('LoginForm', () => {
+  it('allows typing into input', async () => {
+    render(<LoginForm />);
+    const input = screen.getByLabelText('Name');
+
+    await userEvent.type(input, 'John');
+    expect(input).toHaveValue('John');
+  });
+});
+```
+
+---
+
+## ✅ 2. Clicking a Checkbox
+
+```tsx
+it('allows checking the checkbox', async () => {
+  render(<LoginForm />);
+  const checkbox = screen.getByRole('checkbox', { name: /i agree/i });
+
+  await userEvent.click(checkbox);
+  expect(checkbox).toBeChecked();
+});
+```
+
+---
+
+## ✅ 3. Enabling and Submitting the Form
+
+```tsx
+it('enables submit button after filling form and submits it', async () => {
+  render(<LoginForm />);
+  const nameInput = screen.getByLabelText('Name');
+  const checkbox = screen.getByRole('checkbox', { name: /i agree/i });
+  const button = screen.getByRole('button', { name: /submit/i });
+
+  // Initially disabled
+  expect(button).toBeDisabled();
+
+  await userEvent.type(nameInput, 'John');
+  await userEvent.click(checkbox);
+
+  expect(button).toBeEnabled();
+
+  await userEvent.click(button);
+  expect(await screen.findByText('Form Submitted!')).toBeInTheDocument();
+});
+```
+
+---
+
+## ✅ 4. Clearing Input Field
+
+```tsx
+it('clears input field using userEvent.clear()', async () => {
+  render(<LoginForm />);
+  const input = screen.getByLabelText('Name');
+  
+  await userEvent.type(input, 'John');
+  expect(input).toHaveValue('John');
+
+  await userEvent.clear(input);
+  expect(input).toHaveValue('');
+});
+```
+
+---
+
+## ✅ 5. Keyboard Navigation (Tab)
+
+```tsx
+it('navigates form using tab', async () => {
+  render(<LoginForm />);
+  const user = userEvent.setup();
+
+  await user.tab(); // focus goes to first focusable element (input)
+  expect(screen.getByLabelText('Name')).toHaveFocus();
+
+  await user.tab(); // next element
+  expect(screen.getByRole('checkbox')).toHaveFocus();
+});
+```
+
+---
+
+## ✅ 6. Pressing Keys (Keyboard Simulation)
+
+```tsx
+it('submits form using Enter key', async () => {
+  render(<LoginForm />);
+  const nameInput = screen.getByLabelText('Name');
+  const checkbox = screen.getByRole('checkbox');
+
+  await userEvent.type(nameInput, 'John');
+  await userEvent.click(checkbox);
+
+  await userEvent.keyboard('{Enter}');
+
+  expect(await screen.findByText('Form Submitted!')).toBeInTheDocument();
+});
+```
+
+---
+
+## 🔥 Full List of Useful `userEvent` APIs
+
+| API                             | Description                     |
+| ------------------------------- | ------------------------------- |
+| `type(element, text)`           | Types character by character    |
+| `click(element)`                | Clicks the element              |
+| `dblClick(element)`             | Double-clicks                   |
+| `clear(element)`                | Clears input value              |
+| `selectOptions(select, option)` | Selects options in a `<select>` |
+| `tab()`                         | Moves focus to next element     |
+| `keyboard('{Enter}')`           | Simulates pressing keys         |
+| `hover(element)`                | Simulates mouse hover           |
+| `unhover(element)`              | Stops hover                     |
+| `upload(input, file)`           | Simulates file upload           |
+
+---
+
+## 🧠 Best Practices for `userEvent`
+
+* Prefer `userEvent` over `fireEvent` — it's higher-level and simulates real behavior.
+* Always `await` `userEvent` calls since they return promises.
+* For tab/key simulations, create a `user` instance:
+
+  ```ts
+  const user = userEvent.setup();
+  ```
+
+---
+
+## 🧪 Summary: What You Learned
+
+* Simulate user input, clicks, checkboxes, and keyboard events
+* Combine `userEvent` with RTL queries (`getByRole`, `getByLabelText`, etc.)
+* Use `await` with `userEvent` for proper async handling
+
+--- 

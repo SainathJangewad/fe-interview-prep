@@ -1,3 +1,5 @@
+
+
 1. What is useCallback?
 Definition: useCallback is a React hook that memoizes a function, meaning it returns a memoized version of the callback function that only changes if one of its dependencies has changed.
 

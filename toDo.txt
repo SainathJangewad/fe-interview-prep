@@ -3,6 +3,8 @@ Date : 14th april 25
 react :  
  - create dynamic form 
  - create shoppig cart 
+ - unit testing (jest+RTL)
+
 
 Js : '  
  - revision

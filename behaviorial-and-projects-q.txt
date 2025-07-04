@@ -1,0 +1,26 @@
+1) Tell me about yourself
+-> I'm a frontend developer with 2.5 years of experience, and I hold a Bachelor's degree in Computer Science. I previously worked at Arraypointer as a React developer, where I was responsible for building and maintaining various web applications — including e-commerce platforms, e-learning websites, and other responsive, user-facing pages. My work involved working with React, JavaScript, TypeScript, Redux, and API integrations.Now that I’ve moved on from Arraypointer, I’m looking for new opportunities where I can take on more challenging frontend work and continue growing.
+
+2) Do u have any Q for us?
+->Can you tell me a bit about the company culture and what it’s like working ?
+
+
+3) ur strengths and weakness?
+->
+strengths:
+Quick learner:
+"I pick up new tools and concepts quickly. For example, when I started working at my last job, I learned Redux and TypeScript on the go, which helped me contribute faster to projects."
+
+Weakness:
+Asking for help:
+"Sometimes, I try to solve problems on my own for too long instead of asking for help early. I’m working on recognizing when collaboration can save time and improve results."
+
+4)Why left prev company?
+->
+
+--------------------------------**-----------------------
+1)Tell us about ur project i.e. myfamilymart.in 
+-> I worked on building an e-commerce app similar to Blinkit, which allows users to quickly order groceries online. My role was the frontend developer, and I used React to build responsive UI components. I implemented features like product browsing, filtering, a shopping cart, user login/logout, and real-time order tracking. For state management, I used Redux, and integrated with REST APIs for all backend data. One challenge was ensuring fast load times even with many products, so I used lazy loading and code splitting to optimize performance. The app handled high traffic well, and users found the interface easy to use.
+
+
+

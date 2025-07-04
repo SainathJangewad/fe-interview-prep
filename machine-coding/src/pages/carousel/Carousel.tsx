@@ -108,7 +108,7 @@ const Carousel: React.FC<CarouselProps> = ({
                     {nextArrow ? (
                         React.cloneElement(nextArrow, {
                             onClick: nextSlide,
-                            className: `${nextArrow.props.className || ""} custom-arrow left`
+                            className: `${nextArrow.props.className || ""} custom-arrow right`
                         })
                     ) : (
                         <button onClick={nextSlide} className="carousel-arrow right">▶</button>
