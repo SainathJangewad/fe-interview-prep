@@ -1,0 +1,104 @@
+Here's the formatted and **interview-friendly** version of your notes on **Test Coverage in Vitest**:
+
+---
+
+## ✅ What is Test Coverage?
+
+**Test coverage** measures how much of your code is executed when running your test suite.
+It helps identify:
+
+* 🟢 Which lines of code are tested
+* 🔴 Which lines are untested (potential bugs)
+* 📊 Overall test quality
+
+---
+
+## 📘 Types of Coverage Metrics
+
+* **Statements** – Are all statements executed?
+* **Branches** – Are all `if/else` paths covered?
+* **Functions** – Are all functions invoked?
+* **Lines** – Are all lines of code run?
+
+---
+
+## 🧪 How to Check Test Coverage in Vitest
+
+### 1️⃣ Install Required Dependency
+
+#### ➤ For `v8` (recommended for speed):
+
+```bash
+npm install -D @vitest/coverage-v8
+```
+
+#### ➤ For `istanbul` (for advanced features):
+
+```bash
+npm install -D @vitest/coverage-istanbul
+```
+
+---
+
+### 2️⃣ Configure `vitest.config.ts` (or `vite.config.ts`)
+
+```ts
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    coverage: {
+      enabled: true, // Enable coverage
+      provider: 'v8', // or 'istanbul'
+      reporter: ['text', 'html', 'json'], // Output formats
+      // include: ['src/**/*.ts'],
+      // exclude: ['node_modules/', 'dist/'],
+    },
+  },
+});
+```
+
+🔸 `reporter`: Defines coverage output
+
+* `text`: Summary in terminal
+* `html`: Interactive HTML report
+* `json`: Structured coverage data
+
+---
+
+### 3️⃣ Run Tests with Coverage
+
+```bash
+npx vitest run --coverage
+```
+
+✔️ Shows a terminal summary
+🌐 For HTML report: Open `coverage/index.html` in your browser
+
+---
+
+## 🖥️ Optional: View Coverage in Vitest UI
+
+```bash
+npx vitest --ui
+```
+
+📌 Works only if:
+
+* `coverage.enabled = true` in config
+* `html` reporter is set
+
+---
+
+## 🎯 Interview Keywords
+
+> Say these to show practical knowledge:
+
+* ✅ "Test coverage improves confidence in code"
+* ✅ "Vitest uses `c8` under the hood for coverage"
+* ✅ "Helps detect dead code and untested edge cases"
+* ✅ "I aim for high branch and line coverage but also care about meaningful tests"
+
+---
+
+Let me know if you want a **live code demo with coverage report** or **how to set coverage thresholds**!

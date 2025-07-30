@@ -1,0 +1,86 @@
+Ah, got it — you're asking about **DOM debugging** when testing **React components** with **Vitest + React Testing Library (RTL)**.
+
+Here’s a **short and focused guide** to DOM debugging during tests:
+
+---
+
+## ✅ 1. `screen.debug()` — Print the current DOM
+
+Use this to see what the virtual DOM looks like at any point:
+
+```ts
+import { render, screen } from '@testing-library/react';
+import MyForm from './MyForm';
+
+test('renders form', () => {
+  render(<MyForm />);
+  
+  screen.debug(); // 👈 prints the entire virtual DOM
+
+  const input = screen.getByLabelText(/name/i);
+  expect(input).toBeInTheDocument();
+});
+```
+
+You can also log a **specific element**:
+
+```ts
+const input = screen.getByLabelText(/name/i);
+screen.debug(input); // prints just that element
+```
+
+---
+
+## ✅ 2. `logRoles()` — Print all accessible roles
+
+Helpful when you can't figure out how to query an element:
+
+```ts
+import { render, screen, logRoles } from '@testing-library/react';
+import MyForm from './MyForm';
+
+test('check roles', () => {
+  const { container } = render(<MyForm />);
+  logRoles(container); // 👈 shows available roles
+});
+```
+
+---
+
+## ✅ 3. `debugger` with DOM inspection
+
+You can pause test execution and inspect the DOM manually:
+
+```ts
+import { render, screen } from '@testing-library/react';
+import MyForm from './MyForm';
+
+test('pause test', () => {
+  render(<MyForm />);
+  debugger; // 👈 pause and inspect in DevTools
+  const btn = screen.getByRole('button', { name: /submit/i });
+  expect(btn).toBeDisabled();
+});
+```
+
+Then run with a debugger attached (in VS Code or Chrome DevTools).
+
+---
+
+## ✅ 4. Useful tips
+
+### Run a single test with `it.only`:
+
+```ts
+it.only('debug this test', () => {
+  ...
+});
+```
+
+### Show DOM before/after user events:
+
+```ts
+userEvent.click(screen.getByRole('button', { name: /show form/i }));
+screen.debug(); // to see updated DOM
+```
+-----------------------------------
