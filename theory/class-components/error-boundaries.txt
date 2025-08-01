@@ -67,5 +67,5 @@ Error boundaries do not catch:
 Errors inside event handlers.
 Errors in asynchronous code (like setTimeout or fetch).
 Server-side rendering (SSR) errors.
-Errors thrown from inside the error boundary itself.
+Errors thrown from inside the error boun dary itself.
   
