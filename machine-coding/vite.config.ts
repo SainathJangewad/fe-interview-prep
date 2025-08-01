@@ -14,8 +14,8 @@ export default defineConfig({
           enabled: true, // Enable coverage collection
           provider: 'v8', // or 'istanbul'
           reporter: ['text', 'html', 'json'], // Specify desired reporters
-          // include: ['src/**/*.ts'], // Optionally include specific files/patterns
-          // exclude: ['node_modules/', 'dist/'], // Optionally exclude specific files/patterns
+          include: ['src/pages/**/*.{ts,tsx}'], // ✅ Only include files in src/pages/
+          exclude: ['src/**/*.test.tsx', 'src/**/__tests__/**'], // ❌ Exclude test files
         },
   },
 })

@@ -1,0 +1,111 @@
+Sure! Here's a **short and focused lesson on how to mock functions** in **React Testing Library (RTL)** using **Vitest**, written from an **interview perspective**.
+
+---
+
+## ✅ What Does "Mocking a Function" Mean?
+
+Mocking means **replacing a real function** (like an API call, utility, or callback) with a **fake version** during testing, so you can:
+
+- Track how it's called (arguments, call count, etc.)
+- Control its return value
+- Avoid side effects (e.g., real API calls)
+
+---
+
+## 🔧 Tools Used
+
+- **Vitest's `vi.fn()`** – for mocking
+- **React Testing Library** – for testing components
+
+---
+
+## 📌 Most Common Scenarios for Mocking
+
+| Use Case                     | Example                                      |
+|-----------------------------|----------------------------------------------|
+| Mock a prop function         | e.g., `onSubmit`, `onClick`                 |
+| Mock API call / service      | e.g., `fetchUser()`, `axios.get()`          |
+| Mock a module or utility     | e.g., `dateFormatter()`, `getUserToken()`   |
+
+---
+
+## ✅ Example 1: Mocking a Prop Function
+
+### 🧪 Component: `SubmitButton.tsx`
+```tsx
+type Props = {
+  onSubmit: () => void;
+};
+
+export function SubmitButton({ onSubmit }: Props) {
+  return <button onClick={onSubmit}>Submit</button>;
+}
+```
+
+### 🧪 Test: `SubmitButton.test.tsx`
+```tsx
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { SubmitButton } from './SubmitButton';
+import { vi } from 'vitest';
+
+test('calls onSubmit when button is clicked', async () => {
+  const handleSubmit = vi.fn(); // ✅ mock function
+  render(<SubmitButton onSubmit={handleSubmit} />);
+
+  await userEvent.click(screen.getByRole('button', { name: /submit/i }));
+
+  expect(handleSubmit).toHaveBeenCalledTimes(1);
+});
+```
+
+---
+
+## ✅ Example 2: Mocking a Module or Utility
+
+Let's say you have a utility function:
+```ts
+// utils/userUtils.ts
+export const getUserName = () => 'Real User';
+```
+
+You can mock it like this in your test:
+
+```ts
+// YourComponent.test.tsx
+import { vi } from 'vitest';
+import * as userUtils from '../utils/userUtils';
+
+vi.mock('../utils/userUtils', () => ({
+  getUserName: vi.fn(() => 'Mocked User'),
+}));
+
+test('uses mocked username', () => {
+  expect(userUtils.getUserName()).toBe('Mocked User');
+});
+```
+
+---
+
+## ✅ Example 3: Mocking `fetch` or API Calls
+
+```ts
+global.fetch = vi.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({ name: 'Mocked User' }),
+  })
+) as any;
+```
+
+---
+
+## 🎯 Interview Tips
+
+- Always use `vi.fn()` for mocking standalone or prop functions.
+- Use `vi.mock()` when mocking modules or files.
+- Use `.mockReturnValue()` or `.mockResolvedValue()` to control return values.
+- Use `.toHaveBeenCalledWith()` to check call arguments.
+
+---
+
+Want to practice mocking an API inside a component next?

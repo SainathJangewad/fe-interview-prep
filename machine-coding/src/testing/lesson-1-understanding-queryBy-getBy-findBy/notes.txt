@@ -140,7 +140,7 @@ describe('MyComponent', () => {
   it('renders Hello immediately', () => {
     render(<MyComponent />);
     expect(screen.getByText('Hello')).toBeInTheDocument();
-  });
+  }); 
 
   it('shows Loaded! after delay', async () => {
     render(<MyComponent />);

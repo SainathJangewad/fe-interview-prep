@@ -1,0 +1,92 @@
+To test a **custom hook** like `useCounter()`, you should use the `renderHook` utility from **`@testing-library/react`** (not `react-testing-library`) along with **Vitest**.
+
+---
+
+## 🧠 Example `useCounter()` Hook
+
+```ts
+// useCounter.ts
+import { useState } from 'react';
+
+export function useCounter(initialValue = 0) {
+  const [count, setCount] = useState(initialValue);
+  const increment = () => setCount(c => c + 1);
+  const decrement = () => setCount(c => c - 1);
+  const reset = () => setCount(initialValue);
+
+  return { count, increment, decrement, reset };
+}
+```
+
+---
+
+## ✅ How to Test It
+
+```ts
+// useCounter.test.ts
+import { renderHook, act } from '@testing-library/react';
+import { useCounter } from './useCounter';
+
+describe('useCounter', () => {
+  it('should initialize with default value', () => {
+    const { result } = renderHook(() => useCounter());
+    expect(result.current.count).toBe(0);
+  });
+
+  it('should initialize with custom value', () => {
+    const { result } = renderHook(() => useCounter(5));
+    expect(result.current.count).toBe(5);
+  });
+
+  it('should increment the counter', () => {
+    const { result } = renderHook(() => useCounter());
+    act(() => result.current.increment());
+    expect(result.current.count).toBe(1);
+  });
+
+  it('should decrement the counter', () => {
+    const { result } = renderHook(() => useCounter(2));
+    act(() => result.current.decrement());
+    expect(result.current.count).toBe(1);
+  });
+
+  it('should reset the counter', () => {
+    const { result } = renderHook(() => useCounter(3));
+    act(() => result.current.increment()); // count = 4
+    act(() => result.current.reset());     // count = 3
+    expect(result.current.count).toBe(3);
+  });
+});
+```
+
+---
+
+ ### 📌 Why We Use `renderHook` Instead of `render` for Custom Hooks
+
+* **`renderHook`** is designed specifically to test **custom React hooks** in isolation, without needing to create a full component.
+* **`render`** is used for testing React components—not hooks directly.
+
+---
+
+### ✅ Benefits of `renderHook`
+
+| Feature        | Description                                                                 |
+| -------------- | --------------------------------------------------------------------------- |
+| Simpler setup  | No need to manually wrap the hook inside a test component.                  |
+| Cleaner output | Gives direct access to the return value of the hook using `result.current`. |
+| Isolation      | You test the hook's logic without UI or DOM distractions.                   |
+
+---
+
+### 🛠 Why We Use `act()`
+
+* React updates (like state changes) must be wrapped in `act()` to ensure they are **fully applied before making assertions**.
+* Without `act()`, tests may behave inconsistently or throw warnings.
+
+---
+
+### 🔁 Summary
+
+> ✅ Use `renderHook` to isolate and test hooks easily.
+> 🔄 Use `act()` to simulate updates like `setState()` and make assertions safely.
+ 

@@ -98,7 +98,103 @@ npx vitest --ui
 * ✅ "Vitest uses `c8` under the hood for coverage"
 * ✅ "Helps detect dead code and untested edge cases"
 * ✅ "I aim for high branch and line coverage but also care about meaningful tests"
+ 
+---------------------------------------------------------------------------
+
+## ✅ View Specific Files in Coverage
+
+Use `include` in `vitest.config.ts`:
+
+```ts
+coverage: {
+  enabled: true,
+  include: ['src/pages/**/*'],
+}
+```
+
+Shows coverage **only for matching files**.
 
 ---
 
-Let me know if you want a **live code demo with coverage report** or **how to set coverage thresholds**!
+## 🚫 Omit Files from Coverage
+
+Use `exclude`:
+
+```ts
+coverage: {
+  exclude: ['**/*.test.*', 'src/pages/utils/**'],
+}
+```
+
+These files **won’t appear** in the report.
+
+---
+
+## ⚙️ Test Files Still Run
+
+Even if excluded:
+
+* ✅ Test files still **execute**
+* ❌ But are **not counted** in coverage
+
+--- 
+---------------------------------------------------------------------
+Here’s a **short interview-ready note** on **setting coverage thresholds in Vitest**:
+
+---
+
+## ✅ Coverage Thresholds in Vitest
+
+**Purpose**: Enforce minimum test coverage to maintain code quality.
+
+### 📌 How to set:
+
+In `vitest.config.ts`:
+
+```ts
+coverage: {
+  enabled: true,
+  provider: 'v8',
+  reporter: ['text', 'html'],
+  threshold: {
+    statements: 80,
+    branches: 75,
+    functions: 80,
+    lines: 80,
+  },
+}
+```
+
+### 🔍 Metrics:
+
+* **statements**: All executable code
+* **branches**: All conditionals (`if`, `switch`)
+* **functions**: All defined functions
+* **lines**: All lines of code
+
+### 🚨 If thresholds not met:
+
+Test run fails with a message like:
+
+> Coverage for lines (78%) does not meet global threshold (80%)
+
+---
+
+✅ Use this to enforce test quality in CI/CD.
+-----------------------------------
+**🔍 View HTML Coverage Report in Vitest (Short Note):**
+
+1. In `vitest.config.ts`, set:
+
+```ts
+reporter: ['html']
+```
+
+2. Run:
+
+```bash
+npx vitest run --coverage
+```
+3. Open:
+ go to the 'coverage' folder which is auto created and open the 'html' file there in the brows 
+
