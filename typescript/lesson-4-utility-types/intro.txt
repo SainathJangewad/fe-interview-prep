@@ -1,0 +1,209 @@
+Absolutely! Let’s learn **utility types** in TypeScript with examples — especially the ones most used in **React**.
+
+---
+
+## 🔹 What are Utility Types?
+
+Utility types are **built-in TypeScript types** that help **transform or simplify other types**.
+
+They make your types:
+
+* shorter
+* reusable
+* easier to maintain
+
+---
+
+## 🔹 Most Common Utility Types
+
+### 1. `Partial<T>`
+
+Makes all properties optional.
+
+type User = { name: string; age: number };
+type UserUpdate = Partial<User>;
+// { name?: string; age?: number }
+```
+
+**React Example:**
+x
+type Props = { user: User; onUpdate: (u: Partial<User>) => void };
+```
+
+---
+
+### 2. `Required<T>`
+
+Opposite of `Partial`. Makes all fields required.
+
+type Settings = { theme?: string };
+type StrictSettings = Required<Settings>;
+// { theme: string }
+```
+
+---
+
+### 3. `Readonly<T>`
+
+Makes fields read-only.
+
+type Data = { id: number };
+const item: Readonly<Data> = { id: 1 };
+item.id = 2; // ❌ Error
+```
+
+---
+
+### 4. `Pick<T, K>`
+
+Pick specific keys from a type.
+
+type User = { name: string; age: number; email: string };
+type PublicUser = Pick<User, 'name' | 'email'>;
+// { name: string; email: string }
+```
+
+**React Example:**
+
+type Props = Pick<User, 'name' | 'email'>;
+```
+
+---
+
+### 5. `Omit<T, K>`
+
+Opposite of `Pick`. Removes keys.
+
+type PrivateUser = Omit<User, 'email'>;
+// { name: string; age: number }
+```
+
+---
+
+### 6. `Record<K, T>`
+
+Create a type with keys of type `K` and values of type `T`.
+
+type Roles = 'admin' | 'user';
+type RoleFlags = Record<Roles, boolean>;
+// { admin: boolean; user: boolean }
+```
+
+**React Example:**
+
+const permissions: Record<string, boolean> = {
+  edit: true,
+  delete: false,
+};
+```
+
+---
+
+### 7. `ReturnType<T>`
+
+Gets the return type of a function.
+
+function getUser() {
+  return { id: 1, name: 'Alice' };
+}
+
+type User = ReturnType<typeof getUser>;
+// { id: number; name: string }
+```
+
+---
+
+### 8. `Exclude<T, U>`
+
+Removes types from a union.
+
+type Status = 'loading' | 'success' | 'error';
+type FinalStatus = Exclude<Status, 'loading'>;
+// "success" | "error"
+```
+
+---
+
+### 9. `NonNullable<T>`
+
+Removes `null` and `undefined`.
+
+type A = string | null | undefined;
+type B = NonNullable<A>; // string
+```
+
+---
+
+## 🔹 Summary Table
+
+| Utility Type     | What it does                          |
+| ---------------- | ------------------------------------- |
+| `Partial<T>`     | Makes all props optional              |
+| `Required<T>`    | Makes all props required              |
+| `Readonly<T>`    | Makes props readonly                  |
+| `Pick<T, K>`     | Picks certain keys                    |
+| `Omit<T, K>`     | Omits certain keys                    |
+| `Record<K, T>`   | Creates object with fixed keys/values |
+| `ReturnType<T>`  | Gets function return type             |
+| `Exclude<T, U>`  | Removes types from union              |
+| `NonNullable<T>` | Removes `null` and `undefined`        |
+
+--------------------------------------------------------
+Great observation!
+
+You're asking:
+
+> Why not just do this?
+>
+>
+> type User = typeof getUser;
+> ```
+
+Let’s compare:
+
+---
+
+### 🔸 `typeof getUser`
+
+type User = typeof getUser;
+```
+
+🔹 This gives you the **type of the function itself** — not its return value.
+
+Result:
+
+type User = () => { id: number; name: string };
+```
+
+It means: “`User` is a function that returns an object”.
+
+---
+
+### 🔸 `ReturnType<typeof getUser>`
+
+type User = ReturnType<typeof getUser>;
+```
+
+🔹 This gives you the **type of what the function returns**.
+
+Result:
+
+type User = { id: number; name: string };
+```
+
+---
+
+### ✅ Summary:
+
+| Expression                   | What it gives you                     |
+| ---------------------------- | ------------------------------------- |
+| `typeof getUser`             | The type **of the function** itself   |
+| `ReturnType<typeof getUser>` | The type **returned by the function** |
+
+So, if you want just the returned object type, you need `ReturnType<typeof getUser>`.
+Using `typeof getUser` would be incorrect in this context.
+
+
+✅ Rule:
+ReturnType<T> requires T to be a function type.
+If T is not a function, you get a TypeScript error.

@@ -1,0 +1,283 @@
+Great! Here's **Lesson 2: Objects & Functions in TypeScript**, including how they're used in a **React project**.
+
+---
+
+## ✅ LESSON 2: Objects & Functions in TypeScript
+
+---
+
+### 1️⃣ **Object Types**
+
+TypeScript lets you define the shape of an object.
+
+type User = {
+  id: number;
+  name: string;
+  email?: string; // optional
+};
+```
+
+#### 🛠 Usage in React:
+
+const user: User = { id: 1, name: "Sainath" };
+```
+
+---
+
+### 2️⃣ **Function Types**
+
+You can define the type of function parameters and return values.
+
+function greet(name: string): string {
+  return `Hello, ${name}`;
+}
+```
+
+#### 🛠 Usage in React (handlers):
+
+const handleClick = (id: number): void => {
+  console.log(`Clicked user ${id}`);
+};
+```
+
+---
+
+### 3️⃣ **Typing Functions Inside Props**
+
+#### 🔸 ChildComponent.tsx
+
+type Props = {
+  onSelect: (id: number) => void;
+};
+
+export const ChildComponent = ({ onSelect }: Props) => {
+  return <button onClick={() => onSelect(5)}>Select</button>;
+};
+```
+
+#### 🔸 ParentComponent.tsx
+
+const Parent = () => {
+  const handleSelect = (id: number) => console.log("Selected", id);
+  return <ChildComponent onSelect={handleSelect} />;
+};
+```
+
+---
+
+### 4️⃣ **Default Parameters & Optional Args**
+
+function log(message: string, level: string = "info") {
+  console.log(`[${level}]: ${message}`);
+}
+```
+
+---
+
+### Summary Note (Interview-style):
+
+| Concept       | Example                        | Notes                           |
+| ------------- | ------------------------------ | ------------------------------- |
+| Object type   | `type User = { name: string }` | Use `?` for optional props      |
+| Function type | `(x: number) => string`        | Explicitly type params & return |
+| In React      | Props + Event Handlers         | Ensure type safety in UI flow   |
+
+----------------------------------------
+### ❓**Can you overload functions in TypeScript?**
+
+✅ Yes.
+
+---
+
+### 🔹 **What is Function Overloading?**
+
+Allowing multiple function signatures for a single implementation — useful when a function can take different types or numbers of arguments.
+
+---
+
+### 🔹 **How to Do It?**
+
+function greet(name: string): string;
+function greet(age: number): string;
+
+function greet(value: string | number): string {
+  return typeof value === 'string'
+    ? `Hello, ${value}`
+    : `You are ${value} years old`;
+}
+```
+
+Another example:
+
+function add(a: number, b: number): number;
+function add(a: number, b: number, c: number): number;
+
+function add(a: number, b: number, c?: number): number {
+  return c ? a + b + c : a + b;
+} 
+---
+
+### 🔹 **Where to use in React?**
+
+* Utility functions handling props or event values of multiple types.
+* Input change handlers (e.g., accepting string or number).
+* API request helpers that accept optional arguments.
+------------------------------
+### ❓ **What is contextual typing in TypeScript?**
+
+**✅ Answer (short and clear):**
+
+Contextual typing is when **TypeScript infers the type of a variable based on where it is used** — especially useful for functions, event handlers, and callbacks.
+
+---
+
+**🔹 Example (Arrow Function in React):**
+x
+const numbers = [1, 2, 3];
+
+// TypeScript knows 'num' is a number based on the context of .map()
+const doubled = numbers.map(num => num * 2);
+```
+
+Here, `num` is inferred as `number` because `.map()` is called on a `number[]`.
+
+---
+
+**🔹 React-specific Example:**
+x
+const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  console.log(e.currentTarget);
+};
+
+// OR with contextual typing (type inferred from onClick)
+<button onClick={(e) => console.log(e.currentTarget)} />
+```
+
+In the button's `onClick`, TypeScript infers `e` as `React.MouseEvent` automatically.
+
+---
+
+**🟩 When useful:**
+
+* Reduces need to write explicit types.
+* Keeps code cleaner in React callbacks, `.map()`, `.filter()`, etc.
+--------------------------
+Here are short answers to those real interview questions:
+
+---
+
+### ❓ How do you type React Hooks like `useState` and custom hooks?
+
+**✅ Custom hook:**
+
+function useCounter(): [number, () => void] {
+  const [count, setCount] = useState(0);
+  const increment = () => setCount(c => c + 1);
+  return [count, increment];
+}
+
+### ❓ How would you type a form handler in React with TypeScript?
+
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setValue(e.target.value);
+};
+
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  // submit logic
+};
+```
+
+📝 Use specific `React.*Event<element>` types.
+
+---
+
+### ❓ How do you type `onChange`, `onClick`, and other event handlers in React with TypeScript?
+
+const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  console.log("clicked");
+};
+
+const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setValue(e.target.value);
+};
+```
+
+✅ Use specific types based on the element:
+
+* `MouseEvent<HTMLButtonElement>`
+* `ChangeEvent<HTMLInputElement>`
+* `KeyboardEvent<HTMLInputElement>` (for key events)
+---------------------------------
+ How do you make object properties readonly or optional?
+
+Answer:
+
+interface Config {
+  readonly id: string;
+  title?: string;
+}
+
+✅ readonly = cannot change
+✅ ? = optional
+---------------------------
+ How do you type an object with dynamic keys (index signature)?
+
+Answer:
+
+type Errors = {
+  [key: string]: string;
+};
+
+const formErrors: Errors = {
+  username: "Required",
+  email: "Invalid",
+};
+------------------------
+That’s totally fair — let’s simplify it.
+
+---
+
+### ❓ What is a Recursive Type (Simplified)
+
+A **recursive type** is a type that refers to itself — like how a folder can contain subfolders.
+
+---
+
+### ✅ Simple Recursive Example (No optional `children`):
+
+```ts
+type Node = {
+  value: string;
+  children: Node[]; // refers to itself
+};
+```
+
+This means each `Node` **must** have `children` (can be an empty array):
+
+```ts
+const tree: Node = {
+  value: "root",
+  children: [
+    {
+      value: "child",
+      children: []
+    }
+  ]
+};
+```
+
+Here’s what’s happening:
+
+* `Node` has a `value`
+* It also has `children`, which are also `Node`s
+* And each of those children can have more `children`, and so on
+
+---
+📌 Use case in React:
+Recursive types are useful in:
+    Nested menus
+    Comment threads
+    Folder structures
+    JSON-like data viewers
+    -------------------

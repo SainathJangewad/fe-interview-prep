@@ -1,0 +1,90 @@
+### 🧠 Indexed Signatures in TypeScript (Quick Guide)
+
+#### 📌 What is it?
+
+Allows defining object types with **unknown property names**, but known key/value types.
+type Scores = {
+  [key: string]: number;
+};
+
+const marks: Scores = {
+  math: 90,
+  english: 85,
+};
+```
+
+---
+
+### ✅ When to Use in React?
+
+#### 1. **Form Errors**
+type FormErrors = { [field: string]: string };
+
+const errors = {
+  name: "Required",
+  email: "Invalid",
+};
+```
+
+#### 2. **Dynamic Form Data**
+type FormData = { [field: string]: string | number };
+```
+
+#### 3. **API Data / Flags**
+type Flags = { [flag: string]: boolean };
+```
+
+### ⚠️ Note
+
+* Use when keys are **dynamic**
+* No typo protection — use only when flexibility is needed
+
+--------------------------------------
+Sure! Here's a **shortened explanation** of `keyof` assertion:
+
+---
+
+### 🔹 What is `keyof`?
+
+It gives you the **keys of a type** as a union.
+
+```ts
+type Person = { name: string; age: number };
+type Keys = keyof Person; // "name" | "age"
+```
+
+---
+
+### 🔹 What is `keyof` assertion?
+
+It’s used like this:
+
+```ts
+function getValue<T, K extends keyof T>(obj: T, key: K) {
+  return obj[key];
+}
+```
+
+This **asserts** that `key` is a valid key of object `T`.
+
+---
+
+### 🔹 React example:
+
+```ts
+type FormData = { email: string; password: string };
+
+function handleChange<K extends keyof FormData>(key: K, value: FormData[K]) {
+  // safe: key must be "email" or "password"
+}
+```
+
+---
+
+### 🔹 Why use it?
+
+✅ Prevents invalid keys
+✅ Enables type-safe dynamic access
+✅ Useful in generic utilities
+
+------------------------

@@ -1,0 +1,511 @@
+Great! Since you're just starting with TypeScript, your first lesson should cover **the basics**—what TypeScript is and how it differs from JavaScript.
+
+---
+
+### ✅ **Lesson 1: Introduction to TypeScript**
+
+#### 1. **What is TypeScript?**
+
+* A superset of JavaScript.
+* Adds **static typing** to JavaScript.
+* Helps catch errors during development (before running the code).
+
+---
+
+#### 2. **Installing TypeScript**
+
+You need Node.js installed first. Then:
+
+```bash
+npm install -g typescript
+```
+
+To check if installed:
+
+```bash
+tsc --version
+```
+
+---
+
+#### 3. **Your First TypeScript Program**
+
+Create a file: `hello.ts`
+
+let message: string = "Hello, TypeScript!";
+console.log(message);
+```
+
+To compile:
+
+```bash
+tsc hello.ts
+```
+
+This will create `hello.js` which you can run with:
+
+```bash
+node hello.js
+```
+
+---
+
+#### 4. **Basic Types in TypeScript**
+
+Here are the most common types you'll use:
+
+| Type      | Example                          |
+| --------- | -------------------------------- |
+| `string`  | `let name: string = "Alice";`    |
+| `number`  | `let age: number = 25;`          |
+| `boolean` | `let isOnline: boolean = true;`  |
+| `any`     | `let data: any = 5; data = "hi"` |
+| `array`   | `let scores: number[] = [1,2,3]` |
+
+---
+
+#### 5. **Why Use Types?**
+
+Types help avoid bugs:
+
+let age: number = 25;
+age = "twenty-five"; // ❌ Error: Type 'string' is not assignable to type 'number'
+```
+
+---
+
+### 👉 Your Homework
+
+* Install TypeScript.
+* Write a `.ts` file with some `let` variables using different types (`string`, `number`, `boolean`, etc.).
+* Compile and run it.
+
+Great catch! You're right — interviewers *do* ask about advanced types like `unknown`, `never`, `void`, etc., even though they aren't in the "Hello World" stage.
+
+Let me give you a **bonus section** at the end of **Lesson 1** with **less common but interview-important types**.
+
+---
+
+### 🔁 **\[Bonus] Advanced Types from Lesson 1**
+
+#### 1. `any` vs `unknown`
+
+| Type      | Description                                                               |
+| --------- | ------------------------------------------------------------------------- |
+| `any`     | Disables type checking. Use when you don’t care what the value is.        |
+| `unknown` | Safer alternative to `any`. You must **narrow** its type before using it. |
+
+let value1: any = "hello";
+value1.toUpperCase(); // ✅ No error, but unsafe
+
+let value2: unknown = "hello";
+value2.toUpperCase(); // ❌ Error
+
+if (typeof value2 === "string") {
+  console.log(value2.toUpperCase()); // ✅ Safe
+} 
+---
+
+#### 2. `void`
+
+Used for functions that **do not return anything**.
+
+function logMessage(msg: string): void {
+  console.log(msg);
+} 
+---
+
+#### 3. `never`
+
+Used when a function **never returns** (throws error or infinite loop).
+
+function throwError(msg: string): never {
+  throw new Error(msg);
+}
+
+function infiniteLoop(): never {
+  while (true) {}
+}
+```
+
+---
+
+#### 4. `null` and `undefined`
+
+You can explicitly type them:
+
+let nothingHere: null = null;
+let notAssigned: undefined = undefined;
+```
+
+To allow both number and null:
+
+let maybeAge: number | null = 25;
+```
+#### 5. `literal` types
+
+You can restrict a variable to exact values:
+
+let direction: "left" | "right" = "left";
+direction = "up"; // ❌ Error
+```
+### 🔍 Interview Tip
+
+When asked about `unknown` vs `any`:
+> "`unknown` is a safer version of `any` — the compiler forces you to check the type before using it."
+
+When asked about `never`:
+> "`never` is used when a function never returns — for example, it always throws an error or loops forever."
+ 
+-------------------------------------------------
+
+Perfect. You're asking for **real-world React-friendly lessons** on some of the most **important TypeScript types**. Let's break this into multiple **mini-lessons**, each with **concept, syntax, when to use, and a React-like example**.
+
+---
+
+## ✅ Mini-Lesson 1: `enum`
+
+### 👉 What is it?
+
+An `enum` defines a set of named constants.
+
+enum Status {
+  Idle,
+  Loading,
+  Success,
+  Error,
+}
+```
+
+### 🛠 When to use?
+
+Use when you have a fixed list of possible **states or modes**.
+
+### 🔁 Real React Example
+
+enum Status {
+  Idle,
+  Loading,
+  Success,
+  Error,
+}
+
+interface Props {
+  status: Status;
+}
+
+const StatusMessage = ({ status }: Props) => {
+  if (status === Status.Loading) return <p>Loading...</p>;
+  if (status === Status.Error) return <p>Error occurred</p>;
+  return null;
+};
+```
+
+---
+
+## ✅ Mini-Lesson 2: `tuple`
+
+### 👉 What is it?
+
+A tuple is a **fixed-length array** where **each element has a known type**.
+
+const person: [string, number] = ["Alice", 30];
+```
+
+### 🛠 When to use?
+
+Use when order and number of elements **matter**.
+
+### 🔁 Real React Example (custom hook return)
+
+function useCounter(): [number, () => void] {
+  const [count, setCount] = useState(0);
+  const increment = () => setCount(c => c + 1);
+  return [count, increment];
+}
+
+const [count, increment] = useCounter();
+---
+
+## ✅ Mini-Lesson 3: `union`
+
+### 👉 What is it?
+
+Allows a variable to have **more than one type**.
+
+let value: string | number;
+```
+
+### 🛠 When to use?
+
+Use when a variable **can be more than one thing**.
+
+### 🔁 Real React Example (button click handler)
+
+type ID = string | number;
+
+const deleteItem = (id: ID) => {
+  console.log("Delete item with ID", id);
+};
+```
+
+---
+
+## ✅ Mini-Lesson 4: `intersection`
+
+### 👉 What is it?
+
+Combines multiple types into one.
+
+type A = { name: string };
+type B = { age: number };
+type Person = A & B; // { name: string, age: number }
+```
+
+### 🛠 When to use?
+
+Use when you want to **merge multiple types**.
+
+### 🔁 Real React Example
+
+type HasId = { id: string };
+type HasName = { name: string };
+type UserProps = HasId & HasName;
+
+const UserCard = ({ id, name }: UserProps) => (
+  <div>{name} ({id})</div>
+);
+```
+
+---
+
+## ✅ Mini-Lesson 5: `interface`
+
+### 👉 What is it?
+
+Defines the **shape of an object**.
+
+interface User {
+  name: string;
+  age: number;
+}
+```
+
+### 🛠 When to use?
+
+Use when defining **props, state, API response**, etc.
+
+### 🔁 Real React Example
+
+interface User {
+  id: string;
+  name: string;
+}
+
+const UserRow = ({ user }: { user: User }) => (
+  <div>{user.name}</div>
+);
+```
+
+---
+
+## ✅ Mini-Lesson 6: `type` and Type Aliases
+
+### 👉 What is it?
+
+Use `type` to **create aliases** for complex types.
+
+type UserID = string | number;
+type User = {
+  id: UserID;
+  name: string;
+};
+```
+
+### 🛠 When to use?
+
+Use for unions, intersections, utility types, or complex reuse.
+
+### 🔁 Real React Example
+
+type Status = "idle" | "loading" | "success" | "error";
+
+interface Props {
+  status: Status;
+}
+```
+
+---
+
+## ✅ Mini-Lesson 7: `object` type
+
+### 👉 What is it?
+
+Use `object` to define general object shapes. But prefer **`type` or `interface`** for actual objects.
+
+let config: { theme: string; darkMode: boolean };
+```
+
+### 🛠 When to use?
+
+Use in **props**, **config objects**, etc.
+
+### 🔁 Real React Example
+
+const ThemeSettings = ({ config }: { config: { theme: string; darkMode: boolean } }) => (
+  <div>{config.theme}</div>
+);
+```
+
+---
+
+## ✅ Mini-Lesson 8: Literal Types
+
+### 👉 What is it?
+
+You can restrict a variable to **exact string or number values**.
+
+type Direction = "left" | "right" | "up" | "down";
+```
+
+### 🛠 When to use?
+
+Use when you have **a few valid string/number options** (like modes or variants).
+
+### 🔁 Real React Example
+
+type ButtonVariant = "primary" | "secondary";
+
+const Button = ({ variant }: { variant: ButtonVariant }) => (
+  <button className={variant}>{variant} button</button>
+);
+```
+
+---
+
+## 🧠 Summary Table
+
+| Feature        | When to Use                            | Example Use in React      |
+| -------------- | -------------------------------------- | ------------------------- |
+| `enum`         | Finite set of states                   | API status, button modes  |
+| `tuple`        | Fixed return structure from hook       | `[data, setData]`         |
+| `union`        | One of several types                   | string \| number ID       |
+| `intersection` | Combine multiple object types          | Merge props or configs    |
+| `interface`    | Object structure (preferred for props) | Props, API responses      |
+| `type`         | Aliases, unions, intersections, etc.   | Complex reusable types    |
+| `object`       | Inline object typing                   | config or settings        |
+| `literal`      | Restrict to exact values               | Variant props, directions |
+
+-------------------------------------
+Qestions.
+1.When would you use interface over type?
+--> Great question — this is **commonly asked in interviews**, and knowing when to use `interface` vs `type` shows you understand TypeScript design principles.
+
+---
+
+## ✅ Short Answer (what to say in an interview):
+
+> Use `interface` when describing the **shape of an object**, especially for **React props**, because it's more extendable.
+> Use `type` when you need **unions**, **intersections**, or aliasing **primitives or complex types**.
+
+---
+
+## 📌 Detailed Comparison
+
+| Feature                 | `interface`                        | `type`                                  |
+| ----------------------- | ---------------------------------- | --------------------------------------- |
+| **Extending**           | ✅ Can be extended                  | ✅ Can be intersected using `&`          |
+| **Declaration Merging** | ✅ Yes                              | ❌ No                                    |
+| **Unions/Primitives**   | ❌ Not supported                    | ✅ Can do `type ID = string \| number`   |
+| **React Community**     | Preferred for **props**, **state** | Used for **utility types**, **aliases** |
+| **Readability**         | Clear and expressive for objects   | Better for advanced use cases           |
+
+---
+
+## 🧠 Examples
+
+### ✅ Use `interface` when...
+
+#### 1. **Defining props/state**
+
+interface UserProps {
+  name: string;
+  age: number;
+}
+
+const User = ({ name, age }: UserProps) => (
+  <p>{name} - {age}</p>
+);
+```
+
+#### 2. **Extending**
+
+interface Animal {
+  name: string;
+}
+interface Dog extends Animal {
+  breed: string;
+}
+```
+
+---
+
+### ✅ Use `type` when...
+
+#### 1. **Union Types**
+
+type Status = "idle" | "loading" | "success";
+```
+
+#### 2. **Function Signatures**
+
+type ClickHandler = (event: React.MouseEvent) => void;
+```
+
+#### 3. **Combining with intersection**
+
+type A = { name: string };
+type B = { age: number };
+type AB = A & B;
+```
+
+#### 4. **Aliasing complex types**
+
+type User = {
+  id: number;
+  name: string;
+} | null;
+``` 
+
+## 🧪 Quick Rule of Thumb
+
+* Use `interface` for **React props**, **class objects**, and **simple object models**.
+* Use `type` when working with **unions**, **intersections**, **tuples**, or **primitives**.
+
+--- 
+2.What is type inferance in ts?
+>Sure! Here's a **short version**:
+
+---
+
+### ✅ Type Inference (TS)
+
+TypeScript **automatically figures out** the type from the value.
+
+let name = "Sainath"; // inferred as string
+let age = 25;         // inferred as number
+```
+
+---
+
+### ⚠️ Caution:
+
+let x; // inferred as any (unsafe!)
+x = "hello";
+x = 42;  // allowed!
+
+### ✅ Best Use:
+
+* Let TS infer when value is given.
+* Explicitly write types for **function params**, **returns**, and **uninitialized vars**.
+----------------------------------------
