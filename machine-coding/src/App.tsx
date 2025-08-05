@@ -26,6 +26,10 @@ import FullForm from './pages/config-driven-form/simpleForm'
 import { FiltersComponent } from './pages/filters/FiltersComponent'
 import { BrowserRouter } from 'react-router-dom'
 import { FiltersProvider } from './pages/filters/FiltersProvider'
+import TicTacToe from './pages/tic-tac-toe/TicTacToe'
+import AccordionParent from './pages/accordion/AccordionParent'
+import MemoryGame from './pages/memory-game/MemoryGame'
+import ChipsParent from './pages/chips/ChipsParent'
 
 
 
@@ -123,6 +127,10 @@ function App() {
     <BrowserRouter>
       <FiltersProvider>
         <ThemeProvider>
+          <TicTacToe />
+          <MemoryGame />
+          <ChipsParent />
+          <AccordionParent />
           <FiltersComponent />
           <FullForm />
 
@@ -152,11 +160,12 @@ function App() {
           <div ref={elRef} style={{ height: '200px', background: `${intersectingEntry?.isIntersecting ? 'green' : 'red'}` }}>
             element to observe
           </div>
+
           <PollWidgetParent />
         </ThemeProvider>
       </FiltersProvider>
     </BrowserRouter>
-  </div>
+  </div >
 
 }
 
