@@ -24,12 +24,16 @@ import { ThemeProvider, useTheme } from './pages/dark-mode/ThemeContext'
 import ThemeToggle from './pages/dark-mode/ThemeToggle'
 import FullForm from './pages/config-driven-form/simpleForm'
 import { FiltersComponent } from './pages/filters/FiltersComponent'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { FiltersProvider } from './pages/filters/FiltersProvider'
 import TicTacToe from './pages/tic-tac-toe/TicTacToe'
 import AccordionParent from './pages/accordion/AccordionParent'
 import MemoryGame from './pages/memory-game/MemoryGame'
 import ChipsParent from './pages/chips/ChipsParent'
+import BreadcrumbParent from './pages/breadcrumbs/BreadcrumbParent'
+import Home from './pages/breadcrumbs/dummy-pages/Home'
+import Product from './pages/breadcrumbs/dummy-pages/Product'
+import OtpParent from './pages/otp/OtpParent'
 
 
 
@@ -125,8 +129,14 @@ function App() {
 
   return <div className="App">
     <BrowserRouter>
+      <BreadcrumbParent />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/products' element={<Product />} />
+      </Routes>
       <FiltersProvider>
         <ThemeProvider>
+          <OtpParent />
           <TicTacToe />
           <MemoryGame />
           <ChipsParent />
