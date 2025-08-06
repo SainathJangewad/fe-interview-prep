@@ -1,0 +1,129 @@
+Sure! Here's a **quick, focused crash course** on **TypeScript classes**, just the basics you need as a **React developer**, with a short interview-ready summary at the end.
+
+---
+
+## 🚀 TypeScript Class Basics
+
+### 1️⃣ **Declaring a Class**
+
+```ts
+class Person {
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  greet() {
+    console.log(`Hello, ${this.name}`);
+  }
+}
+```
+
+* `class` keyword creates a blueprint.
+* `constructor` initializes values.
+* `this` refers to the instance.
+
+---
+
+### 2️⃣ **Access Modifiers**
+
+```ts
+class User {
+  public name: string;        // accessible everywhere
+  private age: number;        // accessible only inside class
+  protected role: string;     // accessible inside class + subclasses
+
+  constructor(name: string, age: number, role: string) {
+    this.name = name;
+    this.age = age;
+    this.role = role;
+  }
+}
+```
+
+---
+
+### 3️⃣ **Readonly Properties**
+
+```ts
+class Config {
+  readonly apiKey: string;
+  constructor(apiKey: string) {
+    this.apiKey = apiKey;
+  }
+}
+```
+
+* Can be assigned once, then it's locked.
+
+---
+
+### 4️⃣ **Inheritance with `extends`**
+
+```ts
+class Animal {
+  speak() {
+    console.log("Animal speaks");
+  }
+}
+
+class Dog extends Animal {
+  speak() {
+    console.log("Dog barks");
+  }
+}
+```
+
+---
+
+### 5️⃣ **Implementing Interfaces**
+
+```ts
+interface Printable {
+  print(): void;
+}
+
+class Report implements Printable {
+  print() {
+    console.log("Printing report...");
+  }
+}
+```
+
+---
+
+### 6️⃣ **Generic Class (basic)**
+
+```ts
+class Box<T> {
+  value: T;
+  constructor(val: T) {
+    this.value = val;
+  }
+}
+```
+
+---
+
+## 🧠 Short Note (Interview-Ready)
+
+### 📌 TypeScript Class Quick Summary
+
+| Feature       | Description                               |
+| ------------- | ----------------------------------------- |
+| `class`       | Defines a blueprint for objects           |
+| `constructor` | Runs when object is created               |
+| `public`      | Accessible from anywhere (default)        |
+| `private`     | Only inside class                         |
+| `protected`   | Inside class and subclasses               |
+| `readonly`    | Set once, can't be changed                |
+| `extends`     | Inheritance between classes               |
+| `implements`  | Enforces class structure from interface   |
+| `class<T>`    | Generic class (type-safe, reusable logic) |
+
+✅ As a React dev, focus on:
+
+* `constructor`, `public/private`
+* `extends`, `implements`
+* `generic class` (used in utilities)
+-------------------------------
