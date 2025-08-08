@@ -34,6 +34,10 @@ import BreadcrumbParent from './pages/breadcrumbs/BreadcrumbParent'
 import Home from './pages/breadcrumbs/dummy-pages/Home'
 import Product from './pages/breadcrumbs/dummy-pages/Product'
 import OtpParent from './pages/otp/OtpParent'
+import TableParent from './pages/table/TableParent'
+import TabsParent from './pages/tabs/TabsParent'
+import StarRatingParent from './pages/star-rating/StarRatingParent'
+import Holygrail from './pages/holygrail/Holygrail'
 
 
 
@@ -134,38 +138,64 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/products' element={<Product />} />
       </Routes>
+      <hr />
+      <TableParent />
+      <hr />
+      <TabsParent />
+      <hr />
       <FiltersProvider>
         <ThemeProvider>
           <OtpParent />
+          <StarRatingParent />
+          <hr />
           <TicTacToe />
+          <hr />
+          <Holygrail />
+          <hr />
           <MemoryGame />
+          <hr />
           <ChipsParent />
+          <hr />
           <AccordionParent />
+          <hr />
           <FiltersComponent />
+          <hr />
           <FullForm />
+          <hr />
 
           {/* dark mode  */}
           <h1 className="home__title">Current Theme: {theme}</h1>
           <ThemeToggle />
+          <hr />
 
           <Counter />
+          <hr />
           <User />
+          <hr />
           {
             counter
           }
           <NotificationParent />
+          <hr />
           <CarouselParent />
+          <hr />
           <Stopwatch />
+          <hr />
           <NestedComments />
+          <hr />
           <Parent />
+          <hr />
           <ProgressBar value={progress} max={100} color="success" size="large" striped animated showLabel />
+          <hr />
           {/* <button onClick={() => setCount2(count2 + 1)}>inc2</button>
     <button onClick={() => setCount(count + 1)}>inc</button>
     <button onClick={() => setCount(count - 1)}>dec</button> */}
           {/* <div>sqrt : {sqrt}</div>
     <div>sqrt : {sqrt2}</div> */}
           <AutocompleteParent />
+          <hr />
           <InfiniteScrollList />
+          <hr />
 
           <div ref={elRef} style={{ height: '200px', background: `${intersectingEntry?.isIntersecting ? 'green' : 'red'}` }}>
             element to observe
