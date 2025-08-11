@@ -15,7 +15,7 @@
 .card {
   width: 80px;
   height: 80px;
-  perspective: 1000px;
+  perspective: 10000px;
   cursor: pointer;
 
   .card-inner {
@@ -61,3 +61,6 @@
   margin-bottom: 10px;
   color: green;
 }
+
+// So here, position: absolute on the back card and front card makes them stack on top of each other — the front being on top and the back card hidden behind it. The back card is rotated 180° on the Y-axis so that when we rotate .card-inner on the Y-axis by 180°, the real face of the back card is shown instead of the “back side” of the back card.
+// rotateY(180) means it brings backside to front . rotateY(90) will not bring backside entirely ...only half of it.

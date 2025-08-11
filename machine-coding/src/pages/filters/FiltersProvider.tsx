@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
+export const MAx_PRICE = 1e5;
+
 export type SortOption = "price_asc" | "price_desc" | "rating";
 export interface Filters {
     sortBy: SortOption;
@@ -13,7 +15,7 @@ export interface Filters {
 
 const defaultFilters: Filters = {
     sortBy: "price_asc",
-    priceRange: [0, 1000],
+    priceRange: [0, MAx_PRICE],
     categories: [],
     brand: "",
     rating: 0,
@@ -37,7 +39,7 @@ export const FiltersProvider = ({ children }: { children: React.ReactNode }) => 
         sortBy: (searchParams.get("sort") as SortOption) || "price_asc",
         priceRange: [
             Number(searchParams.get("min")) || 0,
-            Number(searchParams.get("max")) || 1000,
+            Number(searchParams.get("max")) || MAx_PRICE,
         ],
         categories: searchParams.get("categories")?.split(",") || [],
         brand: searchParams.get("brand") || "",

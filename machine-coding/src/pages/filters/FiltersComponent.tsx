@@ -1,6 +1,7 @@
 import React from "react";
 import { useFilters } from "./useFilters";
 import "./FiltersComponent.scss";
+import { MAx_PRICE } from "./FiltersProvider";
 
 const CATEGORIES = ["Electronics", "Clothing", "Books", "Home"];
 const BRANDS = ["Apple", "Samsung", "Nike", "Sony"];
@@ -33,7 +34,7 @@ export const FiltersComponent: React.FC = () => {
                 <input
                     type="range"
                     min={0}
-                    max={5000}
+                    max={MAx_PRICE}
                     value={filters.priceRange[1]}
                     onChange={(e) => updateFilters({ priceRange: [0, Number(e.target.value)] })}
                 />

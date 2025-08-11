@@ -78,6 +78,17 @@ const InfiniteScrollList: React.FC = () => {
             if (scrollTop + clientHeight >= scrollHeight - 10 && !loading) {
                 fetchData();
             }
+            //📜 Scroll Position Basics
+            // scrollHeight → Total height of the page(visible + invisible).
+            // clientHeight → Height of the visible part of the page(viewport).
+            // scrollTop → How far the top of the viewport is from the top of the page.
+            // Max scrollTop = scrollHeight - clientHeight → equals the size of the invisible part.
+            // You can only scroll through the invisible part — once it’s fully revealed, you’re at the bottom.
+
+            //Example:
+            // If scrollHeight = 10 and clientHeight = 4 →
+            // Invisible part = 10 - 4 = 6 → Max scrollTop = 6.
+            // You start at scrollTop = 0 and can scroll until scrollTop = 6.
         };
 
         // Attach the scroll event listener

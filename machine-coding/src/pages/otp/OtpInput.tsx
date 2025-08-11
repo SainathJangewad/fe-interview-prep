@@ -30,6 +30,8 @@ const OtpInput: React.FC<OtpInputProps> = ({ length, onChange }) => {
     };
 
     const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+        e.preventDefault(); // ✅ Stop browser from pasting into just one box
+
         const pasteData = e.clipboardData.getData('text').slice(0, length);
         if (!/^\d+$/.test(pasteData)) return;
 

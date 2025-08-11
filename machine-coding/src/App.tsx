@@ -38,6 +38,8 @@ import TableParent from './pages/table/TableParent'
 import TabsParent from './pages/tabs/TabsParent'
 import StarRatingParent from './pages/star-rating/StarRatingParent'
 import Holygrail from './pages/holygrail/Holygrail'
+import Products from './pages/filters/Products'
+import FiltersParent from './pages/filters/FiltersParent'
 
 
 
@@ -158,7 +160,7 @@ function App() {
           <hr />
           <AccordionParent />
           <hr />
-          <FiltersComponent />
+          <FiltersParent />
           <hr />
           <FullForm />
           <hr />
@@ -194,14 +196,14 @@ function App() {
     <div>sqrt : {sqrt2}</div> */}
           <AutocompleteParent />
           <hr />
-          <InfiniteScrollList />
-          <hr />
 
           <div ref={elRef} style={{ height: '200px', background: `${intersectingEntry?.isIntersecting ? 'green' : 'red'}` }}>
             element to observe
           </div>
 
           <PollWidgetParent />
+          <InfiniteScrollList />
+          <hr />
         </ThemeProvider>
       </FiltersProvider>
     </BrowserRouter>
