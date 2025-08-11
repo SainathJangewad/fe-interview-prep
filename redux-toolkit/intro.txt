@@ -27,6 +27,21 @@ export type AppDispatch = typeof store.dispatch;
 
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import type { RootState, AppDispatch } from './store';
+-----------------------------------------------
+**`import type` in TypeScript – Quick Note**
+
+* **Purpose:** Import types **only for compile-time**, not at runtime.
+* **Syntax:**
+
+  ```ts
+  import type { MyType } from './file';
+  ```
+* **Why use it:**
+
+  * Removes type imports from compiled JS → smaller bundle.
+  * Avoids accidental runtime imports when you only need types.
+* **In Redux:** Common for `RootState` & `AppDispatch` in `hooks.ts` since they’re used only for typing.
+------------------------------------------------------------------------
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
