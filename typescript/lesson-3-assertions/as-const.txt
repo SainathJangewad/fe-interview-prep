@@ -1,24 +1,17 @@
-Got it. Here's a **better, beginner-friendly explanation** of `as const` with well-commented code and simple examples.
-
----
-
 ## 🔹 What is `as const`?
 
 In TypeScript, when you write:
 
-```ts
 const value = "apple";
 ```
 
 TS treats it as:
 
-```ts
 const value: string; // It assumes value could be *any* string
 ```
 
 But if you want it to **treat the value as exactly** `"apple"` (not just any string), you write:
 
-```ts
 const value = "apple" as const; // 👈 Now TS says: value is type "apple"
 ```
 
@@ -34,7 +27,6 @@ So, `as const` means:
 
 ### ✅ With `as const`
 
-```ts
 const COLORS = ["red", "green", "blue"] as const;
 // COLORS is now readonly ["red", "green", "blue"]
 // Each element is a literal type: "red", "green", "blue"
@@ -52,7 +44,6 @@ paint("yellow"); // ❌ Error: "yellow" is not a valid color
 
 ### ❌ Without `as const`
 
-```ts
 const COLORS = ["red", "green", "blue"];
 // COLORS is type: string[]
 
@@ -64,7 +55,6 @@ type Color = typeof COLORS[number];
 
 ## 🔹 Use Case 2: Discriminated union with constants
 
-```ts
 const STATUS = {
   LOADING: "loading",
   SUCCESS: "success",
@@ -89,7 +79,6 @@ If you don't use `as const`, `STATUS.SUCCESS` becomes `string`, and that breaks 
 
 ## 🔹 Use Case 3: Prevent accidental mutation
 
-```ts
 const config = {
   apiBase: "https://api.example.com",
   retry: 3,
@@ -106,8 +95,7 @@ You’re telling TypeScript:
 ---
 
 ## 🔹 Real React Example: `as const` with props
-
-```tsx
+x
 const BUTTON_VARIANTS = ["primary", "secondary", "danger"] as const;
 
 type Variant = typeof BUTTON_VARIANTS[number]; 
@@ -144,7 +132,6 @@ Great question! Let's break this **weird-looking** syntax down clearly and simpl
 
 ## 🔹 The code again:
 
-```ts
 const COLORS = ["red", "green", "blue"] as const;
 type Color = typeof COLORS[number];
 ```
@@ -159,14 +146,12 @@ It tells TypeScript:
 
 > “Give me the type of this variable, not its value.”
 
-```ts
 typeof COLORS
 // gives: readonly ["red", "green", "blue"]
 ```
 
 So it's equivalent to:
 
-```ts
 type Temp = readonly ["red", "green", "blue"];
 ```
 
@@ -178,7 +163,6 @@ This part means:
 
 > “Get the type of any **element** inside the `COLORS` array.”
 
-```ts
 typeof COLORS[number]
 // → "red" | "green" | "blue"
 ```
@@ -189,7 +173,6 @@ This is because the array only contains those three values (and it's `readonly` 
 
 ## 🔹 Putting it together:
 
-```ts
 type Color = typeof COLORS[number];
 // becomes: "red" | "green" | "blue"
 ```
@@ -210,7 +193,6 @@ You can use this in props, form fields, dropdown options, etc.
 
 ## 🔁 Visual Summary
 
-```ts
 const COLORS = ["red", "green", "blue"] as const;
 //    type = readonly ["red", "green", "blue"]
 

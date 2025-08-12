@@ -1,11 +1,6 @@
-Here’s a **short, practical guide to TypeScript generics in React**—designed for **interview prep**.
-
----
-
 ## ✅ What Are Generics?
 
 **Generics** let you write **reusable code** that works with different **types**, like a function or component that can handle multiple data types **safely**.
-
 ---
 
 ## 🔶 Why React Devs Use Generics?
@@ -14,7 +9,6 @@ Here’s a **short, practical guide to TypeScript generics in React**—designed
 * For reusable hooks
 * For API functions
 * To avoid `any` while keeping flexibility
-
 ---
 
 ## 🔷 1. Generic Function
@@ -25,12 +19,10 @@ function identity<T>(value: T): T {
 
 const num = identity<number>(10); // T = number
 const str = identity("hello");    // T = string (inferred)
-```
-
 ---
 
 ## 🔷 2. Generic React Component
-x
+
 type ListProps<T> = {
   items: T[];
   renderItem: (item: T) => React.ReactNode;
@@ -45,7 +37,6 @@ function List<T>({ items, renderItem }: ListProps<T>) {
   items={["apple", "banana"]}
   renderItem={(item) => <li key={item}>{item}</li>}
 />
-```
 
 ✅ **Why this is asked**: Shows understanding of reusable typed components.
 
@@ -61,7 +52,6 @@ function useArray<T>(initial: T[]) {
 
 // Usage
 const { array, push } = useArray<number>([1, 2, 3]);
-```
 
 ✅ **Interview Tip**: Hooks with generics show abstraction skill.
 
@@ -197,14 +187,11 @@ Sure! Let’s now look at **generic interfaces** in TypeScript — another **imp
 ## ✅ What is a Generic Interface?
 
 A **generic interface** lets you define an interface with **type parameters** (like `T`), so it can work with **different types**.
-
 ---
 
-## 🔹 Syntaxinterface InterfaceName<T> {
+## 🔹 Syntax interface InterfaceName<T> {
   property: T;
 }
-```
-
 ---
 
 ## 🔷 Example 1: Generic Data Holderinterface Box<T> {
@@ -214,12 +201,13 @@ A **generic interface** lets you define an interface with **type parameters** (l
 const numberBox: Box<number> = { value: 100 };
 const stringBox: Box<string> = { value: "hello" };
 ```
-
 ✅ `Box<T>` can store any type — that's the power of generics.
 
 ---
 
-## 🔷 Example 2: Generic with Multiple Typesinterface Pair<K, V> {
+## 🔷 Example 2: Generic with Multiple Types
+
+interface Pair<K, V> {
   key: K;
   value: V;
 }
@@ -228,11 +216,10 @@ const item: Pair<string, number> = {
   key: "price",
   value: 999
 };
-```
-
 ---
 
-## 🔷 Example 3: Constrained GenericsT extends {length:numner} means u can pass value of any type (T) but this passed type must have the "length" property.
+## 🔷 Example 3: Constrained Generics T extends {length:numner} means u can pass value of any type (T) but this passed type must have the "length" property.
+
 interface Lengthwise<T extends { length: number }> {
   item: T;
 }
@@ -240,11 +227,10 @@ interface Lengthwise<T extends { length: number }> {
 const valid: Lengthwise<string> = { item: "test" }; // ✅
 const alsoValid: Lengthwise<number[]> = { item: [1, 2, 3] }; // ✅
 // const invalid: Lengthwise<number> = { item: 123 }; // ❌ Error - cuz number does not have 'length' property
-```
 
 ---
 
-## 🔷 Example 4: Interface with Generic Methodinterface Logger {
+## 🔷 Example 4: Interface with Generic Method interface Logger {
   log<T>(value: T): void;
 }
 
@@ -277,35 +263,14 @@ Q-> here we usually do something like this interface Logger {
 * Type `T` is fixed when the interface is used.
 * Example: `Logger<string>` → `log("hi")` ✅, `log(123)` ❌
 
-#### ❌ Invalid (Missing generic declaration)interface Logger {
+#### ❌ Invalid (Missing generic declaration) interface Logger {
   log: (value: T) => void; // ❌ Error: 'T' not declared
 }
-```
 
 ✔ Use **generic method** for flexibility
 ✔ Use **generic interface** when the type is known ahead
 
-```
-
 ✅ Generic methods can be inside non-generic interfaces too.
-
----
-
-## 🔷 Example 5: Generic Interface in React Props
-interface ListProps<T> {
-  items: T[];
-  renderItem: (item: T) => React.ReactNode;
-}
-
-function List<T>({ items, renderItem }: ListProps<T>) {
-  return <ul>{items.map(renderItem)}</ul>;
-}
-
-// Usage
-<List items={[1, 2, 3]} renderItem={(item) => <li>{item}</li>} />
-```
-
-✅ Common in component libraries like `MUI`, `React Table`, etc.
 
 ---
 
@@ -411,7 +376,6 @@ getLength([1, 2, 3]);   // ✅ array has length
 
 ## 🔷 Example 2: Constraint to a specific object shape
 
-```ts
 interface Person {
   name: string;
   age: number;
@@ -426,12 +390,10 @@ greet({ name: "Alice", age: 30 });  // ✅
 ```
 
 ✅ Here `T` must be **at least** a `Person`.
-
 ---
 
 ## 🔷 Example 3: Constraining to union of types
 
-```ts
 function printId<T extends string | number>(id: T) {
   console.log(id);
 }
@@ -447,7 +409,6 @@ printId(true);   // ❌ not allowed
 
 ## 🔷 Example 4: Generic Constraint with `keyof`
 
-```ts
 function getProperty<T, K extends keyof T>(obj: T, key: K) {
   return obj[key];
 }
@@ -477,7 +438,6 @@ Great! Let’s dive into **conditional types** in TypeScript, especially **insid
 
 A **conditional type** works like an `if-else` in the type system:
 
-```ts
 T extends U ? X : Y
 ```
 
@@ -492,8 +452,6 @@ type IsString<T> = T extends string ? "yes" : "no";
 
 type A = IsString<string>; // "yes"
 type B = IsString<number>; // "no"
-```
-
 ---
 
 ## 🔷 Conditional Type in a Generic Function
@@ -516,7 +474,6 @@ const b = process(123);   // number[]
 
 ## 🔷 Use Case: Remove `null` or `undefined`
 
-```ts
 type NonNullable<T> = T extends null | undefined ? never : T;
 
 type A = NonNullable<string | null>; // string
@@ -529,7 +486,6 @@ type B = NonNullable<number | undefined>; // number
 
 ## 🔷 Use Case: Extract Return Type
 
-```ts
 type MyReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
 
 type Fn = () => number;

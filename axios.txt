@@ -39,7 +39,6 @@ src/
 
 ### 1. `axiosInstance.ts` — Centralized Axios Configuration
 
-```ts
 // src/api/axiosInstance.ts
 import axios from 'axios';
 
@@ -75,12 +74,10 @@ axiosInstance.interceptors.response.use(
  
 export default axiosInstance;
 ```
-
 ---
 
 ### 2. `endpoints.ts` — Define Endpoint Constants (optional but cleaner)
 
-```ts
 // src/api/endpoints.ts
 export const USERS_ENDPOINT = '/users';
 ```
@@ -89,7 +86,6 @@ export const USERS_ENDPOINT = '/users';
 
 ### 3. `userApi.ts` — Feature-Specific API Functions
 
-```ts
 // src/api/userApi.ts
 import axiosInstance from './axiosInstance';
 import { USERS_ENDPOINT } from './endpoints';
@@ -120,8 +116,7 @@ export const deleteUser = (id: string) => {
 ### 4. `useUsers.ts` — Use in a React Hook (with `useEffect` or `react-query`)
 
 #### Option A: Using `useEffect`
-
-```tsx
+x
 // src/hooks/useUsers.ts
 import { useEffect, useState } from 'react';
 import { getAllUsers } from '../api/userApi';
@@ -147,8 +142,7 @@ export const useUsers = () => {
 ```bash
 npm install @tanstack/react-query
 ```
-
-```tsx
+x
 // src/hooks/useUsers.ts
 import { useQuery } from '@tanstack/react-query';
 import { getAllUsers } from '../api/userApi';
@@ -161,8 +155,7 @@ export const useUsers = () => {
 ---
 
 ### 5. `UsersPage.tsx` — Use Hook in React Component
-
-```tsx
+x
 // src/pages/UsersPage.tsx
 import React from 'react';
 import { useUsers } from '../hooks/useUsers';
@@ -210,7 +203,6 @@ Handled in `axiosInstance` via `interceptors`. Add/remove tokens from localStora
 
 ## 📤 File Upload Example
 
-```ts
 export const uploadAvatar = (file: File) => {
   const formData = new FormData();
   formData.append('avatar', file);
@@ -227,7 +219,6 @@ export const uploadAvatar = (file: File) => {
 
 ## 📦 Pagination, Params, Headers
 
-```ts
 export const getUsersPaginated = (page: number, limit: number) => {
   return axiosInstance.get('/users', {
     params: { page, limit },

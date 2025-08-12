@@ -1,11 +1,7 @@
-
-## 🧠 Lesson: Type Assertions in TypeScript
-
 ### ✅ What is a Type Assertion?
 
 TypeScript lets you **override its type inference** when **you know more** about the value than TypeScript does.
 const val = someValue as string;
-```
 
 You’re telling TypeScript:
 
@@ -22,13 +18,11 @@ You’re telling TypeScript:
 ---
 
 ## 🛠 Common Real-World Examples in React
-
 ---
 
 ### 1. **Asserting DOM Elements**
 const el = document.getElementById("myDiv") as HTMLElement;
 el.style.backgroundColor = "blue";
-```
 
 🔍 Why?
 Because `getElementById()` returns `HTMLElement | null`, so you must assert to safely access `.style`.
@@ -41,11 +35,9 @@ const inputRef = useRef<HTMLInputElement>(null);
 useEffect(() => {
   inputRef.current?.focus();
 }, []);
-```
 
 OR when you use non-null assertion:
 inputRef.current!.focus(); // "I’m sure it’s not null"
-```
 
 🔍 Why?
 `ref.current` is possibly `null`, and TS complains.
@@ -54,7 +46,6 @@ The `!` tells TS: "Don't worry, it's there."
 
 ### 4. **Custom Types from JSON**
 const data = JSON.parse(jsonString) as MyType;
-```
 
 🔍 Why?
 
@@ -67,7 +58,6 @@ type Animal = { type: "cat"; meow: () => void } | { type: "dog"; bark: () => voi
 
 const pet = getPet();
 (pet as { type: "dog"; bark: () => void }).bark();
-```
 
 🔍 Why?
 You narrow down the union type when you’re **sure** what variant it is.
@@ -86,7 +76,6 @@ You narrow down the union type when you’re **sure** what variant it is.
 
 Instead of:
 const el = document.getElementById("id") as HTMLElement;
-```
 
 Do:
 const el = document.getElementById("id");

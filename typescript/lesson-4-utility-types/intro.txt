@@ -23,12 +23,10 @@ Makes all properties optional.
 type User = { name: string; age: number };
 type UserUpdate = Partial<User>;
 // { name?: string; age?: number }
-```
 
 **React Example:**
-x
+
 type Props = { user: User; onUpdate: (u: Partial<User>) => void };
-```
 
 ---
 
@@ -39,7 +37,6 @@ Opposite of `Partial`. Makes all fields required.
 type Settings = { theme?: string };
 type StrictSettings = Required<Settings>;
 // { theme: string }
-```
 
 ---
 
@@ -50,7 +47,6 @@ Makes fields read-only.
 type Data = { id: number };
 const item: Readonly<Data> = { id: 1 };
 item.id = 2; // ❌ Error
-```
 
 ---
 
@@ -61,12 +57,10 @@ Pick specific keys from a type.
 type User = { name: string; age: number; email: string };
 type PublicUser = Pick<User, 'name' | 'email'>;
 // { name: string; email: string }
-```
 
 **React Example:**
 
 type Props = Pick<User, 'name' | 'email'>;
-```
 
 ---
 
@@ -76,7 +70,6 @@ Opposite of `Pick`. Removes keys.
 
 type PrivateUser = Omit<User, 'email'>;
 // { name: string; age: number }
-```
 
 ---
 
@@ -87,7 +80,6 @@ Create a type with keys of type `K` and values of type `T`.
 type Roles = 'admin' | 'user';
 type RoleFlags = Record<Roles, boolean>;
 // { admin: boolean; user: boolean }
-```
 
 **React Example:**
 
@@ -95,7 +87,6 @@ const permissions: Record<string, boolean> = {
   edit: true,
   delete: false,
 };
-```
 
 ---
 
@@ -109,7 +100,6 @@ function getUser() {
 
 type User = ReturnType<typeof getUser>;
 // { id: number; name: string }
-```
 
 ---
 
@@ -120,7 +110,6 @@ Removes types from a union.
 type Status = 'loading' | 'success' | 'error';
 type FinalStatus = Exclude<Status, 'loading'>;
 // "success" | "error"
-```
 
 ---
 
@@ -130,7 +119,6 @@ Removes `null` and `undefined`.
 
 type A = string | null | undefined;
 type B = NonNullable<A>; // string
-```
 
 ---
 
@@ -157,7 +145,7 @@ You're asking:
 >
 >
 > type User = typeof getUser;
-> ```
+>
 
 Let’s compare:
 
@@ -166,14 +154,12 @@ Let’s compare:
 ### 🔸 `typeof getUser`
 
 type User = typeof getUser;
-```
 
 🔹 This gives you the **type of the function itself** — not its return value.
 
 Result:
 
 type User = () => { id: number; name: string };
-```
 
 It means: “`User` is a function that returns an object”.
 
@@ -182,14 +168,12 @@ It means: “`User` is a function that returns an object”.
 ### 🔸 `ReturnType<typeof getUser>`
 
 type User = ReturnType<typeof getUser>;
-```
 
 🔹 This gives you the **type of what the function returns**.
 
 Result:
 
 type User = { id: number; name: string };
-```
 
 ---
 

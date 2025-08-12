@@ -101,10 +101,24 @@ value1.toUpperCase(); // ✅ No error, but unsafe
 let value2: unknown = "hello";
 value2.toUpperCase(); // ❌ Error
 
-if (typeof value2 === "string") {
-  console.log(value2.toUpperCase()); // ✅ Safe
-} 
----
+Exactly ✅  
+
+`unknown` is TypeScript’s way of saying:  
+
+> “You can store anything in me… but if you want to actually *do* something with me, prove I’m the right type first.”  
+
+So if you have:  
+let data: unknown = "hello";
+```
+You **can** assign any value to it, but if you try:  
+data.toUpperCase(); // ❌ Error
+```
+TypeScript stops you because it doesn’t yet know `data` is a string.  
+You must first check:  
+if (typeof data === "string") {
+  console.log(data.toUpperCase()); // ✅ Safe
+}
+----------------------------------------
 
 #### 2. `void`
 
@@ -126,9 +140,7 @@ function throwError(msg: string): never {
 function infiniteLoop(): never {
   while (true) {}
 }
-```
-
----
+---------------
 
 #### 4. `null` and `undefined`
 
@@ -148,20 +160,7 @@ You can restrict a variable to exact values:
 
 let direction: "left" | "right" = "left";
 direction = "up"; // ❌ Error
-```
-### 🔍 Interview Tip
-
-When asked about `unknown` vs `any`:
-> "`unknown` is a safer version of `any` — the compiler forces you to check the type before using it."
-
-When asked about `never`:
-> "`never` is used when a function never returns — for example, it always throws an error or loops forever."
- 
 -------------------------------------------------
-
-Perfect. You're asking for **real-world React-friendly lessons** on some of the most **important TypeScript types**. Let's break this into multiple **mini-lessons**, each with **concept, syntax, when to use, and a React-like example**.
-
----
 
 ## ✅ Mini-Lesson 1: `enum`
 
@@ -294,20 +293,7 @@ interface User {
 ### 🛠 When to use?
 
 Use when defining **props, state, API response**, etc.
-
-### 🔁 Real React Example
-
-interface User {
-  id: string;
-  name: string;
-}
-
-const UserRow = ({ user }: { user: User }) => (
-  <div>{user.name}</div>
-);
-```
-
----
+----------------------------------------------------------
 
 ## ✅ Mini-Lesson 6: `type` and Type Aliases
 
@@ -423,7 +409,6 @@ Qestions.
 ---
 
 ## 🧠 Examples
-
 ### ✅ Use `interface` when...
 
 #### 1. **Defining props/state**
@@ -437,7 +422,6 @@ const User = ({ name, age }: UserProps) => (
   <p>{name} - {age}</p>
 );
 ```
-
 #### 2. **Extending**
 
 interface Animal {
@@ -446,9 +430,7 @@ interface Animal {
 interface Dog extends Animal {
   breed: string;
 }
-```
-
----
+```-----------
 
 ### ✅ Use `type` when...
 
@@ -476,17 +458,12 @@ type User = {
   name: string;
 } | null;
 ``` 
-
 ## 🧪 Quick Rule of Thumb
-
 * Use `interface` for **React props**, **class objects**, and **simple object models**.
 * Use `type` when working with **unions**, **intersections**, **tuples**, or **primitives**.
 
---- 
+--- --------------------------------------------------------------------------------
 2.What is type inferance in ts?
->Sure! Here's a **short version**:
-
----
 
 ### ✅ Type Inference (TS)
 
@@ -494,8 +471,6 @@ TypeScript **automatically figures out** the type from the value.
 
 let name = "Sainath"; // inferred as string
 let age = 25;         // inferred as number
-```
-
 ---
 
 ### ⚠️ Caution:
@@ -503,9 +478,4 @@ let age = 25;         // inferred as number
 let x; // inferred as any (unsafe!)
 x = "hello";
 x = 42;  // allowed!
-
-### ✅ Best Use:
-
-* Let TS infer when value is given.
-* Explicitly write types for **function params**, **returns**, and **uninitialized vars**.
-----------------------------------------
+----------
