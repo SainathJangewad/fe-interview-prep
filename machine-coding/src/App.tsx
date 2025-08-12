@@ -40,6 +40,8 @@ import StarRatingParent from './pages/star-rating/StarRatingParent'
 import Holygrail from './pages/holygrail/Holygrail'
 import Products from './pages/filters/Products'
 import FiltersParent from './pages/filters/FiltersParent'
+import Calculator from './pages/calculator/Calculator'
+import Calendar from './pages/calender/Calender'
 
 
 
@@ -142,6 +144,10 @@ function App() {
       </Routes>
       <hr />
       <TableParent />
+      <hr />
+      <Calculator />
+      <hr />
+      <Calendar />
       <hr />
       <TabsParent />
       <hr />

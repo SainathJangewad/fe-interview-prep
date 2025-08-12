@@ -1,0 +1,85 @@
+
+.rc-calendar {
+  width: 320px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  padding: 12px;
+}
+
+.rc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.rc-nav {
+  display: flex;
+  gap: 6px;
+}
+
+.rc-btn {
+  background: transparent;
+  border: 1px solid #ddd;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.rc-title {
+  font-weight: 600;
+}
+
+.rc-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.rc-table th {
+  font-size: 12px;
+  text-align: center;
+  padding: 6px 0;
+  color: #666;
+}
+
+.rc-cell {
+  padding: 4px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.rc-day {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.rc-day:hover:not(.disabled) {
+  background: #f3f3f3;
+}
+
+.rc-day.other {
+  opacity: 0.5;
+}
+
+.rc-day.selected {
+  background: #1e88e5;
+  color: white;
+}
+
+.rc-day.today {
+  box-shadow: inset 0 0 0 1px #1e88e5;
+}
+
+.rc-day.disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
