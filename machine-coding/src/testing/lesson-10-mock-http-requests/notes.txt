@@ -50,13 +50,11 @@ export function UserProfile() {
 
   return <h1>Hello, {name}</h1>;
 }
-```
 
 ---
 
 ### 🧩 Step 2: Create mock handler
 
-```ts
 // src/mocks/handlers.ts
 import { rest } from 'msw';
 
@@ -65,25 +63,19 @@ export const handlers = [
     return res(ctx.json({ name: 'MSW User' }));
   }),
 ];
-```
-
 ---
 
 ### 🧩 Step 3: Setup MSW server
 
-```ts
 // src/mocks/server.ts
 import { setupServer } from 'msw/node';
 import { handlers } from './handlers';
 
 export const server = setupServer(...handlers);
-```
-
 ---
 
 ### 🧩 Step 4: Initialize in test setup
 
-```ts
 // src/setupTests.ts
 import { server } from './mocks/server';
 import { afterAll, afterEach, beforeAll } from 'vitest';
@@ -92,13 +84,10 @@ import '@testing-library/jest-dom';
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
-```
- 
 ---
 
 ### 🧪 Final Test File
 
-```tsx
 // UserProfile.test.tsx
 import { render, screen } from '@testing-library/react';
 import { UserProfile } from './UserProfile';
@@ -107,15 +96,12 @@ test('loads and displays user', async () => {
   render(<UserProfile />);
   expect(await screen.findByText(/hello, msw user/i)).toBeInTheDocument();
 });
-```
-
----
+---------------------------------------------------------
 
 ## ⚠️ Want to Mock Error?
 
 Override the handler inside the test:
 
-```tsx
 import { server } from '../test/mocks/server';
 import { rest } from 'msw';
 
@@ -129,8 +115,6 @@ test('shows fallback on API error', async () => {
   render(<UserProfile />);
   // Add your fallback error message check here
 });
-```
-
 ---
 
 ## 🧠 Summary
@@ -145,7 +129,6 @@ test('shows fallback on API error', async () => {
 --------------------------------------------------------
 
 Great! Let’s now learn how to **mock `POST`, `PUT`, and `DELETE` HTTP requests using Mock Service Worker (MSW)**. These are crucial when testing forms or actions that modify server data (e.g., submitting, editing, or deleting).
-
 ---
 
 ## 🔧 Step-by-Step Setup for MSW (Recap)
@@ -154,7 +137,6 @@ Before mocking requests, ensure MSW is installed:
 
 ```bash
 npm install msw --save-dev
-```
 
 ---
 
@@ -167,13 +149,11 @@ src/
   mocks/
     handlers.ts       ✅ define mock API responses
     server.ts         ✅ setup test server
-```
 
 ---
 
 ## 🧪 1. Create `handlers.ts`
 
-```ts
 // mocks/handlers.ts
 import { rest } from 'msw';
 
@@ -195,38 +175,29 @@ export const handlers = [
     return res(ctx.status(204)); // No Content
   }),
 ];
-```
-
 ---
 
 ## ⚙️ 2. Create `server.ts`
 
-```ts
 // mocks/server.ts
 import { setupServer } from 'msw/node';
 import { handlers } from './handlers';
 
 export const server = setupServer(...handlers);
-```
-
 ---
 
 ## ✅ 3. Set Up MSW in Your Test Environment
 
-```ts
 // setupTests.ts (imported in vitest.config.ts or setupFiles)
 import { server } from './mocks/server';
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
-```
-
 ---
 
 ## 🧪 4. Example Test for a POST Request
 
-```tsx
 // __tests__/MyForm.test.tsx
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -242,13 +213,10 @@ test('submits the form successfully (POST)', async () => {
     expect(screen.getByText(/user created/i)).toBeInTheDocument()
   );
 });
-```
-
 ---
 
 ## 🧪 5. Mocking Errors or Overriding Handlers in Specific Tests
 
-```ts
 import { server } from '../mocks/server';
 import { rest } from 'msw';
 
@@ -267,8 +235,6 @@ test('handles 500 error on submit', async () => {
     expect(screen.getByText(/server error/i)).toBeInTheDocument()
   );
 });
-```
-
 ---
 
 ## 💡 Summary
@@ -278,7 +244,3 @@ test('handles 500 error on submit', async () => {
 | POST   | Create a new resource    | 201         | `/api/users`     |
 | PUT    | Update existing resource | 200         | `/api/users/:id` |
 | DELETE | Remove resource          | 204         | `/api/users/:id` |
-
----
-
-Would you like a full working example with a simple form that makes all 3 requests (POST, PUT, DELETE) and is fully tested?

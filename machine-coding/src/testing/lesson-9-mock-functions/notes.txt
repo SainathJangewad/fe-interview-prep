@@ -32,7 +32,7 @@ Mocking means **replacing a real function** (like an API call, utility, or callb
 ## ✅ Example 1: Mocking a Prop Function
 
 ### 🧪 Component: `SubmitButton.tsx`
-```tsx
+
 type Props = {
   onSubmit: () => void;
 };
@@ -40,10 +40,9 @@ type Props = {
 export function SubmitButton({ onSubmit }: Props) {
   return <button onClick={onSubmit}>Submit</button>;
 }
-```
 
 ### 🧪 Test: `SubmitButton.test.tsx`
-```tsx
+
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SubmitButton } from './SubmitButton';
@@ -57,17 +56,14 @@ test('calls onSubmit when button is clicked', async () => {
 
   expect(handleSubmit).toHaveBeenCalledTimes(1);
 });
-```
-
 ---
 
 ## ✅ Example 2: Mocking a Module or Utility
 
 Let's say you have a utility function:
-```ts
 // utils/userUtils.ts
+
 export const getUserName = () => 'Real User';
-```
 
 You can mock it like this in your test:
 
@@ -83,20 +79,15 @@ vi.mock('../utils/userUtils', () => ({
 test('uses mocked username', () => {
   expect(userUtils.getUserName()).toBe('Mocked User');
 });
-```
-
 ---
 
 ## ✅ Example 3: Mocking `fetch` or API Calls
 
-```ts
 global.fetch = vi.fn(() =>
   Promise.resolve({
     json: () => Promise.resolve({ name: 'Mocked User' }),
   })
 ) as any;
-```
-
 ---
 
 ## 🎯 Interview Tips
@@ -106,6 +97,4 @@ global.fetch = vi.fn(() =>
 - Use `.mockReturnValue()` or `.mockResolvedValue()` to control return values.
 - Use `.toHaveBeenCalledWith()` to check call arguments.
 
----
-
-Want to practice mocking an API inside a component next?
+---------------------------------------------

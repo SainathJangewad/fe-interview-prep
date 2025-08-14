@@ -12,14 +12,12 @@ All of these come from the `@testing-library/user-event` package.
 
 Simulates typing text (character by character), including special keys.
 
-```ts
 const input = screen.getByRole('textbox');
 await userEvent.type(input, 'Hello world');
 ```
 
 Supports special keys:
 
-```ts
 await userEvent.type(input, 'Hello{space}World{backspace}');
 ```
 
@@ -29,7 +27,6 @@ await userEvent.type(input, 'Hello{space}World{backspace}');
 
 Simulates raw keypresses — very flexible for arrow keys, shortcuts, etc.
 
-```ts
 // Press Enter key
 await userEvent.keyboard('{Enter}');
 
@@ -38,7 +35,6 @@ await userEvent.keyboard('{Control>}{a}{/Control}'); // Ctrl+A
 
 // Simulate arrow keys
 await userEvent.keyboard('{ArrowDown}{ArrowDown}');
-```
 
 Useful when navigating dropdowns or menus.
 
@@ -48,11 +44,9 @@ Useful when navigating dropdowns or menus.
 
 Simulates a real browser `Tab` key behavior — moves focus to the next focusable element.
 
-```ts
 await userEvent.tab(); // move to next element
 await userEvent.tab({ shift: true }); // move to previous element
 ```
-
 Great for accessibility testing and focus management.
 
 ---
@@ -61,22 +55,16 @@ Great for accessibility testing and focus management.
 
 Clears the content of an input field (as if user selects and deletes it).
 
-```ts
 const input = screen.getByRole('textbox');
 await userEvent.clear(input);
-```
-
 ---
 
 ### 5. **`userEvent.paste()`**
 
 Simulates pasting content into an input or textarea.
 
-```ts
 const input = screen.getByRole('textbox');
 await userEvent.paste(input, 'Pasted text');
-```
-
 ---
 
 ## ✨ Bonus: Typical Use Cases
@@ -91,20 +79,17 @@ await userEvent.paste(input, 'Pasted text');
 | Testing backspace/delete behavior | `userEvent.type()` with `{backspace}` |
 | Testing paste input               | `userEvent.paste()`                   |
 
----
-
-Would you like to see test examples for a dropdown or accessible keyboard navigation?
 ---------------------------------------------
 
-Sure! Here are **full `.tsx` + test examples** for the keyboard interaction cases:
+Would you like to see test examples for a dropdown or accessible keyboard navigation?
 
+Sure! Here are **full `.tsx` + test examples** for the keyboard interaction cases:
 ---
 
 ## ✅ 1. Select Option Using Keyboard — `.tsx + .test.tsx`
 
 ### **`DropdownComponent.tsx`**
 
-```tsx
 import React from 'react';
 
 type Props = {
@@ -130,7 +115,6 @@ export default DropdownComponent;
 
 ### **`DropdownComponent.test.tsx`**
 
-```ts
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import DropdownComponent from './DropdownComponent';
@@ -147,7 +131,6 @@ test('selects option using keyboard', async () => {
 
   expect(handleChange).toHaveBeenCalledWith('option1'); // 2nd element
 });
-```
 
 ---
 
@@ -155,7 +138,6 @@ test('selects option using keyboard', async () => {
 
 ### **`FormComponent.tsx`**
 
-```tsx
 import React from 'react';
 
 const FormComponent = () => {
@@ -178,7 +160,6 @@ export default FormComponent;
 
 ### **`FormComponent.test.tsx`**
 
-```ts
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import FormComponent from './FormComponent';
@@ -197,15 +178,12 @@ test('navigates through inputs using Tab', async () => {
   await userEvent.tab(); // to Email
   expect(input2).toHaveFocus();
 });
-```
-
 ---
 
 ## ✅ 3. Submit with Enter Key — `.tsx + .test.tsx`
 
 ### **`EnterSubmitForm.tsx`**
 
-```tsx
 import React, { useState } from 'react';
 
 type Props = {
@@ -237,7 +215,6 @@ export default EnterSubmitForm;
 
 ### **`EnterSubmitForm.test.tsx`**
 
-```ts
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import EnterSubmitForm from './EnterSubmitForm';
@@ -254,12 +231,11 @@ test('submits form on Enter key', async () => {
 });
 
 Here's a minimal **TypeScript + React (.tsx)** component that works with the test case you mentioned:
-
+(selecting dropdown) 
 ---
 
 ### ✅ `MyComponent.tsx`
 
-```tsx
 import React, { useState } from 'react';
 
 const MyComponent: React.FC = () => {
@@ -282,13 +258,10 @@ const MyComponent: React.FC = () => {
 };
 
 export default MyComponent;
-```
-
 ---
 
 ### ✅ Matching Test Case
 
-```ts
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MyComponent from './MyComponent';
@@ -306,16 +279,12 @@ test('select option using keyboard', async () => {
   // Expect "Option Two" to be selected
   expect(select).toHaveValue('option2');
 });
-```
- ```
 ---------------------------
-Sure! Below is a **test case** that checks a **file upload input** using `React Testing Library` and `Vitest`. The test simulates a user uploading a file and explains the "weird syntax" inline using comments.
-
+Sure! Below is a **test case** that checks a **file upload input**
 ---
 
 ### ✅ `FileUploadComponent.tsx`
 
-```tsx
 import React, { useState } from 'react';
 
 const FileUploadComponent: React.FC = () => {
@@ -338,13 +307,10 @@ const FileUploadComponent: React.FC = () => {
 };
 
 export default FileUploadComponent;
-```
-
 ---
 
 ### ✅ Test: `FileUploadComponent.test.tsx`
 
-```ts
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import FileUploadComponent from './FileUploadComponent';
@@ -372,13 +338,10 @@ describe('File upload', () => {
     expect(screen.getByText(/uploaded: hello.txt/i)).toBeInTheDocument();
   });
 });
-```
-
 ---
 
 ### 🔍 Explanation of Weird Syntax:
 
-```ts
 const file = new File(['hello world'], 'hello.txt', { type: 'text/plain' });
 ```
 
@@ -390,7 +353,6 @@ const file = new File(['hello world'], 'hello.txt', { type: 'text/plain' });
 
 ---
 
-```ts
 await userEvent.upload(input, file);
 ```
 
@@ -407,21 +369,17 @@ No, you **can upload any file type**—`.txt` was just an example in the test. Y
 
 ### 🔁 Example: Uploading a `.png` image file
 
-```ts
 const imageFile = new File(['dummy image data'], 'photo.png', {
   type: 'image/png',
 });
 
 await userEvent.upload(input, imageFile);
-```
-
 ---
 
 ### 📌 Want to restrict allowed file types?
 
 If you **only want to allow specific file types**, you can add the `accept` attribute to the input:
 
-```tsx
 <input type="file" accept=".png,.jpg,.jpeg" />
 ```
 
@@ -432,89 +390,41 @@ Yes — in addition to the ones we've already discussed like `userEvent.type`, `
 
 ---
 
-### ✅ 1. `userEvent.clear()`
-
-**Purpose:** Clears the content of an input or textarea.
-
-```ts
-const input = screen.getByRole('textbox');
-await userEvent.type(input, 'initial text');
-await userEvent.clear(input);
-expect(input).toHaveValue('');
-```
-
----
-
-### ✅ 2. `userEvent.paste()`
-
-**Purpose:** Simulates pasting text into an input field.
-
-```ts
-const input = screen.getByRole('textbox');
-await userEvent.paste(input, 'pasted content');
-expect(input).toHaveValue('pasted content');
-```
-
----
-
 ### ✅ 3. `userEvent.hover()` / `userEvent.unhover()`
 
 **Purpose:** Simulates hovering over or out from an element (used with tooltips or hover effects).
 
-```ts
 const button = screen.getByRole('button', { name: /help/i });
 await userEvent.hover(button);
 expect(await screen.findByText(/tooltip info/i)).toBeInTheDocument();
 
 await userEvent.unhover(button);
-```
-
 ---
 
 ### ✅ 4. `userEvent.selectOptions()` / `userEvent.deselectOptions()`
 
 **Purpose:** Select or deselect options in a `<select>` dropdown (including multi-select).
 
-```ts
 const select = screen.getByRole('listbox'); // or use getByLabelText
 await userEvent.selectOptions(select, ['option1', 'option2']);
-```
-
----
-
-### ✅ 5. `userEvent.tab({ shift: true })`
-
-**Purpose:** Simulates keyboard tabbing (forward or backward with `shift`) — useful for accessibility checks.
-
-```ts
-await userEvent.tab(); // move forward
-await userEvent.tab({ shift: true }); // move backward
-```
-
 ---
 
 ### ✅ 6. `userEvent.dblClick()`
 
 **Purpose:** Simulates double-click — useful for editable fields or interactive elements.
 
-```ts
 const editable = screen.getByText('Double click me');
 await userEvent.dblClick(editable);
-```
-
 ---
 
 ### ✅ 7. `userEvent.pointer()`
 
 **Purpose:** Fine-grained control of pointer interactions (less common, but useful for drag & drop, sliders, etc.).
 
-```ts
 await userEvent.pointer({
   target: element,
   keys: '[MouseLeft>]', // press down left mouse button
 });
-```
-
 ---
 
 You're right — thanks for pointing that out! Here's a proper `.tsx` component and test example that demonstrates both `selectOptions` and `deselectOptions` (for a multi-select dropdown).
@@ -523,7 +433,6 @@ You're right — thanks for pointing that out! Here's a proper `.tsx` component 
 
 ### ✅ Component: `FruitSelector.tsx`
 
-```tsx
 // FruitSelector.tsx
 import React from 'react';
 
@@ -540,13 +449,10 @@ export const FruitSelector = () => {
     </div>
   );
 };
-```
-
 ---
 
 ### ✅ Test: `FruitSelector.test.tsx`
 
-```tsx
 // FruitSelector.test.tsx
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -570,21 +476,15 @@ describe('FruitSelector', () => {
     ).toEqual(['apple']);
   });
 });
-```
-
 ---
 
 ### 🔍 Explanation of Key Parts
 
-```ts
 await userEvent.selectOptions(select, ['apple', 'banana']);
-```
 
 This simulates the user holding `Ctrl` or `Cmd` and clicking multiple options.
 
-```ts
 await userEvent.deselectOptions(select, 'banana');
-```
 
 This removes **banana** from the selected list.
 

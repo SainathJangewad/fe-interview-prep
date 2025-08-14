@@ -1,7 +1,3 @@
-Here's the formatted and **interview-friendly** version of your notes on **Test Coverage in Vitest**:
-
----
-
 ## ✅ What is Test Coverage?
 
 **Test coverage** measures how much of your code is executed when running your test suite.
@@ -19,7 +15,6 @@ It helps identify:
 * **Branches** – Are all `if/else` paths covered?
 * **Functions** – Are all functions invoked?
 * **Lines** – Are all lines of code run?
-
 ---
 
 ## 🧪 How to Check Test Coverage in Vitest
@@ -36,13 +31,11 @@ npm install -D @vitest/coverage-v8
 
 ```bash
 npm install -D @vitest/coverage-istanbul
-```
 
 ---
 
 ### 2️⃣ Configure `vitest.config.ts` (or `vite.config.ts`)
 
-```ts
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -51,11 +44,14 @@ export default defineConfig({
       enabled: true, // Enable coverage
       provider: 'v8', // or 'istanbul'
       reporter: ['text', 'html', 'json'], // Output formats
-      // include: ['src/**/*.ts'],
+      // include: ['src/**/*.ts'],//
       // exclude: ['node_modules/', 'dist/'],
     },
   },
 });
+
+So **/*.ts means:
+    “All .ts files in the current folder and all its subfolders, no matter how deeply nested.”
 ```
 
 🔸 `reporter`: Defines coverage output
@@ -63,18 +59,15 @@ export default defineConfig({
 * `text`: Summary in terminal
 * `html`: Interactive HTML report
 * `json`: Structured coverage data
-
 ---
 
 ### 3️⃣ Run Tests with Coverage
 
-```bash
 npx vitest run --coverage
 ```
 
 ✔️ Shows a terminal summary
 🌐 For HTML report: Open `coverage/index.html` in your browser
-
 ---
 
 ## 🖥️ Optional: View Coverage in Vitest UI
@@ -105,13 +98,11 @@ npx vitest --ui
 
 Use `include` in `vitest.config.ts`:
 
-```ts
 coverage: {
   enabled: true,
   include: ['src/pages/**/*'],
 }
 ```
-
 Shows coverage **only for matching files**.
 
 ---
@@ -120,11 +111,9 @@ Shows coverage **only for matching files**.
 
 Use `exclude`:
 
-```ts
 coverage: {
   exclude: ['**/*.test.*', 'src/pages/utils/**'],
 }
-```
 
 These files **won’t appear** in the report.
 
@@ -137,7 +126,6 @@ Even if excluded:
 * ✅ Test files still **execute**
 * ❌ But are **not counted** in coverage
 
---- 
 ---------------------------------------------------------------------
 Here’s a **short interview-ready note** on **setting coverage thresholds in Vitest**:
 
@@ -151,7 +139,6 @@ Here’s a **short interview-ready note** on **setting coverage thresholds in Vi
 
 In `vitest.config.ts`:
 
-```ts
 coverage: {
   enabled: true,
   provider: 'v8',
@@ -164,7 +151,6 @@ coverage: {
   },
 }
 ```
-
 ### 🔍 Metrics:
 
 * **statements**: All executable code

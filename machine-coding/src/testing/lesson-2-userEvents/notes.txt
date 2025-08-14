@@ -1,9 +1,4 @@
-Great! Let's begin **Lesson 2: Interacting with Elements using `userEvent` in RTL with Vitest**.
-
----
-
 ## 🎯 Lesson 2: Simulating User Interactions with `userEvent`
-
 ---
 
 ## 🔹 What is `userEvent`?
@@ -18,7 +13,6 @@ Great! Let's begin **Lesson 2: Interacting with Elements using `userEvent` in RT
 * Tab navigation
 
 It **mimics real browser behavior** better than the older `fireEvent` API (which simulates only DOM events).
-
 ---
 
 ## 🧱 Install `@testing-library/user-event`
@@ -28,8 +22,6 @@ If not already installed:
 ```bash
 npm install --save-dev @testing-library/user-event
 ```
-
----
 
 ## 📦 Basic Setup
 
@@ -76,8 +68,6 @@ export function LoginForm() {
     </form>
   );
 }
-```
-
 ---
 
 ## ✅ 1. Typing into an Input Field
@@ -97,7 +87,6 @@ describe('LoginForm', () => {
     expect(input).toHaveValue('John');
   });
 });
-```
 
 ---
 
@@ -152,7 +141,6 @@ it('clears input field using userEvent.clear()', async () => {
   await userEvent.clear(input);
   expect(input).toHaveValue('');
 });
-```
 
 ---
 
@@ -169,7 +157,6 @@ it('navigates form using tab', async () => {
   await user.tab(); // next element
   expect(screen.getByRole('checkbox')).toHaveFocus();
 });
-```
 
 ---
 
@@ -188,8 +175,6 @@ it('submits form using Enter key', async () => {
 
   expect(await screen.findByText('Form Submitted!')).toBeInTheDocument();
 });
-```
-
 ---
 
 ## 🔥 Full List of Useful `userEvent` APIs
@@ -214,14 +199,8 @@ it('submits form using Enter key', async () => {
 * Prefer `userEvent` over `fireEvent` — it's higher-level and simulates real behavior.
 * Always `await` `userEvent` calls since they return promises.
 * For tab/key simulations, create a `user` instance:
-
-  ```ts
+eg.
   const user = userEvent.setup();
-  ```
-
-
-  
-
 ---
 
 ## 🧪 Summary: What You Learned
@@ -229,5 +208,3 @@ it('submits form using Enter key', async () => {
 * Simulate user input, clicks, checkboxes, and keyboard events
 * Combine `userEvent` with RTL queries (`getByRole`, `getByLabelText`, etc.)
 * Use `await` with `userEvent` for proper async handling
-
---- 

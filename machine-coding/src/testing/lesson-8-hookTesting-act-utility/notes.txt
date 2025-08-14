@@ -1,10 +1,8 @@
 To test a **custom hook** like `useCounter()`, you should use the `renderHook` utility from **`@testing-library/react`** (not `react-testing-library`) along with **Vitest**.
-
 ---
 
 ## 🧠 Example `useCounter()` Hook
 
-```ts
 // useCounter.ts
 import { useState } from 'react';
 
@@ -16,13 +14,10 @@ export function useCounter(initialValue = 0) {
 
   return { count, increment, decrement, reset };
 }
-```
-
 ---
 
 ## ✅ How to Test It
 
-```ts
 // useCounter.test.ts
 import { renderHook, act } from '@testing-library/react';
 import { useCounter } from './useCounter';
@@ -57,8 +52,6 @@ describe('useCounter', () => {
     expect(result.current.count).toBe(3);
   });
 });
-```
-
 ---
 
  ### 📌 Why We Use `renderHook` Instead of `render` for Custom Hooks

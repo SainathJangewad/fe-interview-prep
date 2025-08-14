@@ -7,77 +7,61 @@ When testing a form in **React + TypeScript** using **React Testing Library (RTL
 
 Make sure all form fields render correctly.
 
-```ts
 test('renders all form inputs', () => {
   render(<MyForm />);
   expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
   expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
   expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
 });
-```
-
 ---
 
 ### ✅ **2. Input Interaction Test**
 
 Simulate typing/selecting and verify the values change as expected.
 
-```ts
 test('updates input fields on user typing', async () => {
   render(<MyForm />);
   await userEvent.type(screen.getByLabelText(/name/i), 'John Doe');
   expect(screen.getByLabelText(/name/i)).toHaveValue('John Doe');
 });
-```
-
 ---
 
 ### ✅ **3. Select/Dropdown Interaction**
 
 For `<select>` fields:
 
-```ts
 test('selects an option from dropdown', async () => {
   render(<MyForm />);
   await userEvent.selectOptions(screen.getByLabelText(/role/i), 'Admin');
   expect(screen.getByLabelText(/role/i)).toHaveValue('Admin');
 });
-```
-
 ---
 
 ### ✅ **4. Checkbox / Radio Button Test**
 
-```ts
 test('checks the checkbox', async () => {
   render(<MyForm />);
   const checkbox = screen.getByRole('checkbox', { name: /i agree/i });
   await userEvent.click(checkbox);
   expect(checkbox).toBeChecked();
 });
-```
-
 ---
 
 ### ✅ **5. Validation Test (Required Fields, Format, etc.)**
 
 Ensure client-side validation is working.
 
-```ts
 test('shows validation error on empty submit', async () => {
   render(<MyForm />);
   await userEvent.click(screen.getByRole('button', { name: /submit/i }));
   expect(await screen.findByText(/name is required/i)).toBeInTheDocument();
 });
-```
-
 ---
 
 ### ✅ **6. Submit with Valid Data**
 
 Make sure submission happens when data is valid.
 
-```ts
 test('submits form with valid data', async () => {
   const handleSubmit = vi.fn();
   render(<MyForm onSubmit={handleSubmit} />);
@@ -85,29 +69,23 @@ test('submits form with valid data', async () => {
   await userEvent.click(screen.getByRole('button', { name: /submit/i }));
   expect(handleSubmit).toHaveBeenCalled();
 });
-```
-
 ---
 
 ### ✅ **7. Disabled Submit Button Until Valid**
 
 Good UX practice: submit should be disabled until form is valid.
 
-```ts
 test('submit button is disabled when inputs are invalid', () => {
   render(<MyForm />);
   const button = screen.getByRole('button', { name: /submit/i });
   expect(button).toBeDisabled();
 });
-```
-
 ---
 
 ### ✅ **8. Reset Button (if present)**
 
 Ensure form resets correctly.
 
-```ts
 test('resets the form', async () => {
   render(<MyForm />);
   const nameInput = screen.getByLabelText(/name/i);
@@ -115,15 +93,12 @@ test('resets the form', async () => {
   await userEvent.click(screen.getByRole('button', { name: /reset/i }));
   expect(nameInput).toHaveValue('');
 });
-```
-
 ---
 
 ### ✅ **9. Keyboard Navigation (Accessibility)**
 
 Check tabbing between inputs.
 
-```ts
 test('form inputs are focusable in order', async () => {
   render(<MyForm />);
   await userEvent.tab();
@@ -131,15 +106,12 @@ test('form inputs are focusable in order', async () => {
   await userEvent.tab();
   expect(screen.getByLabelText(/email/i)).toHaveFocus();
 });
-```
-
 ---
 
 ### ✅ **10. Error Message Disappears on Fix**
 
 Make sure fixing a field removes its validation error.
 
-```ts
 test('removes error after fixing input', async () => {
   render(<MyForm />);
   await userEvent.click(screen.getByRole('button', { name: /submit/i }));
@@ -149,8 +121,6 @@ test('removes error after fixing input', async () => {
   await userEvent.type(screen.getByLabelText(/name/i), 'Sainath');
   expect(screen.queryByText(/name is required/i)).not.toBeInTheDocument();
 });
-```
-
 ---
 
 ### Bonus Tips:
@@ -210,6 +180,9 @@ describe('MyForm', () => {
     await userEvent.type(screen.getByLabelText(/email/i), 'jane@example.com');
     await userEvent.click(screen.getByRole('button', { name: /submit/i }));
     await waitFor(() => expect(handleSubmit).toHaveBeenCalled());
+    //Short Note – When to use waitFor() with handleSubmit
+   // If handleSubmit is called immediately on Submit button click → no waitFor() needed.
+    //If handleSubmit calls an API after some async validation or delay → use waitFor() to wait until it’s actually called.
   });
 
   it('submit button is disabled when form is invalid', () => {
@@ -294,8 +267,6 @@ This allows you to pass a mock function and test its arguments.
 ### ✅ 2. Example Form Component
 
 Suppose your form looks like this:
-
-```tsx
 type MyFormProps = {
   onSubmit: (data: { name: string; email: string }) => void;
 };
@@ -323,13 +294,10 @@ export function MyForm({ onSubmit }: MyFormProps) {
     </form>
   );
 }
-```
-
 ---
 
 ### ✅ 3. Test: `handleSubmit` Called with Input Values
 
-```tsx
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -356,8 +324,6 @@ describe('MyForm', () => {
     });
   });
 });
-```
-
 ---
 
 ### ✅ Key Points:
@@ -369,7 +335,6 @@ describe('MyForm', () => {
 --- ----------------------------------------------------------------------------------------
 Certainly! Here's the test case to check if a value is selected from a dropdown using **React Testing Library** and **user-event**:
 
-```ts
 it('selects a value from the dropdown', async () => {
   render(<MyForm />); // replace with your actual form component
 
@@ -382,7 +347,6 @@ it('selects a value from the dropdown', async () => {
 
 If your `<option>` values are different from their visible text (e.g., `<option value="admin">Admin</option>`), then adjust the assertion accordingly:
 
-```ts
 await userEvent.selectOptions(select, 'admin'); // value, not label
 expect(select).toHaveValue('admin');
 ```
@@ -399,7 +363,6 @@ Great questions! Let's break them down clearly.
 
 ### 🔹 Syntax:
 
-```ts
 await waitFor(() => {
   expect(something).toBe(true);
 });
@@ -407,7 +370,6 @@ await waitFor(() => {
 
 ### 🔹 Example Use Case:
 
-```ts
 await userEvent.click(screen.getByText('Submit'));
 
 await waitFor(() => {
@@ -420,7 +382,7 @@ await waitFor(() => {
 * DOM updates **after delays**, **state changes**, or **debounced functions**.
 * Without `waitFor`, the test may **run expectations too early** and fail.
 
----
+----------------------------------------------
 
 ## ✅ `vi.fn()` vs `vi.spyOn()`
 
@@ -433,12 +395,9 @@ Creates a **standalone mock function**. It's useful when:
 
 #### Example:
 
-```ts
 const mockFn = vi.fn();
 mockFn('hello');
 expect(mockFn).toHaveBeenCalledWith('hello');
-```
-
 ---
 
 ### 🔹 `vi.spyOn()`
@@ -449,12 +408,9 @@ Creates a **spy** (wrapper) around an **existing method** on an object. It's use
 
 #### Example:
 
-```ts
 const logSpy = vi.spyOn(console, 'log');
 console.log('test');
 expect(logSpy).toHaveBeenCalledWith('test');
-```
-
 ---
 
 ### 🆚 Summary: `vi.fn()` vs `vi.spyOn()`
@@ -467,7 +423,6 @@ expect(logSpy).toHaveBeenCalledWith('test');
 
 -----------------------------
 Absolutely — let’s go deeper and make it crystal clear with better **real-world-style explanations and code examples**.
-
 ---
 
 ## ✅ `vi.fn()` — "Standalone Mock Function"
@@ -475,14 +430,12 @@ Absolutely — let’s go deeper and make it crystal clear with better **real-wo
 ### 🔹 What it means:
 
 A **standalone mock function** is a function **you create from scratch** using `vi.fn()` — it doesn’t exist anywhere else yet. You use it in places where you **pass a function as a prop** or **simulate a callback**.
-
 ---
 
 ### ✅ Example 1 — Use in props (`onSubmit`, `onClick`)
 
 #### 🔸 Component:
-
-```tsx
+x
 type Props = {
   onSubmit: (data: string) => void;
 };
@@ -494,7 +447,6 @@ function MyForm({ onSubmit }: Props) {
 
 #### 🔸 Test:
 
-```ts
 it('calls onSubmit with "hello"', async () => {
   const mockSubmit = vi.fn(); // <== standalone mock function
   render(<MyForm onSubmit={mockSubmit} />);
@@ -504,7 +456,6 @@ it('calls onSubmit with "hello"', async () => {
 ```
 
 ➡️ You created a **new mock function** (`vi.fn()`) and passed it as a prop. You're testing whether it was called correctly.
-
 ---
 
 ## ✅ `vi.spyOn()` — "Wraps Existing Method"
@@ -521,35 +472,28 @@ This is used when the function already **belongs to some object**, like:
 * `console.log`
 * `window.fetch`
 * a method in a class or module
-
 ---
 
 ### ✅ Example 2 — Spy on `console.log`
 
-```ts
 it('logs a message', () => {
   const spy = vi.spyOn(console, 'log'); // <== wrap existing method
   console.log('test log');
   expect(spy).toHaveBeenCalledWith('test log');
 });
-```
-
 ➡️ Here, you’re spying on the actual `console.log` method. You didn’t create a new function — you **watched an existing one**.
 
 ---
 
 ### ✅ Example 3 — Spy on method in a module
 
-```ts
 // file: mathUtils.ts
 export const mathUtils = {
   add(a: number, b: number) {
     return a + b;
   },
 };
-```
 
-```ts
 // file: mathUtils.test.ts
 import { mathUtils } from './mathUtils';
 
@@ -558,19 +502,14 @@ it('calls add with correct args', () => {
   mathUtils.add(3, 5);
   expect(spy).toHaveBeenCalledWith(3, 5);
 });
-```
 
 ➡️ Here you're testing if the `add` method of `mathUtils` was called — you **didn't replace it**, just watched it.
-
 ---
 
 ### ✅ Bonus: Replace behavior with `mockImplementation`
 
-```ts
 const spy = vi.spyOn(mathUtils, 'add').mockImplementation(() => 42);
 expect(mathUtils.add(1, 1)).toBe(42);
-```
-
 ---
 
 ## 🔄 Comparison Summary Table
@@ -583,7 +522,6 @@ expect(mathUtils.add(1, 1)).toBe(42);
 | Can override real behavior  | ❌ Only if you use it directly          | ✅ With `.mockImplementation()`               |
 | Typical usage               | `onClick`, `onSubmit`, custom callback | `console.log`, `window.fetch`, module method |
 
----
 ---------------------------------------------------------
 In Vitest, vi.fn() and vi.spyOn() are both used for mocking and spying on functions, but they serve different purposes: 
 
@@ -607,7 +545,6 @@ In summary:
 ### ✅ `mockRestore()` in Vitest
 
 `vi.mockRestore()` is used to **restore the original implementation** of a spied or mocked function after you've mocked or overridden it using `vi.spyOn()`.
-
 ---
 
 ## 📌 When to use it?
@@ -619,7 +556,6 @@ In summary:
 
 ## ✅ Short Example
 
-```ts
 import { describe, it, expect, vi } from 'vitest';
 
 const utils = {
@@ -636,8 +572,6 @@ describe('vi.spyOn with mockRestore', () => {
     expect(utils.greet()).toBe('Hello'); // ✅ original behavior restored
   });
 });
-```
-
 ---
 
 ## 🧠 Key Notes
@@ -649,9 +583,7 @@ describe('vi.spyOn with mockRestore', () => {
 
 ## ✅ Bonus: Restore all mocks at once
 
-```ts
 afterEach(() => {
   vi.restoreAllMocks();
 });
-```
 ---------------------------------------------

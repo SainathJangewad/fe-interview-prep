@@ -1,7 +1,3 @@
-Great! Let’s start with **Lesson 1: RTL (React Testing Library) + Vitest Basics**.
-
----
-
 ## 🔹 What is Vitest?
 
 **Vitest** is a **fast unit test framework** built on top of **Vite**. It is commonly used with modern front-end frameworks like React.
@@ -46,7 +42,6 @@ Here are the main RTL queries with examples:
 
 ### ✅ 1. `getByText`
 
-```tsx
 render(<div>Hello World</div>);
 screen.getByText('Hello World'); // ✅ Passes
 screen.getByText('Not There');   // ❌ Throws error
@@ -54,7 +49,6 @@ screen.getByText('Not There');   // ❌ Throws error
 
 ### ✅ 2. `getAllByText`
 
-```tsx
 render(<>
   <p>Hello</p>
   <p>Hello</p>
@@ -64,14 +58,12 @@ screen.getAllByText('Hello'); // ✅ Returns array of both
 
 ### ✅ 3. `queryByText`
 
-```tsx
 render(<div>Hi</div>);
 screen.queryByText('Bye'); // ✅ Returns null (doesn’t throw)
 ```
 
 ### ✅ 4. `queryAllByText`
 
-```tsx
 render(<>
   <p>Test</p>
 </>);
@@ -80,7 +72,6 @@ screen.queryAllByText('Nope'); // ✅ Returns []
 
 ### ✅ 5. `findByText` (Async)
 
-```tsx
 render(<div>{isLoading ? 'Loading...' : 'Done'}</div>);
 
 // Suppose 'Done' appears later
@@ -89,7 +80,6 @@ await screen.findByText('Done'); // ✅ Waits for it
 
 ### ✅ 6. `findAllByText` (Async multiple)
 
-```tsx
 render(<>
   <p>Load</p>
   <p>Load</p>
@@ -112,7 +102,6 @@ await screen.findAllByText('Load'); // ✅ Returns both
 
 ## 🧪 Sample Vitest Test with RTL
 
-```tsx
 // MyComponent.tsx
 export function MyComponent() {
   const [show, setShow] = useState(false);
@@ -130,7 +119,6 @@ export function MyComponent() {
 }
 ```
 
-```tsx
 // MyComponent.test.tsx
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
@@ -156,8 +144,6 @@ it('matches Loaded! using RegExp (case-insensitive)', async () => {
 
 });
 
-
----
 --------------------------------------------------------------------------------------------
                  findByRole, getByRole,
 
@@ -171,7 +157,6 @@ Absolutely! Let’s dive deeper into `findByRole` with a **realistic example** t
 
 ## 🔹 Enhanced Example: `findByRole` in Practice
 
-```tsx
 // FormComponent.tsx
 import { useEffect, useState } from 'react';
 
@@ -201,13 +186,10 @@ export function FormComponent() {
     </div>
   );
 }
-```
-
 ---
 
 ## 🧪 Test Case with `findByRole`
 
-```tsx
 // FormComponent.test.tsx
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
@@ -238,15 +220,12 @@ describe('FormComponent', () => {
     expect(cancelBtn).toBeInTheDocument();
   });
 });
-```
-
 ---
 
 ## 🤔 Why use `{ name: "Submit" }` in `findByRole`?
 
 When you do:
 
-```ts
 screen.findByRole('button');
 ```
 
@@ -254,14 +233,12 @@ It will **throw an error if there are multiple buttons** because it doesn't know
 
 To avoid this, use the **accessible name** of the button:
 
-```ts
 screen.findByRole('button', { name: 'Submit' });
 ```
 
 > 🔹 The `{ name: "..." }` option refers to the **visible text** associated with the element (what screen readers read).
 
 This helps RTL find the **exact element** you're testing.
-
 ---
 
 ## 📌 Bonus: How RTL maps HTML elements to roles
@@ -277,7 +254,6 @@ This helps RTL find the **exact element** you're testing.
 | `<img alt="...">`         | `img`         |
 
 You can inspect roles in browser devtools using `axe` or Chrome's accessibility tab.
-
 ---
 
 ## ✅ Query Priority Recap (Best to Worst)
@@ -294,6 +270,4 @@ You can inspect roles in browser devtools using `axe` or Chrome's accessibility 
 | 6️⃣      | `getByAltText`             | For images                                       |
 | 7️⃣      | `getByTitle`               | Least recommended                                |
 | ❌ Avoid  | `getByTestId`              | Not user-focused; only when others don’t work    |
-
----
  
