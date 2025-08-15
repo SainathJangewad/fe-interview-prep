@@ -42,6 +42,7 @@ import Products from './pages/filters/Products'
 import FiltersParent from './pages/filters/FiltersParent'
 import Calculator from './pages/calculator/Calculator'
 import Calendar from './pages/calender/Calender'
+import DemoConfigForm from './pages/config-driven-form/DemoConfigForm'
 
 
 
@@ -144,6 +145,8 @@ function App() {
       </Routes>
       <hr />
       <TableParent />
+      <hr />
+      <DemoConfigForm />
       <hr />
       <Calculator />
       <hr />
